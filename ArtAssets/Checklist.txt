@@ -1,0 +1,6 @@
+HP/XP Beakers
+Player Face
+GUI Bar
+Town BG
+Food Items
+Conveyor Belt Graphics
