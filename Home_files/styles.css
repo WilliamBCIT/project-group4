@@ -82,7 +82,68 @@ p {
     color: black;
 }
 
+/* ----OVERLAY MENU---- */
 
+.overlay-menu {
+    height: 130%;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    background-color: #131313e7;
+    overflow-x: hidden;
+}
+
+.overlay-content {
+    position: relative;
+    top: 0;
+    left: 60px;
+    text-align: left;
+    margin-top: 18vh;
+    transition: 0.3s;
+}
+
+@media only screen and (min-width: 500px) {
+    .overlay-content {
+        position: relative;
+        top: 0;
+        left: 120px;
+        text-align: left;
+        margin-top: 18vh;
+        transition: 0.3s;
+    }
+}
+
+.overlay-menu a {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    padding: 0;
+    padding-bottom: 0.5em;
+    text-decoration: none;
+    color: white;
+    display: block;
+    transition: 0.3s ease;
+}
+
+@media only screen and (min-width: 500px) {
+    .overlay-menu a {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 300;
+        font-size: 30px;
+        padding: 0;
+        text-decoration: none;
+        color: white;
+        display: block;
+        transition: 0.3s ease;
+    }
+}
+
+.overlay-menu a:hover,
+.overlay-menu a:focus {
+    color: #ff9431;
+}
 
 /* ----LANDING SCREEN---- */
 
@@ -107,6 +168,7 @@ p {
 #landing-message h2 {
     font-size: 3em;
 }
+
 
 /* ----WIDE TEXT CONTAINER---- */
 
