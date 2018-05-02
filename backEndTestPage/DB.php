@@ -14,12 +14,12 @@ class DB
         return;
     }
 }
-$sql ="CREATE TABLE Records
-(fullname         CHAR(20)       NOT NULL
-,score          NUMBER(4)    NOT NULL
-,hotelAddress    DATE(40)    NOT NULL
-,PRIMARY KEY (fullName)
-);
- ";
+//$sql ="CREATE TABLE Records
+//(fullname         CHAR(20)       NOT NULL
+//,score          NUMBER(4)    NOT NULL
+//,hotelAddress    DATE(40)    NOT NULL
+//,PRIMARY KEY (fullName)
+//);
+//";
 
 ?>
