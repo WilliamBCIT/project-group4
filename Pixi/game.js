@@ -1,3 +1,27 @@
+const foodTypes = {
+	ANY:0,
+	LIQUID:1,
+		WATER:11,
+		OIL:12,
+	VEGETABLE:2,
+		POTATO:21,
+		CARROT:22,
+		CABBAGE:23,
+	FRUIT:3,
+		BANANA:31,
+		ORANGE:32,
+		APPLE:33,
+	BREAD:4,
+	MEAT:5,
+		BONE:51,
+		STEAK:52
+};
+
+const towerTypes = {
+	COMPOST:1,
+	FEEDANIMALS:2
+};
+
 function Init(){
 	// Initialize game window
 	app = new PIXI.Application(720, 720, {backgroundColor:0x1099bb, antialias:true});
@@ -16,11 +40,61 @@ function Init(){
 	score = 0;
 
 	// Import textures
-	PIXI.loader.add("whiteBox", "images/WhiteBox.png")
+	PIXI.loader.add("logo", "images/logoWhiteBackground.png")
+			   .add("playB", "images/PlayButton.png")
+			   .add("lBoardsB", "images/LeaderboardsButton.png")
 			   .load(Init2);
 }
 
 function Init2(){
+	mmLogo = GetObj(GetSprite("logo", .5, .5, .3, .3), 360, 240);
+	mmPlay = GetObj(GetSprite("playB", .5, .5, 1.5, 1.5), 360, 490);
+	mmLBoards = GetObj(GetSprite("lBoardsB", .5, .5, 1.5, 1.5), 360, 590);
+
+	mmPlay.interactive = true;
+	mmPlay.buttonMode = true;
+	mmPlay.on("pointerdown", StartGame);
+	mmLBoards.interactive = true;
+	mmLBoards.buttonMode = true;
+	mmLBoards.on("pointerdown", ShowLBoards);
+}
+
+function ShowLBoards(){
+	// TODO
+}
+
+function OpenPauseMenu(){
+	//pm
+}
+
+function ClosePauseMenu(){
+	//pm
+}
+
+function StartGame(){
+	Destroy(mmLogo);
+	Destroy(mmPlay);
+	Destroy(mmLBoards);
+
+	// TODO: Loading bar
+
+	gridSize = 18;
+	unit = app.renderer.width / gridSize;
+
+	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
+	towers = new Array();
+	food = new Array();
+	frame = 0;
+	score = 0;
+	money = 1000;
+	wantToPlace = "";
+
+	// Import textures
+	PIXI.loader.add("whiteBox", "images/WhiteBox.png")
+			   .load(StartGame2);
+}
+
+function StartGame2(){
 	// Proto{
 
 	for(let x = 0; x < gridSize; x++){
@@ -36,11 +110,11 @@ function Init2(){
 	//	Proto}
 
 	// Assuming one level
-	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}, {x:2, y:18}];
-	let trackV = [{x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}];
+track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
+let trackV = [{x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, /*{x:-1, y:0}*/];
 
 	for(let i = 0; i < track.length; i++){
-		track[i] = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x999999), track[i].x * unit, track[i].y * unit);
+		track[i] = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x999999), (track[i].x - 1) * unit, (track[i].y - 1) * unit);
 		track[i].type = "track";
 		track[i].interactive = true;
 		
@@ -53,12 +127,13 @@ function Init2(){
 		}
 	}
 
-	garbage = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x555555), 1 * unit, 18 * unit);
+	garbage = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x555555), 1 * unit, 17 * unit);
 
 	app.ticker.add(delta => Update(delta)); // Defines the function that gets called every frame
 
 	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10);
-	/* Proto */ scoreText = GetObj(new PIXI.Text("Score: 0", debugStyle), 10, 25);
+	/* Proto */ scoreText = GetObj(new PIXI.Text("Score: " + score, debugStyle), 10, 25);
+	/* Proto */ moneyText = GetObj(new PIXI.Text("Money: " + money, debugStyle), 10, 40);
 }
 
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
@@ -71,15 +146,15 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 		// TODO: Handle food as particles
 
-		/* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -1, -1, unit / 3, unit / 3, Math.random() * 0xFFFFFF), (16.7 + Math.random() * .6) * unit, (1.7 + Math.random() * .6) * unit), "apple", "fruit"));
+		/* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -1, -1, unit / 3, unit / 3, Math.random() * 0xFFFFFF), (15.7 + Math.random() * .6) * unit, (0.7 + Math.random() * .6) * unit), "apple", "fruit"));
 	}else{
 		frame++;
 	}
 
 	// TODO: Properly centre food along tracks
-	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 1.8; i < food.length; i++){
+	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 2; i < food.length; i++){
 		for(j = 0; j < track.length; j++){
-			if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){
+			if(Math.abs(Math.pow(track[j].x - food[i].x, 2)) + Math.abs(Math.pow(track[j].y - food[i].y, 2)) <= maxDistSqrd){
 				food[i].x += track[j].vx * delta;
 				food[i].y += track[j].vy * delta;
 			}
@@ -118,10 +193,10 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 		
 		for(i = 0; i < food.length; i++){
 			let l = towers[j].allow.findIndex(function(element){
-				return element == "any" || food[i].type == element || food[i].subType == element;
+				return element == foodTypes.ANY || food[i].type == element || food[i].subType == element;
 			});
 
-			if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.pow(towers[j].x - food[i].x, 2) + Math.pow(towers[j].y - food[i].y, 2) <= maxDistSqrd){
+			if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.abs(Math.pow(towers[j].x - food[i].x, 2)) + Math.abs(Math.pow(towers[j].y - food[i].y, 2)) <= maxDistSqrd){
 				towers[j].curr[l].push(0);
 				food[i].parent.removeChild(food[i]);
 				food.splice(i, 1);
@@ -129,6 +204,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			}
 		}
 	}
+
+	wantToPlace = towerTypes.COMPOST;
 }
 
 /*if(tower allows any & tower.curr < max){
@@ -136,20 +213,44 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 }*/
 
 function PlaceTower(){
-	var tower = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x993388), this.x, this.y);
-	tower.type = "compost";
-	tower.allow = ["any"];
-	tower.max = [5];
-	tower.finished = [0];
-	tower.curr = [[]];
-	tower.currCount = 0;
-	tower.atOnce = 1;
-	tower.processTime = 60; // NOTE: Stored in frames
-	tower.cost = 750;
-	tower.value = 100;
-	tower.interactive = true;
+	var tower = false;
 
-	towers.push(tower);
+	if(wantToPlace == towerTypes.COMPOST){
+		if(Buy(500)){
+			valid = true;
+
+			tower = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x993388), this.x, this.y);
+			tower.allow = [foodTypes.ANY];
+			tower.ignore = [];
+			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+			tower.atOnce = 1; // Amount of concurrent users
+			tower.processTime = 60; // Frames required to process one food item
+			tower.value = 100; // Amount of score and money gained when all maxes have been met
+		}
+	}
+
+	if(tower != false){
+		tower.type = wantToPlace;
+		tower.currCount = 0;
+		tower.interactive = true;
+
+		towers.push(tower);
+	}
+}
+
+function Buy(cost){
+	if(money < cost){
+		console.log("PLAYER CANNOT AFFORD $" + cost);
+
+		return false;
+	}else{
+		money -= cost;
+		moneyText.text = "Money: " + money;
+
+		return true;
+	}
 }
 
 //	Proto{
@@ -169,6 +270,8 @@ function TrackBuilder(){ // Helps laying track
 function AdjustScore(increaseBy){
 	score += increaseBy;
 	scoreText.text = "Score: " + score;
+	money += increaseBy;
+	moneyText.text = "Money: " + money;
 }
 
 function GetSprite(name, anchorX = 0, anchorY = 0, scaleX = 1, scaleY = 1, tint = 0xFFFFFF){
@@ -193,4 +296,8 @@ function GetFood(obj, subType, type){
 	obj.subType = subType;
 
 	return obj;
+}
+
+function Destroy(obj){
+	obj.parent.removeChild(obj);
 }
