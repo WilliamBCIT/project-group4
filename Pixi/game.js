@@ -27,9 +27,17 @@ const towerTypes = {
 	PURIFIER:6
 };
 
+const uiMargin = 120
+
+const relPos = {
+	IGNOREMARGIN:0,
+	USEMARGIN:1,
+	SIDEBAR:2
+};
+
 function Init(){
 	// Initialize game window
-	app = new PIXI.Application(720, 720, {backgroundColor:0x1099bb, antialias:true});
+	app = new PIXI.Application(720 + uiMargin, 720 + uiMargin, {backgroundColor:0x1099bb, antialias:true});
 	app.renderer.autoResize = true;
 	document.getElementById("playframe").appendChild(app.view);
 	
@@ -45,16 +53,18 @@ function Init(){
 	score = 0;
 
 	// Import textures
-	PIXI.loader.add("logo", "images/logoWhiteBackground.png")
-			   .add("playB", "images/PlayButton.png")
-			   .add("lBoardsB", "images/LeaderboardsButton.png")
+	PIXI.loader.add("logo", "../pixi/images/logoWhiteBackground.png")
+			   .add("playB", "../pixi/images/PlayButton.png")
+			   .add("lBoardsB", "../pixi/images/LeaderboardsButton.png")
 			   .load(Init2);
 }
 
 function Init2(){
-	mmLogo = GetObj(GetSprite("logo", .5, .5, .3, .3), 360, 240);
-	mmPlay = GetObj(GetSprite("playB", .5, .5, 1.5, 1.5), 360, 490);
-	mmLBoards = GetObj(GetSprite("lBoardsB", .5, .5, 1.5, 1.5), 360, 590);
+	let halfWidth = app.renderer.width / 2;
+
+	mmLogo = GetObj(GetSprite("logo", .5, .5, .3, .3), halfWidth, 315, app.stage, relPos.IGNOREMARGIN);
+	mmPlay = GetObj(GetSprite("playB", .5, .5, 1.5, 1.5), halfWidth, 565, app.stage, relPos.IGNOREMARGIN);
+	mmLBoards = GetObj(GetSprite("lBoardsB", .5, .5, 1.5, 1.5), halfWidth, 665, app.stage, relPos.IGNOREMARGIN);
 
 	mmPlay.interactive = true;
 	mmPlay.buttonMode = true;
@@ -84,7 +94,7 @@ function StartGame(){
 	// TODO: Loading bar
 
 	gridSize = 18;
-	unit = app.renderer.width / gridSize;
+	unit = (app.renderer.width - uiMargin) / gridSize;
 
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 	towers = new Array();
@@ -92,18 +102,18 @@ function StartGame(){
 	frame = 0;
 	lives = 100;
 	score = 0;
-	money = 700;
+	money = 70000;
 	wantToPlace = "";
 
 	// Import textures
-	PIXI.loader.add("whiteBox", "images/WhiteBox.png")
-			   .add("compost", "images/towerCompost.png")
-			   .add("donate", "images/towerDonate.png")
-			   .add("animals", "images/towerFarm.png")
-			   .add("factory", "images/towerFuel.png")
-			   .add("recycle", "images/towerRecycle.png")
-			   .add("purify", "images/towerWater.png")
-			   .add("garbage", "images/garbageBin.png")
+	PIXI.loader.add("whiteBox", "../pixi/images/WhiteBox.png")
+			   .add("compost", "../pixi/images/towerCompost.png")
+			   .add("donate", "../pixi/images/towerDonate.png")
+			   .add("animals", "../pixi/images/towerFarm.png")
+			   .add("factory", "../pixi/images/towerFuel.png")
+			   .add("recycle", "../pixi/images/towerRecycle.png")
+			   .add("purify", "../pixi/images/towerWater.png")
+			   .add("garbage", "../pixi/images/garbageBin.png")
 			   .load(StartGame2);
 }
 
@@ -136,20 +146,82 @@ function StartGame2(){
 			track[i].vy = trackV[i].y;
 
 			// Displays a little arrow pointing in the direction the track pushes
-			/* Proto */ GetObj(new PIXI.Text(track[i].vx > 0 ? ">" : track[i].vx < 0 ? "<" : track[i].vy > 0 ? "v" : track[i].vy < 0 ? "^" : "", debugStyle), track[i].x, track[i].y);
+			/* Proto */ GetObj(new PIXI.Text(track[i].vx > 0 ? ">" : track[i].vx < 0 ? "<" : track[i].vy > 0 ? "v" : track[i].vy < 0 ? "^" : "", debugStyle), track[i].x, track[i].y, app.stage, relPos.IGNOREMARGIN);
 		}
 	}
 
 	garbage = GetObj(GetSprite("garbage", 0, 0, 1.25, 1.25, 0x555555), 1 * unit, 17 * unit);
 
+	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10, app.stage, relPos.IGNOREMARGIN);
+	/* Proto */ livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25, app.stage, relPos.IGNOREMARGIN);
+	/* Proto */ scoreText = GetObj(new PIXI.Text("Score: " + score, debugStyle), 10, 40, app.stage, relPos.IGNOREMARGIN);
+	/* Proto */ moneyText = GetObj(new PIXI.Text("Money: " + money, debugStyle), 10, 55, app.stage, relPos.IGNOREMARGIN);
+	
+	sidebarUnit = 720 / 6;
+
+	compostB = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), uiMargin / 2, sidebarUnit * .5, app.stage, relPos.SIDEBAR);
+	compostB.interactive = true;
+	compostB.buttonMode = true;
+	compostB.on('pointerdown', function(){wantToPlace = towerTypes.COMPOST;})
+			.on('pointerover', function(){compostB.scale.x *= 1.2; compostB.scale.y *= 1.2;})
+			.on('pointerout', function(){compostB.scale.x /= 1.2; compostB.scale.y /= 1.2;});
+	
+	compostText = GetObj(new PIXI.Text("Compost: $250", debugStyle), uiMargin / 2, sidebarUnit * .5 + unit * 3 / 4, app.stage, relPos.SIDEBAR);
+	compostText.anchor.set(.5, .5);
+
+	donateB = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), uiMargin / 2, sidebarUnit * 1.5, app.stage, relPos.SIDEBAR);
+	donateB.interactive = true;
+	donateB.buttonMode = true;
+	donateB.on('pointerdown', function(){wantToPlace = towerTypes.DONATION;})
+			.on('pointerover', function(){donateB.scale.x *= 1.2; donateB.scale.y *= 1.2;})
+			.on('pointerout', function(){donateB.scale.x /= 1.2; donateB.scale.y /= 1.2;});
+	
+	donateText = GetObj(new PIXI.Text("Donate: 400", debugStyle), uiMargin / 2, sidebarUnit * 1.5 + unit * 3 / 4, app.stage, relPos.SIDEBAR);
+	donateText.anchor.set(.5, .5);
+
+	recycleB = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), uiMargin / 2, sidebarUnit * 2.5, app.stage, relPos.SIDEBAR);
+	recycleB.interactive = true;
+	recycleB.buttonMode = true;
+	recycleB.on('pointerdown', function(){wantToPlace = towerTypes.RECYCLE;})
+			.on('pointerover', function(){recycleB.scale.x *= 1.2; recycleB.scale.y *= 1.2;})
+			.on('pointerout', function(){recycleB.scale.x /= 1.2; recycleB.scale.y /= 1.2;});
+	
+	recycleText = GetObj(new PIXI.Text("Recycle: $650", debugStyle), uiMargin / 2, sidebarUnit * 2.5 + unit * 3 / 4, app.stage, relPos.SIDEBAR);
+	recycleText.anchor.set(.5, .5);
+
+	animalsB = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), uiMargin / 2, sidebarUnit * 3.5, app.stage, relPos.SIDEBAR);
+	animalsB.interactive = true;
+	animalsB.buttonMode = true;
+	animalsB.on('pointerdown', function(){wantToPlace = towerTypes.ANIMALS;})
+			.on('pointerover', function(){animalsB.scale.x *= 1.2; animalsB.scale.y *= 1.2;})
+			.on('pointerout', function(){animalsB.scale.x /= 1.2; animalsB.scale.y /= 1.2;});
+	
+	animalsText = GetObj(new PIXI.Text("Animals: $770", debugStyle), uiMargin / 2, sidebarUnit * 3.5 + unit * 3 / 4, app.stage, relPos.SIDEBAR);
+	animalsText.anchor.set(.5, .5);
+
+	purifierB = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), uiMargin / 2, sidebarUnit * 4.5, app.stage, relPos.SIDEBAR);
+	purifierB.interactive = true;
+	purifierB.buttonMode = true;
+	purifierB.on('pointerdown', function(){wantToPlace = towerTypes.PURIFIER;})
+			.on('pointerover', function(){purifierB.scale.x *= 1.2; purifierB.scale.y *= 1.2;})
+			.on('pointerout', function(){purifierB.scale.x /= 1.2; purifierB.scale.y /= 1.2;});
+	
+	purifierText = GetObj(new PIXI.Text("Purifier: $900", debugStyle), uiMargin / 2, sidebarUnit * 4.5 + unit * 3 / 4, app.stage, relPos.SIDEBAR);
+	purifierText.anchor.set(.5, .5);
+
+	factoryB = GetObj(GetSprite("factory", .5, .5, 1.25, 1.25), uiMargin / 2, sidebarUnit * 5.5, app.stage, relPos.SIDEBAR);
+	factoryB.interactive = true;
+	factoryB.buttonMode = true;
+	factoryB.on('pointerdown', function(){wantToPlace = towerTypes.FACTORY;})
+			.on('pointerover', function(){factoryB.scale.x *= 1.2; factoryB.scale.y *= 1.2;})
+			.on('pointerout', function(){factoryB.scale.x /= 1.2; factoryB.scale.y /= 1.2;});
+	
+	factoryText = GetObj(new PIXI.Text("Factory: $1200", debugStyle), uiMargin / 2, sidebarUnit * 5.5 + unit * 3 / 4, app.stage, relPos.SIDEBAR);
+	factoryText.anchor.set(.5, .5);
+
+	/* Proto */ wantToPlace = "";
+
 	app.ticker.add(delta => Update(delta)); // Defines the function that gets called every frame
-
-	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10);
-	/* Proto */ livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25);
-	/* Proto */ scoreText = GetObj(new PIXI.Text("Score: " + score, debugStyle), 10, 40);
-	/* Proto */ moneyText = GetObj(new PIXI.Text("Money: " + money, debugStyle), 10, 55);
-
-	/* Proto */ wantToPlace = towerTypes.COMPOST;
 }
 
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
@@ -243,7 +315,7 @@ function PlaceTower(){
 
 	if(wantToPlace == towerTypes.COMPOST){
 		if(Buy(250)){
-			tower = GetObj(GetSprite("compost", 0, 0, 1.25, 1.25), this.x, this.y);
+			tower = GetObj(GetSprite("compost", 0, 0, 1.25, 1.25), this.x, this.y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.ANY];
 			tower.ignore = [];
 			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -255,7 +327,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.ANIMALS){
 		if(Buy(770)){
-			tower = GetObj(GetSprite("animals", 0, 0, 1.25, 1.25), this.x, this.y);
+			tower = GetObj(GetSprite("animals", 0, 0, 1.25, 1.25), this.x, this.y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.MEAT];
 			tower.ignore = [];
 			tower.max = [4]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -267,7 +339,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.FACTORY){
 		if(Buy(1200)){
-			tower = GetObj(GetSprite("factory", 0, 0, 1.25, 1.25), this.x, this.y);
+			tower = GetObj(GetSprite("factory", 0, 0, 1.25, 1.25), this.x, this.y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.ANY];
 			tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
 			tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -279,7 +351,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.DONATION){
 		if(Buy(400)){
-			tower = GetObj(GetSprite("donate", 0, 0, 1.25, 1.25), this.x, this.y);
+			tower = GetObj(GetSprite("donate", 0, 0, 1.25, 1.25), this.x, this.y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.VEGETABLE, foodTypes.FRUIT, foodTypes.BREAD];
 			tower.ignore = [];
 			tower.max = [2]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -291,7 +363,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.RECYCLE){
 		if(Buy(650)){
-			tower = GetObj(GetSprite("recycle", 0, 0, 1.25, 1.25), this.x, this.y);
+			tower = GetObj(GetSprite("recycle", 0, 0, 1.25, 1.25), this.x, this.y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.ANY];
 			tower.ignore = [foodTypes.MEAT, foodTypes.LIQUID];
 			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -303,7 +375,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.PURIFIER){
 		if(Buy(900)){
-			tower = GetObj(GetSprite("purify", 0, 0, 1.25, 1.25), this.x, this.y);
+			tower = GetObj(GetSprite("purify", 0, 0, 1.25, 1.25), this.x, this.y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.WATER];
 			tower.ignore = [];
 			tower.max = [20]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -373,9 +445,9 @@ function GetSprite(name, anchorX = 0, anchorY = 0, scaleX = 1, scaleY = 1, tint 
 	return sprite;
 }
 
-function GetObj(obj, posX = 0, posY = 0, parent = app.stage){
-	obj.x = posX;
-	obj.y = posY;
+function GetObj(obj, posX = 0, posY = 0, parent = app.stage, ignoreUIMargin = relPos.USEMARGIN){
+	obj.x = ignoreUIMargin == relPos.SIDEBAR ? app.renderer.width - uiMargin + posX : posX;
+	obj.y = ignoreUIMargin == relPos.IGNOREMARGIN ? posY : posY + uiMargin;
 	parent.addChild(obj);
 	
 	return obj;
