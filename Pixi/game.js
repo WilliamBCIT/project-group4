@@ -19,7 +19,11 @@ const foodTypes = {
 
 const towerTypes = {
 	COMPOST:1,
-	FEEDANIMALS:2
+	ANIMALS:2,
+	FACTORY:3,
+	DONATION:4,
+	RECYCLE:5,
+	PURIFIER:6
 };
 
 function Init(){
@@ -86,7 +90,7 @@ function StartGame(){
 	food = new Array();
 	frame = 0;
 	score = 0;
-	money = 1000;
+	money = 700;
 	wantToPlace = "";
 
 	// Import textures
@@ -146,7 +150,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 		// TODO: Handle food as particles
 
-		/* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -1, -1, unit / 3, unit / 3, Math.random() * 0xFFFFFF), (15.7 + Math.random() * .6) * unit, (0.7 + Math.random() * .6) * unit), "apple", "fruit"));
+		/* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -2 / 5, -2 / 5, unit * 3 / 5, unit * 3 / 5, Math.random() * 0xFFFFFF), (15.7 + Math.random() * .6) * unit, (0.7 + Math.random() * .6) * unit), "apple", "fruit"));
 	}else{
 		frame++;
 	}
@@ -161,7 +165,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 		}
 	}
 
-	for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.25; j < towers.length; j++){
+	for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.5; j < towers.length; j++){
 		let total = 0;
 
 		for(i = 0; i < towers[j].curr.length; i++){ // Increments counters of currently-being-processed food
@@ -180,10 +184,12 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				towers[j].curr[i] = [];
 			}
 		}
-
+		
 		if(total == towers[j].allow.length){ // Increases score if tower is finished, and clears it
 			for(i = 0; i < towers[j].curr.length; i++){
 				towers[j].finished[i] = 0;
+				towers[j].currCount = 0;
+				towers[j].curr[i] = [];
 			}
 
 			AdjustScore(towers[j].value);
@@ -195,6 +201,10 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			let l = towers[j].allow.findIndex(function(element){
 				return element == foodTypes.ANY || food[i].type == element || food[i].subType == element;
 			});
+
+			if(towers[j].ignore.includes(food[i].type) || towers[j].ignore.includes(food[i].subType)){
+				l = -1;
+			}
 
 			if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.abs(Math.pow(towers[j].x - food[i].x, 2)) + Math.abs(Math.pow(towers[j].y - food[i].y, 2)) <= maxDistSqrd){
 				towers[j].curr[l].push(0);
@@ -216,6 +226,76 @@ function PlaceTower(){
 	var tower = false;
 
 	if(wantToPlace == towerTypes.COMPOST){
+		if(Buy(225)){
+			valid = true;
+
+			tower = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x993388), this.x, this.y);
+			tower.allow = [foodTypes.ANY];
+			tower.ignore = [];
+			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+			tower.atOnce = 1.2; // Amount of concurrent users
+			tower.processTime = 60; // Frames required to process one food item
+			tower.value = 100; // Amount of score and money gained when all maxes have been met
+		}
+	}else if(wantToPlace == towerTypes.ANIMALS){
+		if(Buy(750)){
+			valid = true;
+
+			tower = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x993388), this.x, this.y);
+			tower.allow = [foodTypes.MEAT];
+			tower.ignore = [];
+			tower.max = [10]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+			tower.atOnce = 5; // Amount of concurrent users
+			tower.processTime = 15; // Frames required to process one food item
+			tower.value = 125; // Amount of score and money gained when all maxes have been met
+		}
+	}else if(wantToPlace == towerTypes.FACTORY){
+		if(Buy(500)){
+			valid = true;
+
+			tower = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x993388), this.x, this.y);
+			tower.allow = [foodTypes.ANY];
+			tower.ignore = [];
+			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+			tower.atOnce = 1; // Amount of concurrent users
+			tower.processTime = 60; // Frames required to process one food item
+			tower.value = 100; // Amount of score and money gained when all maxes have been met
+		}
+	}else if(wantToPlace == towerTypes.DONATION){
+		if(Buy(500)){
+			valid = true;
+
+			tower = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x993388), this.x, this.y);
+			tower.allow = [foodTypes.ANY];
+			tower.ignore = [];
+			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+			tower.atOnce = 1; // Amount of concurrent users
+			tower.processTime = 60; // Frames required to process one food item
+			tower.value = 100; // Amount of score and money gained when all maxes have been met
+		}
+	}else if(wantToPlace == towerTypes.RECYCLE){
+		if(Buy(500)){
+			valid = true;
+
+			tower = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x993388), this.x, this.y);
+			tower.allow = [foodTypes.ANY];
+			tower.ignore = [];
+			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+			tower.atOnce = 1; // Amount of concurrent users
+			tower.processTime = 60; // Frames required to process one food item
+			tower.value = 100; // Amount of score and money gained when all maxes have been met
+		}
+	}else if(wantToPlace == towerTypes.PURIFIER){
 		if(Buy(500)){
 			valid = true;
 
