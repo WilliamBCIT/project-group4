@@ -90,6 +90,7 @@ function StartGame(){
 	towers = new Array();
 	food = new Array();
 	frame = 0;
+	lives = 100;
 	score = 0;
 	money = 700;
 	wantToPlace = "";
@@ -144,8 +145,9 @@ function StartGame2(){
 	app.ticker.add(delta => Update(delta)); // Defines the function that gets called every frame
 
 	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10);
-	/* Proto */ scoreText = GetObj(new PIXI.Text("Score: " + score, debugStyle), 10, 25);
-	/* Proto */ moneyText = GetObj(new PIXI.Text("Money: " + money, debugStyle), 10, 40);
+	/* Proto */ livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25);
+	/* Proto */ scoreText = GetObj(new PIXI.Text("Score: " + score, debugStyle), 10, 40);
+	/* Proto */ moneyText = GetObj(new PIXI.Text("Money: " + money, debugStyle), 10, 55);
 
 	/* Proto */ wantToPlace = towerTypes.COMPOST;
 }
@@ -167,10 +169,16 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 	// TODO: Properly centre food along tracks
 	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 2; i < food.length; i++){
-		for(j = 0; j < track.length; j++){
-			if(Math.abs(Math.pow(track[j].x - food[i].x, 2)) + Math.abs(Math.pow(track[j].y - food[i].y, 2)) <= maxDistSqrd){
-				food[i].x += track[j].vx * delta;
-				food[i].y += track[j].vy * delta;
+		if(Math.abs(Math.pow(garbage.x - food[i].x, 2)) + Math.abs(Math.pow(garbage.y - food[i].y, 2)) <= maxDistSqrd){ // Destroy if near garbage can
+			Destroy(food[i]);
+			food.splice(i, 1);
+			AdjustLives(-1);
+		}else{
+			for(j = 0; j < track.length; j++){
+				if(Math.abs(Math.pow(track[j].x - food[i].x, 2)) + Math.abs(Math.pow(track[j].y - food[i].y, 2)) <= maxDistSqrd){ // Move if near track
+					food[i].x += track[j].vx * delta;
+					food[i].y += track[j].vy * delta;
+				}
 			}
 		}
 	}
@@ -220,7 +228,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 				if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.abs(Math.pow(towers[j].x - food[i].x, 2)) + Math.abs(Math.pow(towers[j].y - food[i].y, 2)) <= maxDistSqrd){
 					towers[j].curr[l].push(0);
-					food[i].parent.removeChild(food[i]);
+					Destroy(food[i]);
 					food.splice(i, 1);
 					towers[j].currCount++;
 					towers[j].ready = 0;
@@ -349,6 +357,11 @@ function AdjustScore(increaseBy){
 	scoreText.text = "Score: " + score;
 	money += increaseBy;
 	moneyText.text = "Money: " + money;
+}
+
+function AdjustLives(increaseBy){
+	lives += increaseBy;
+	livesText.text = "Lives: " + lives;
 }
 
 function GetSprite(name, anchorX = 0, anchorY = 0, scaleX = 1, scaleY = 1, tint = 0xFFFFFF){
