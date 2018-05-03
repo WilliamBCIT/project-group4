@@ -151,7 +151,7 @@ function StartGame2(){
 }
 
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
-	/* Proto */ fpsText.text = Math.round(1 / delta * 60);
+	/* Proto */ fpsText.text = Math.round(1 / delta * 60) + " fps";
 	
 	mousePos = app.renderer.plugins.interaction.mouse.global;
 
