@@ -27,23 +27,25 @@ var AG_defineProperty=function(){var k,l=Object.defineProperty;if("function"==ty
 } catch (ex) { console.error('Error executing AG js: ' + ex); }</script>
     <script src="./Home_files/bootstrap.min.js.download"></script>
 	<script src="js/overlay.js"></script>
-    <script type="text/javascript" src="pixi.min.js"/></script>
-	<script type="text/javascript" src="game.js"></script>
-    <title>Home</title>
+	<title>Home</title>
 
 </head>
 <body>--&gt;
 
     <div id="menu" class="overlay-menu">
         <div class="overlay-content">
-            <a id="1" href="./Home.html">Game Page</a>
+            <a id="1" href="./index.html">Game Page</a>
             <a id="2" href="./gameManual.html">Game Manual</a>
             <a id="3" href="./explanation.html">Explanation</a>
+			<a id="3" href="./testLogin.html">testLogin</a>
         </div>
     </div>
 
     <nav class="navbar fixed-top">
-        <a class="navbar-brand" href="./home.html"><h3>Achos</h3></a>
+        <a class="navbar-brand" href="./index.html"><h3>Achos</h3></a>
+		<a class="navbar-brand" href="./index.html">Game Page</a>
+		<a class="navbar-brand" href="./gameManual.html">Game Manual</a>
+		<a class="navbar-brand" href="./explanation.html">Explanation</a>
 		<a id="menu-icon-link" class="nav navbar-nav navbar-right" href="#">
             <span class="hamburger-menu-icon fas fa-bars"></span>
         </a>
@@ -57,11 +59,8 @@ var AG_defineProperty=function(){var k,l=Object.defineProperty;if("function"==ty
         </div>
     </div>
 	<!-- LINK HTML5 GAME IN HERE -->
-    <div id="playframe"></div>
-    <script type="text/javascript">
-		Init();
-	</script>
-	<a href="main.html">FULLSCREEN</a>
+	<iframe id="playframe" src="D:\Group4Project\CompostHero1.png" frameborder="0" scrolling="no" width="100%" height="576"></iframe>
+	<a href="https://educa.land/games/matchaddition/0_0_11/">FULLSCREEN</a>
     <div class="wide-text-container jumbotron">
         <div class="wide-text-holder-quote">
             <h2>Tower defense game which run on the mobile web browser (also on PC) which raise awareness about food waste reduction. 

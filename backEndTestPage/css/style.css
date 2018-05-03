@@ -1,0 +1,36 @@
+body {
+	background-color: #253869;
+}
+
+
+section {
+	height: 150px; /* Ask Medhat */
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background-color: #222222;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 1px solid white;
+}
+
+h3 {
+	margin:auto;
+}
+
+img {
+	margin:auto;
+}
+
+span {
+	font-weight: bold;
+}
+
+footer {
+	background-color: deepskyblue;
+	color: whitesmoke;
+}
+
+.navbar {
+	background-color: lightsteelblue;
+    color: black;
+}
