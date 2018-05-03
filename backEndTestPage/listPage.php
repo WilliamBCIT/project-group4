@@ -1,3 +1,4 @@
+<?php?>
 <!DOCTYPE html>
 <!-- saved from url=(0044)https://tommyyeh0505.github.io/Term-Project/ -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -5,29 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- STYLESHEETS -->
+     <!-- STYLESHEETS -->
     <link href="./Home_files/css" rel="stylesheet">
     <link href="./Home_files/css(1)" rel="stylesheet">
     <link href="./Home_files/all.css" rel="stylesheet">
     <link rel="stylesheet" href="./Home_files/bootstrap.min.css">
     <link rel="stylesheet" href="./Home_files/styles.css">
 	<link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
-
+	
 
     <!-- JAVASCRIPT -->
+    
     <script src="./Home_files/bootstrap.min.js.download"></script>
-	<script src="js/overlay.js"></script>
-    <script src="pixi.min.js"></script>
-	<script type="text/javascript" src="game.js"></script>
-	<title>Home</title>
+    <title>List Test Page</title>
 
-</head>
-<body>--&gt;
-
+	
+</head><body>--&gt;
     <nav class="navbar fixed-top">
         <a class="navbar-brand" href="./index.html"><h3>Achos</h3></a>
 		<a class="navbar-brand" href="./index.html">Game Page</a>
-		<a class="navbar-brand" href="./listPage.php">listPage</a>
+		<a class="navbar-brand" href="./gameManual.html">Game Manual</a>
 		<a class="navbar-brand" href="./explanation.html">Explanation</a>
 		<a id="menu-icon-link" class="nav navbar-nav navbar-right" href="#">
             <span class="hamburger-menu-icon fas fa-bars"></span>
@@ -42,38 +40,33 @@
         </div>
     </div>
 	<!-- LINK HTML5 GAME IN HERE -->
-    <div class="row">
-    <div id="playframe"></div>
-    </div>
-	   <script type="text/javascript">
-		  Init();
-	   </script>
-	<a href="https://educa.land/games/matchaddition/0_0_11/">FULLSCREEN</a>
-	
-	<div class="container">
-        <h2>Vertical (basic) form</h2>
-        <form action="recordScore.php" method="post">
-            <div class="form-group">
-              <label for="name">Full Name:</label>
-              <input type="text" class="form-control" name="fullname" placeholder="Full Name">
-            </div>
-            <div class="form-group">
-              <label for="score">Password:</label>
-              <input type="text" class="form-control" name="score" placeholder="Enter score">
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox"> Remember me</label>
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
-	</div>
-	
     <div class="wide-text-container jumbotron">
         <div class="wide-text-holder-quote">
-            <h2>Tower defense game which run on the mobile web browser (also on PC) which raise awareness about food waste reduction. 
-The boy invents towers to prevent foods from going straight into the ‘Waste’ bin. 
-Towers are the real-life examples of food waste reduction and it is to teach the users different ways of reducing food. 
-</h2>
+            <?php
+                    extract($_POST);
+
+                    $credentials = explode(",", file_get_contents("credentials.config"));
+                    $size        = sizeof($credentials);
+                    $fullnames      = array();
+                    $scores   = array();
+                    $user_match  = false;
+                    $pass_match  = false;
+                    for ($i = 0; $i < $size; $i++) {
+                        if (($i % 2) == 0) {
+                            $fullnames[] = trim($credentials[$i]);
+                        }
+                    }
+
+                    for ($i = 0; $i < $size; $i++) {
+                        if (!(($i % 2) == 0)) {
+                            $scores[] = trim($credentials[$i]);
+                        }
+                    }
+            
+                    for ($i = 0; $i < sizeof($fullnames); $i++) {
+                        echo $fullnames[$i]." ".$scores[$i]."<br />";
+                    }
+                ?>
         </div>
     </div>
 
