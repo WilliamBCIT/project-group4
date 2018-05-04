@@ -1,0 +1,545 @@
+/* ----IMPORTS---- */
+
+/* @import url("http://cdnjs.cloudflare.com/ajax/libs/octicons/3.1.0/octicons.css"); */
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+/* ----HTML---- */
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #191919;
+}
+
+h1 {
+    font-weight: 300;
+}
+
+h2 {
+    font-size: 2em;
+    font-weight: lighter;
+}
+
+p {
+    font-size: 1.3em;
+}
+
+/* ----OVERLAY MENU---- */
+
+.overlay-menu {
+    height: 130%;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    background-color: #131313e7;
+    overflow-x: hidden;
+}
+
+.overlay-content {
+    position: relative;
+    top: 0;
+    left: 60px;
+    text-align: left;
+    margin-top: 18vh;
+    transition: 0.3s;
+}
+
+@media only screen and (min-width: 500px) {
+    .overlay-content {
+        position: relative;
+        top: 0;
+        left: 120px;
+        text-align: left;
+        margin-top: 18vh;
+        transition: 0.3s;
+    }
+}
+
+.overlay-menu a {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    padding: 0;
+    padding-bottom: 0.5em;
+    text-decoration: none;
+    color: white;
+    display: block;
+    transition: 0.3s ease;
+}
+
+@media only screen and (min-width: 500px) {
+    .overlay-menu a {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 300;
+        font-size: 30px;
+        padding: 0;
+        text-decoration: none;
+        color: white;
+        display: block;
+        transition: 0.3s ease;
+    }
+}
+
+.overlay-menu a:hover,
+.overlay-menu a:focus {
+    color: #ff9431;
+}
+
+/* ----NAVBAR---- */
+
+.navbar {
+    height: 71px;
+    background-color: white;
+    padding: 0.3em;
+    padding-left: 3%;
+    padding-right: 3%;
+    box-shadow: 0px 1px 2px 0px rgba(125, 125, 125, 0.6);
+}
+
+@media only screen and (min-width: 700px) {
+    .navbar {
+        height: 61px;
+        background-color: white;
+        padding: 0.3em;
+        padding-left: 10%;
+        padding-right: 10%;
+        box-shadow: 0px 1px 2px 0px rgba(125, 125, 125, 0.6);
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .navbar {
+        height: 61px;
+        background-color: white;
+        padding: 0.3em;
+        padding-left: 10%;
+        padding-right: 10%;
+        box-shadow: 0px 1px 2px 0px rgba(125, 125, 125, 0.6);
+    }
+}
+
+@media only screen and (min-width: 1330px) {
+    .navbar {
+        height: 61px;
+        background-color: white;
+        padding: 0.3em;
+        padding-left: 17%;
+        padding-right: 17%;
+        box-shadow: 0px 1px 2px 0px rgba(125, 125, 125, 0.6);
+    }
+}
+
+.navbar-brand>h3 {
+    color: black;
+}
+
+#menu-icon-link:hover {
+    text-decoration: none;
+}
+
+.hamburger-menu-icon {
+    vertical-align: middle;
+    font-size: 1.8em;
+    color: black;
+}
+
+/* ----LANDING SCREEN---- */
+
+#landing-image {
+    background-image: url("../it5.jpeg");
+    height: 20vh;
+    /* alternative is to use jQuery */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#landing-message {
+    color: white;
+    height: 100%;
+    vertical-align: middle;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#landing-message h2 {
+    font-size: 3em;
+}
+
+/* ----WIDE TEXT CONTAINER---- */
+
+.wide-text-container {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    background-color: white;
+    text-align: center;
+    margin: 0;
+    border-radius: 0;
+}
+
+.wide-text-holder-quote {
+    width: 1000px;
+    max-width: 100%;
+}
+
+.wide-text-holder-quote h2 {
+    font-size: 1.5em !important;
+    font-weight: lighter;
+}
+
+@media only screen and (min-width: 900px) {
+    .wide-text-holder-quote h2 {
+        font-size: 2em !important;
+        font-weight: lighter;
+    }
+}
+
+.wide-text-holder {
+    width: 840px;
+    max-width: 90%;
+}
+
+.wide-text-container p {
+    font-weight: 200;
+    font-size: 1em;
+    letter-spacing: 1px;
+    padding-bottom: 40px;
+    margin: 0;
+}
+
+@media only screen and (min-width: 900px) {
+    .wide-text-container p {
+        font-weight: 200;
+        font-size: 1.2em;
+        letter-spacing: 1px;
+        padding-bottom: 40px;
+        margin: 0;
+    }
+}
+
+.wide-text-container p:last-of-type {
+    font-weight: 200;
+    letter-spacing: 1px;
+    padding-bottom: 0px;
+    margin: 0;
+}
+
+.wide-text-container h2 {
+    text-align: center;
+    font-size: 2.1em;
+    font-weight: 200;
+    line-height: 1.5em;
+    vertical-align: baseline;
+}
+
+/* ----SHORT RULE---- */
+
+.short-hr {
+    color: white;
+    background-color: white;
+    width: 50px;
+    display: block;
+}
+
+/* ----BANNER IMAGE----
+   ################################################################
+   # Override the background-image using id or additional classes #
+   ################################################################
+*/
+
+.banner-image {
+	background-color: black;
+    background-image: url("../it1.jpg");
+    color: green;
+    text-align: center;
+    height: 200px;
+    margin: 0;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media only screen and (min-width: 515px) {
+    .banner-image {
+        background-image: url("../it1.jpg");
+        color: Green;
+        text-align: center;
+        height: 300px;
+        margin: 0;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.banner-image-text {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.banner-image-text h1 {
+    font-size: 3.5em;
+    position: relative;
+}
+
+.banner-image-text span {
+    letter-spacing: .4em;
+    line-height: 21px;
+    font-weight: lighter;
+}
+
+.banner-image-short {
+    background-image: url("../it6.jpeg");
+    height: 260px;
+}
+
+.banner-image-short h1 {
+    font-size: 2.7em;
+}
+
+@media only screen and (min-width: 1024px) {
+    .banner-image-short {
+        height: 369px;
+    }
+
+    .banner-image-short h1 {
+        font-size: 3.5em;
+    }
+}
+
+/* ----FOOTER---- */
+
+.footer-container {
+    background-color: #191919;
+    text-align: center;
+    margin: 0;
+    border-radius: 0;
+    color: white;
+}
+
+.footer-container p {
+    font-weight: 200;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.footer-container .footer-location p {
+    margin-bottom: 10px;
+    color: white;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 0.4em;
+    font-size: 0.9em;
+}
+
+.footer-container .footer-contact p {
+    margin-bottom: 10px;
+    color: white;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.95em;
+}
+
+.footer-container .footer-contact a {
+    text-decoration: none !important;
+    margin-bottom: 10px;
+    color: white;
+    padding: 0;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.95em;
+}
+
+.footer-container .footer-contact a:visited {
+    text-decoration: none !important;
+    margin-bottom: 10px;
+    color: white;
+    padding: 0;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.95em;
+}
+
+.footer-container .footer-link {
+    text-decoration: none !important;
+    margin-bottom: 10px;
+    color: white;
+    padding: 0;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.95em;
+}
+
+.footer-container .short-hr {
+    margin-top: 1em;
+    margin-bottom: 2.5em;
+}
+
+.footer-container .social-icons {
+    padding-top: 0.5em;
+    font-size: 2em;
+    letter-spacing: 0.5em;
+}
+
+/* ----BANNERS---- */
+
+#banner1 {
+	
+}
+
+#banner2 {
+}
+
+
+/* ################################################################################### */
+
+/* CONTACT US SPECIFIC */
+
+/* ################################################################################### */
+
+#contact-container {
+    background-color: white;
+}
+
+#contact-container label {  
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
+    font-size: 1.2em;
+}
+
+#contact-container p {
+    font-size: 0.75em;
+    font-weight: 300;
+}
+
+#contact-container .container-fluid {
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+.red-asterisk {
+    color: red;
+    font-weight: bold;
+}
+
+#requirements {
+    text-align: right;
+}
+
+.form-wrapper {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.form-container {
+    width: 768px;
+    max-width: 100%;
+}
+
+.form-container input {
+    font-family: 'Open Sans', sans-serif;
+    ;
+    font-size: 0.8em;
+    height: 46px;
+    border-radius: 3px;
+    border: 1px solid rgba(209, 209, 209, 0.6);
+    background-color: #f7f7f7;
+}
+
+.form-container input:focus {
+    box-shadow: none;
+    border: 1px solid rgba(209, 209, 209, 0.6);
+    background-color: #f7f7f7;
+}
+
+.form-container textarea {
+    font-family: 'Open Sans', sans-serif;
+    ;
+    font-size: 0.8em;
+    border-radius: 3px;
+    border: 1px solid rgba(209, 209, 209, 0.6);
+    background-color: #f7f7f7;
+}
+
+.form-container textarea:focus {
+    box-shadow: none;
+    border: 1px solid rgba(209, 209, 209, 0.6);
+    background-color: #f7f7f7;
+}
+
+.form-submit-wrapper {
+    padding-top: 45px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.form-submit {
+    width: 171px;
+    height: 81px;
+    background-color: white !important;
+    border: 2px solid rgb(44, 44, 44) !important;
+    border-radius: 4px !important;
+    font-size: 0.8em;
+    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
+    text-transform: uppercase;
+    transition: 0.4s ease;
+}
+
+.form-submit:hover {
+    border: 2px solid rgb(211, 211, 211) !important;
+    color: rgb(141, 141, 141);
+}
+
+.wide-text-holder-manual {
+	max-width: 70%;
+	overflow: auto;
+	margin:0 auto;
+}
+
+.manual-text{
+	max-width: 80%;
+	margin: auto auto;
+
+
+}
+
+.whiteText {
+    color : white;
+}
+
+.form1 {
+    color : white;
+}
+
+.left-image {
+	max-width: 100%;
+	float: left;
+	width: 150px;
+	height: 120px;
+	padding-right: 35px;
+
+}
+
+.right-text {
+padding:10;
+    margin-left: 150px
+}
+
+#playframe {
+	background-color:red;
+	height: 100vh;
+	width: 100vh;
+	margin: 0 auto;
+}
+
+
+
