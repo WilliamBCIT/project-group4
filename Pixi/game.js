@@ -37,7 +37,7 @@ const relPos = {
 
 function Init(){
 	// Initialize game window
-	app = new PIXI.Application(720 + uiMargin, 720 + uiMargin, {backgroundColor:0x1099bb, antialias:true});
+	app = new PIXI.Application(720, 720, {backgroundColor:0x1099bb, antialias:true});
 	app.renderer.autoResize = true;
 	document.getElementById("playframe").appendChild(app.view);
 	
@@ -100,7 +100,7 @@ function StartGame(){
 	towers = new Array();
 	food = new Array();
 	frame = 0;
-	lives = 100;
+	lives = 5;
 	score = 0;
 	money = 70000;
 	wantToPlace = "";
@@ -227,8 +227,8 @@ function StartGame2(){
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	/* Proto */ fpsText.text = Math.round(1 / delta * 60) + " fps";
 	
-    if (lives === 0) {
-        StartGame();
+    if (lives < 0) {
+        Init();
     }
     
 	mousePos = app.renderer.plugins.interaction.mouse.global;
@@ -469,5 +469,33 @@ function Destroy(obj){
 }
 
 function death() {
-    
+    PIXI.loader.add("logo", "./images/logoWhiteBackground.png")
+			   .add("playB", "./images/PlayButton.png")
+			   .add("lBoardsB", "./images/LeaderboardsButton.png")
+			   .load(Init2);
+    var recordButton = PIXI.Texture.fromImage('./images/conveyorRight.png');
+
+    var button = new PIXI.Sprite(recordButton);
+    button.buttonMode = true;
+
+    button.anchor.set(0.5);
+    button.x = 175;
+    button.y = 500;
+
+    // make the button interactive...
+    button.interactive = true;
+    button.buttonMode = true;
+
+    button.on('pointerdown', onButtonDown);
+
+    // add it to the stage
+    app.stage.addChild(button);
+
+    // add button to array
+
+    function onButtonDown() {
+        this.isdown = true;
+        this.texture = textureButtonDown;
+        this.alpha = 1;
+``  }
 }
