@@ -53,9 +53,9 @@ function Init(){
 	score = 0;
 
 	// Import textures
-	PIXI.loader.add("logo", "../pixi/images/logoWhiteBackground.png")
-			   .add("playB", "../pixi/images/PlayButton.png")
-			   .add("lBoardsB", "../pixi/images/LeaderboardsButton.png")
+	PIXI.loader.add("logo", "./images/logoWhiteBackground.png")
+			   .add("playB", "./images/PlayButton.png")
+			   .add("lBoardsB", "./images/LeaderboardsButton.png")
 			   .load(Init2);
 }
 
@@ -106,14 +106,14 @@ function StartGame(){
 	wantToPlace = "";
 
 	// Import textures
-	PIXI.loader.add("whiteBox", "../pixi/images/WhiteBox.png")
-			   .add("compost", "../pixi/images/towerCompost.png")
-			   .add("donate", "../pixi/images/towerDonate.png")
-			   .add("animals", "../pixi/images/towerFarm.png")
-			   .add("factory", "../pixi/images/towerFuel.png")
-			   .add("recycle", "../pixi/images/towerRecycle.png")
-			   .add("purify", "../pixi/images/towerWater.png")
-			   .add("garbage", "../pixi/images/garbageBin.png")
+	PIXI.loader.add("whiteBox", "./images/WhiteBox.png")
+			   .add("compost", "./images/towerCompost.png")
+			   .add("donate", "./images/towerDonate.png")
+			   .add("animals", "./images/towerFarm.png")
+			   .add("factory", "./images/towerFuel.png")
+			   .add("recycle", "./images/towerRecycle.png")
+			   .add("purify", "./images/towerWater.png")
+			   .add("garbage", "./images/garbageBin.png")
 			   .load(StartGame2);
 }
 
@@ -227,6 +227,10 @@ function StartGame2(){
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	/* Proto */ fpsText.text = Math.round(1 / delta * 60) + " fps";
 	
+    if (lives === 0) {
+        StartGame();
+    }
+    
 	mousePos = app.renderer.plugins.interaction.mouse.global;
 
 	if(frame == 15){
@@ -462,4 +466,8 @@ function GetFood(obj, subType, type){
 
 function Destroy(obj){
 	obj.parent.removeChild(obj);
+}
+
+function death() {
+    
 }
