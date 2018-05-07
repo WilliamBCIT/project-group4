@@ -227,41 +227,7 @@ function StartGame2(){
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	/* Proto */ fpsText.text = Math.round(1 / delta * 60) + " fps";
 	
-    if (lives <= 0) {
-        var gameOverText = new PIXI.Text('Game Over!', {
-        fontWeight: 'bold',
-        fontSize: 60,
-        fontFamily: 'Arial',
-        fill: '#CD0000',
-        align: 'center',
-        stroke: '#FFFFFF',
-        strokeThickness: 6
-    });
-    
-        var scored = new PIXI.Text('You Scored: ' + score, {
-        fontWeight: 'bold',
-        fontSize: 30,
-        fontFamily: 'Arial',
-        fill: '#CD0000',
-        align: 'center',
-        stroke: '#FFFFFF',
-        strokeThickness: 6
-    });
-    
-    gameOverText.anchor.set(0.5);
-    gameOverText.x = app.screen.width / 2;
-    gameOverText.y = app.screen.height / 2;
-    scored.anchor.set(0.5);
-    scored.x = app.screen.width / 2;
-    scored.y = app.screen.height / 2 + 70;
-
-    
-    app.stage.addChild(gameOverText);
-    app.stage.addChild(scored);
-    }
-    
-    if (lives > 0) {
-	mousePos = app.renderer.plugins.interaction.mouse.global;
+    mousePos = app.renderer.plugins.interaction.mouse.global;
 
 	if(frame == 15){
 		frame = 0;
@@ -342,7 +308,6 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			}
 		}
 	}
-         }
 }
 
 function PlaceTower(){
@@ -469,6 +434,39 @@ function AdjustScore(increaseBy){
 function AdjustLives(increaseBy){
 	lives += increaseBy;
 	livesText.text = "Lives: " + lives;
+
+	if (lives <= 0) {
+        var gameOverText = new PIXI.Text('Game Over!', {
+			fontWeight: 'bold',
+			fontSize: 60,
+			fontFamily: 'Arial',
+			fill: '#CD0000',
+			align: 'center',
+			stroke: '#FFFFFF',
+			strokeThickness: 6
+		});
+    
+        var scored = new PIXI.Text('You Scored: ' + score, {
+			fontWeight: 'bold',
+			fontSize: 30,
+			fontFamily: 'Arial',
+			fill: '#CD0000',
+			align: 'center',
+			stroke: '#FFFFFF',
+			strokeThickness: 6
+		});
+		
+   		gameOverText.anchor.set(0.5);
+		gameOverText.x = app.screen.width / 2;
+		gameOverText.y = app.screen.height / 2;
+		scored.anchor.set(0.5);
+		scored.x = app.screen.width / 2;
+		scored.y = app.screen.height / 2 + 70;
+
+		app.stage.addChild(gameOverText);
+		app.stage.addChild(scored);
+		app.ticker.remove(this.Update);
+    }
 }
 
 function GetSprite(name, anchorX = 0, anchorY = 0, scaleX = 1, scaleY = 1, tint = 0xFFFFFF){
