@@ -128,7 +128,8 @@ function StartGame(){
 			   .add("stage0", "./images/townBackground.png")
 			   .add("fullHP", "./images/HPBeaker.png")
                .add("fullXP", "./images/XPBeaker.png")
-               .add("emptyBeaker", "./images/EmptyBeaker.png")
+			   .add("emptyBeaker", "./images/EmptyBeaker.png")
+			   // TODO: Add conveyor belts & foods
 			   .load(StartGame2);
 }
 
@@ -137,7 +138,7 @@ function StartGame2(){
 	stageImg.interactive = true;
 	stageImg.buttonMode = true;
 	stageImg.on('pointerdown', PlaceTower);
-	
+
     hpBack = GetObj(GetSprite("emptyBeaker", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
     hpBar = GetObj(GetSprite("fullHP", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
     
