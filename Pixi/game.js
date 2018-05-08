@@ -111,6 +111,9 @@ function StartGame(){
 			   .add("garbage", "./images/garbageBin.png")
 			   .add("selectUI", "./images/towerSelection.png")
 			   .add("stage0", "./images/townBackground.png")
+			   .add("fullHP", "./images/HPBeaker.png")
+			   .add("fullXP", "./images/XPBeaker.png")
+			   .add("emptyBeaker", "./images/EmptyBeaker.png")
 			   .load(StartGame2);
 }
 
@@ -119,6 +122,12 @@ function StartGame2(){
 	stageImg.interactive = true;
 	stageImg.buttonMode = true;
 	stageImg.on('pointerdown', PlaceTower);
+
+	hpBack = GetObj(GetSprite("emptyBeaker", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
+	hpBar = GetObj(GetSprite("fullHP", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
+	
+	xpBack = GetObj(GetSprite("emptyBeaker", 0, 0, 1.5, 1.5), 155, 65, app.stage, relPos.IGNOREMARGIN);
+	xpBar = GetObj(GetSprite("fullXP", 0, 0, 1.5, 1.5), 155, 65, app.stage, relPos.IGNOREMARGIN);
 
 	// Assuming one level
 	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
@@ -244,6 +253,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				if(Math.abs(Math.pow(track[j].x - food[i].x, 2)) + Math.abs(Math.pow(track[j].y - food[i].y, 2)) <= maxDistSqrd){ // Move if near track
 					food[i].x += track[j].vx * delta;
 					food[i].y += track[j].vy * delta;
+
+					break;
 				}
 			}
 		}
@@ -493,34 +504,3 @@ function GetFood(obj, subType, type){
 function Destroy(obj){
 	obj.parent.removeChild(obj);
 }
-
-/*function death() {
-	PIXI.loader.add("logo", "./images/logoWhiteBackground.png")
-			.add("playB", "./images/PlayButton.png")
-			.add("lBoardsB", "./images/LeaderboardsButton.png")
-			.load(Init2);
-	var recordButton = PIXI.Texture.fromImage('./images/conveyorRight.png');
-
-	var button = new PIXI.Sprite(recordButton);
-	button.buttonMode = true;
-
-	button.anchor.set(0.5);
-	button.x = 175;
-	button.y = 500;
-
-	// make the button interactive...
-	button.interactive = true;
-	button.buttonMode = true;
-
-	button.on('pointerdown', onButtonDown);
-
-	// add it to the stage
-	app.stage.addChild(button);
-
-	// add button to array
-
-	function onButtonDown() {
-		this.isdown = true;
-		this.texture = textureButtonDown;
-		this.alpha = 1;
-}*/
