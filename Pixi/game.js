@@ -58,8 +58,10 @@ function Init(){
 	//Prepare Easter Egg 
 	var password;
     password = 0;
-			  
-			   }
+	
+    document.addEventListener('keydown', checkKeyInput);
+	
+	}
 
 function Init2(){
 	let halfWidth = app.renderer.width / 2;
@@ -532,31 +534,27 @@ function Destroy(obj){
 		this.alpha = 1;
 }*/
 
-function checkKeyInput (key) {
-    
-        if (key.keyCode == 77 && password == 0)    {
-            password = 1;
-        } else
-        if (key.keyCode == 79 && password == 1)    {
-            password = 2;
-        } else
-        if (key.keyCode == 78 && password == 2)    {
+function checkKeyInput(key) {
+
+        if (key.keyCode === 77 && password == 0)    {
+			password = 1;
+        }
+        if (key.keyCode === 79 && password == 1)    {
+			password = 2;
+        }
+        if (key.keyCode === 78 && password == 2)    {
             password = 3;
-        } else
-        if (key.keyCode == 69 && password == 3)    {
+        }
+        if (key.keyCode === 69 && password == 3)    {
             password = 4;
-        } else
-        if (key.keyCode == 89 && password == 4)    {
+        }
+        if (key.keyCode === 89 && password == 4)    {
             startEasterEgg();
-        } else
-		{
-			password = 0;
-		}
-   
+        } 
 }
 
-function startEasterEgg (void) {
+function startEasterEgg() {
 	
-	//TestCode
+    AdjustScore(500);
 	
 }
