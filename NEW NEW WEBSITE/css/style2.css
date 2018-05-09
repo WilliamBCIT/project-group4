@@ -36,6 +36,7 @@ a, a:hover, a:focus {
 .wrapper {
     display: block;
     align-items: stretch;
+	
 }
 .wrapper2 {
     display: flex;
@@ -48,6 +49,8 @@ a, a:hover, a:focus {
     background: #47B200;
     color: #fff;
     transition: all 0.3s;
+	max-height: 740px;
+	min-height: 700px;
 }
 
 #sidebar.active {
@@ -81,7 +84,7 @@ a, a:hover, a:focus {
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: #fff;
-    background:#57D900;
+    background:#7CFC00;
 }
 /* leaderboard
 
@@ -97,6 +100,7 @@ a, a:hover, a:focus {
 	height:100vh;
 	clear:right;
 	padding-left: 10px;
+	min-height: 700px;
 
 }
 
@@ -129,7 +133,8 @@ a[aria-expanded="true"]::before {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    background: #7CFC00;
+	
 }
 
 ul.CTAs {
@@ -154,7 +159,6 @@ ul.CTAs a {
     padding: 20px;
     min-height: 100vh;
     transition: all 0.3s;
-	background-color
 }
 
 /* ---------------------------------------------------
@@ -184,8 +188,9 @@ ul.CTAs a {
 
 #playframe {
 	background-color:grey;
+	max-width: 60vw;
 	height: 740px;
-	width: 740px;
+	width: 960px;
 	position: absolute;
 	margin: auto;
 	top: 0;
