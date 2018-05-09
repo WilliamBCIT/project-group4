@@ -4,7 +4,7 @@ const foodTypes = {
 		WATER:11,
 		OIL:12,
 	VEGETABLE:2,
-		POTATO:21,
+		EGGPLANT:21,
 		CARROT:22,
 		CABBAGE:23,
 	FRUIT:3,
@@ -16,6 +16,21 @@ const foodTypes = {
 		BONE:51,
 		STEAK:52,
 		PORK:53
+};
+
+const foodNames = {
+	11:"water.png",
+	12:"Oil.png",
+	21:"eggplant.png",
+	22:"Carrot.png",
+	23:"Cabbage.png",
+	31:"bannana.png",
+	32:"orange.png",
+	33:"Apple.png",
+	4:"BreadPiece.png",
+	51:"Bone.png",
+	52:"Steak.png",
+	53:"Pork.png"
 };
 
 const towerTypes = {
@@ -90,6 +105,7 @@ function StartGame(){
 
 	gridSize = 18;
 	unit = app.renderer.width / gridSize;
+	foodScale = unit / 10 / 2;
 
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 	towers = new Array();
@@ -111,6 +127,11 @@ function StartGame(){
 			   .add("garbage", "./images/garbageBin.png")
 			   .add("selectUI", "./images/towerSelection.png")
 			   .add("stage0", "./images/townBackground.png")
+			   .add("fullHP", "./images/HPBeaker.png")
+               .add("fullXP", "./images/XPBeaker.png")
+			   .add("emptyBeaker", "./images/EmptyBeaker.png")
+			   .add("foodSheet", "./images/Food.json")
+			   // TODO: Add conveyor belt animation
 			   .load(StartGame2);
 }
 
@@ -120,6 +141,12 @@ function StartGame2(){
 	stageImg.buttonMode = true;
 	stageImg.on('pointerdown', PlaceTower);
 
+    hpBack = GetObj(GetSprite("emptyBeaker", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
+    hpBar = GetObj(GetSprite("fullHP", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
+    
+    xpBack = GetObj(GetSprite("emptyBeaker", 0, 0, 1.5, 1.5), 155, 65, app.stage, relPos.IGNOREMARGIN);
+	xpBar = GetObj(GetSprite("fullXP", 0, 0, 1.5, 1.5), 155, 65, app.stage, relPos.IGNOREMARGIN);
+	
 	// Assuming one level
 	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
 	let trackV = [{x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, /*{x:-1, y:0}*/];
@@ -212,7 +239,7 @@ function StartGame2(){
 
 	/* Proto */ wantToPlace = "";
 
-	foodContainer = new PIXI.particles.ParticleContainer(10000, {scale:true, position:true, rotation:false, uvs:false, alpha:true});
+	foodContainer = new PIXI.particles.ParticleContainer(10000, {scale:true, position:true, rotation:true, uvs:false, alpha:false});
 	app.stage.addChild(foodContainer);
 
 	app.ticker.add(delta => Update(delta)); // Defines the function that gets called every frame
@@ -226,9 +253,48 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 	if(frame == 15){
 		frame = 0;
 
-		// TODO: Handle food as particles
+		let val = Math.floor(Math.random() * 12);
 
-		/* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -2 / 5, -2 / 5, unit * 3 / 5, unit * 3 / 5, Math.random() * 0xFFFFFF), (16) * unit, (0.7 + Math.random() * .6) * unit, foodContainer), "apple", "fruit"));
+		switch(val){
+			case(0):
+				GetFood(foodTypes.APPLE, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(1):
+				GetFood(foodTypes.BANANA, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(2):
+				GetFood(foodTypes.OIL, foodTypes.LIQUID, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(3):
+				GetFood(foodTypes.BONE, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(4):
+				GetFood(foodTypes.BREAD, foodTypes.BREAD, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(5):
+				GetFood(foodTypes.CABBAGE, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(6):
+				GetFood(foodTypes.CARROT, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(7):
+				GetFood(foodTypes.EGGPLANT, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(8):
+				GetFood(foodTypes.ORANGE, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(9):
+				GetFood(foodTypes.PORK, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(10):
+				GetFood(foodTypes.STEAK, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(11):
+				GetFood(foodTypes.WATER, foodTypes.LIQUID, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+		}
+
+		///* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -2 / 5, -2 / 5, unit * 3 / 5, unit * 3 / 5, Math.random() * 0xFFFFFF), (16) * unit, (0.7 + Math.random() * .6) * unit, foodContainer), "apple", "fruit"));
 	}else{
 		frame++;
 	}
@@ -290,6 +356,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 				if(towers[j].ignore.includes(food[i].type) || towers[j].ignore.includes(food[i].subType)){
 					l = -1;
+				}else{
+					l = Math.min(l, towers[j].max.length - 1);
 				}
 				
 				if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.abs(Math.pow(towers[j].x - food[i].x, 2)) + Math.abs(Math.pow(towers[j].y - food[i].y, 2)) <= maxDistSqrd){
@@ -483,9 +551,25 @@ function GetObj(obj, posX = 0, posY = 0, parent = app.stage, ignoreUIMargin = re
 	return obj;
 }
 
-function GetFood(obj, subType, type){
+var foodAnchor = -1;
+
+function GetFood(subType, type, posX, posY){
+	let obj = new PIXI.Sprite(PIXI.Texture.fromFrame(foodNames[subType]));
+	//let obj = GetObj(GetSprite(foodNames[subType], .5, .5, foodScale, foodScale), posX, posY, foodContainer);
+
+	// /obj.rotation = Math.random() * Math.PI - Math.PI / 2;
+	obj.anchor.set(foodAnchor, foodAnchor);
+	obj.scale.set(foodScale, foodScale);
+	obj.interactiveChildren = false;
+
+	obj.x = posX;
+	obj.y = posY + uiMargin;
+
 	obj.type = type;
 	obj.subType = subType;
+
+	foodContainer.addChild(obj);
+	food.push(obj);
 
 	return obj;
 }
@@ -493,34 +577,3 @@ function GetFood(obj, subType, type){
 function Destroy(obj){
 	obj.parent.removeChild(obj);
 }
-
-/*function death() {
-	PIXI.loader.add("logo", "./images/logoWhiteBackground.png")
-			.add("playB", "./images/PlayButton.png")
-			.add("lBoardsB", "./images/LeaderboardsButton.png")
-			.load(Init2);
-	var recordButton = PIXI.Texture.fromImage('./images/conveyorRight.png');
-
-	var button = new PIXI.Sprite(recordButton);
-	button.buttonMode = true;
-
-	button.anchor.set(0.5);
-	button.x = 175;
-	button.y = 500;
-
-	// make the button interactive...
-	button.interactive = true;
-	button.buttonMode = true;
-
-	button.on('pointerdown', onButtonDown);
-
-	// add it to the stage
-	app.stage.addChild(button);
-
-	// add button to array
-
-	function onButtonDown() {
-		this.isdown = true;
-		this.texture = textureButtonDown;
-		this.alpha = 1;
-}*/
