@@ -121,7 +121,7 @@ function StartGame(){
 			   .add("compost", "./images/towerCompost.png")
 			   .add("donate", "./images/towerDonate.png")
 			   .add("animals", "./images/towerFarm.png")
-			   .add("factory", "./images/towerFuel.png")
+			   .add("factory", "./images/towerFuelALT.png")
 			   .add("recycle", "./images/towerRecycle.png")
 			   .add("purify", "./images/towerWater.png")
 			   .add("garbage", "./images/garbageBin.png")
@@ -131,7 +131,7 @@ function StartGame(){
                .add("fullXP", "./images/XPBeaker.png")
 			   .add("emptyBeaker", "./images/EmptyBeaker.png")
 			   .add("foodSheet", "./images/Food.json")
-			   // TODO: Add conveyor belt animation
+			   .add("conveyorSheet", "./images/conveyor.json")
 			   .load(StartGame2);
 }
 
@@ -150,22 +150,35 @@ function StartGame2(){
 	// Assuming one level
 	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
 	let trackV = [{x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:1, y:0}, {x:1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:-1}, {x:0, y:-1}, {x:0, y:-1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, {x:-1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:1, y:0}, {x:0, y:1}, {x:0, y:1}, {x:-1, y:0}, {x:-1, y:0}, /*{x:-1, y:0}*/];
+	
+	let trackAnim = [];
+
+	for(let i = 0; i < 27; i++){
+		trackAnim.push(PIXI.Texture.fromFrame(i + ".png"));
+	}
 
 	for(let i = 0; i < track.length; i++){
-		track[i] = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x999999), (track[i].x - 1) * unit, (track[i].y - 1) * unit);
+		let x = track[i].x;
+		let y = track[i].y;
+		track[i] = new PIXI.extras.AnimatedSprite(trackAnim);
+		//track[i] = GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x999999), (track[i].x - 1) * unit, (track[i].y - 1) * unit);
+		track[i].anchor.set(.5, .5);
+		track[i].scale.set(unit / 16, unit / 16);
+		track[i] = GetObj(track[i], (x - .5) * unit, (y - .5) * unit);
 		track[i].type = "track";
 		track[i].interactive = true;
+		track[i].animationSpeed = .33;
+		track[i].play();
 		
 		if(i < trackV.length){
 			track[i].vx = trackV[i].x;
 			track[i].vy = trackV[i].y;
 
-			// Displays a little arrow pointing in the direction the track pushes
-			/* Proto */ GetObj(new PIXI.Text(track[i].vx > 0 ? ">" : track[i].vx < 0 ? "<" : track[i].vy > 0 ? "v" : track[i].vy < 0 ? "^" : "", debugStyle), track[i].x, track[i].y, app.stage, relPos.IGNOREMARGIN);
+			track[i].rotation = track[i].vx > 0 ? 0 : track[i].vx < 0 ? Math.PI : track[i].vy > 0 ? Math.PI / 2 : -Math.PI / 2;
 		}
 	}
 
-	garbage = GetObj(GetSprite("garbage", 0, 0, 1.25, 1.25, 0x555555), 1 * unit, 17 * unit);
+	garbage = GetObj(GetSprite("garbage", .5, .5, 1.25, 1.25, 0x555555), 1.5 * unit, 17.5 * unit);
 
 	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10, app.stage, relPos.IGNOREMARGIN);
 	/* Proto */ livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25, app.stage, relPos.IGNOREMARGIN);
@@ -227,14 +240,14 @@ function StartGame2(){
 	purifierText = GetObj(new PIXI.Text("Purifier: $900", debugStyle), purifierB.x, purifierB.y + unit * .8, app.stage, relPos.IGNOREMARGIN);
 	purifierText.anchor.set(.5, .5);
 
-	factoryB = GetObj(GetSprite("factory", .5, .5, 1.25, 1.25), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	factoryB = GetObj(GetSprite("factory", .5, .5, 1.2, 1.2), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	factoryB.interactive = true;
 	factoryB.buttonMode = true;
 	factoryB.on('pointerdown', function(){wantToPlace = towerTypes.FACTORY;})
 			.on('pointerover', function(){factoryB.scale.x *= 1.2; factoryB.scale.y *= 1.2;})
 			.on('pointerout', function(){factoryB.scale.x /= 1.2; factoryB.scale.y /= 1.2;});
 	
-	factoryText = GetObj(new PIXI.Text("Factory: $1200", debugStyle), factoryB.x, factoryB.y - unit * .8, app.stage, relPos.IGNOREMARGIN);
+	factoryText = GetObj(new PIXI.Text("Factory: $1200", debugStyle), factoryB.x, factoryB.y - unit, app.stage, relPos.IGNOREMARGIN);
 	factoryText.anchor.set(.5, .5);
 
 	/* Proto */ wantToPlace = "";
@@ -257,40 +270,40 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 		switch(val){
 			case(0):
-				GetFood(foodTypes.APPLE, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.APPLE, foodTypes.FRUIT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(1):
-				GetFood(foodTypes.BANANA, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.BANANA, foodTypes.FRUIT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(2):
-				GetFood(foodTypes.OIL, foodTypes.LIQUID, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.OIL, foodTypes.LIQUID, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(3):
-				GetFood(foodTypes.BONE, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.BONE, foodTypes.MEAT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(4):
-				GetFood(foodTypes.BREAD, foodTypes.BREAD, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.BREAD, foodTypes.BREAD, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(5):
-				GetFood(foodTypes.CABBAGE, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.CABBAGE, foodTypes.VEGETABLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(6):
-				GetFood(foodTypes.CARROT, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.CARROT, foodTypes.VEGETABLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(7):
-				GetFood(foodTypes.EGGPLANT, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.EGGPLANT, foodTypes.VEGETABLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(8):
-				GetFood(foodTypes.ORANGE, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.ORANGE, foodTypes.FRUIT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(9):
-				GetFood(foodTypes.PORK, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.PORK, foodTypes.MEAT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(10):
-				GetFood(foodTypes.STEAK, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.STEAK, foodTypes.MEAT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(11):
-				GetFood(foodTypes.WATER, foodTypes.LIQUID, 16 * unit, (.7 + Math.random() * .6) * unit);
+				GetFood(foodTypes.WATER, foodTypes.LIQUID, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 		}
 
@@ -300,7 +313,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 	}
 
 	// TODO: Properly centre food along tracks
-	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 2; i < food.length; i++){
+	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 1.95; i < food.length; i++){
 		if(Math.abs(Math.pow(garbage.x - food[i].x, 2)) + Math.abs(Math.pow(garbage.y - food[i].y, 2)) <= maxDistSqrd){ // Destroy if near garbage can
 			Destroy(food[i]);
 			food.splice(i, 1);
@@ -315,7 +328,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 		}
 	}
 
-	for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.5; j < towers.length; j++){
+	for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit / 3.8; j < towers.length; j++){
 		let total = 0;
 
 		for(i = 0; i < towers[j].curr.length; i++){ // Increments counters of currently-being-processed food
@@ -381,7 +394,7 @@ function PlaceTower(){
 		if(Buy(250)){
 			tower = GetObj(GetSprite("compost", 0, 0, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.ANY];
-			tower.ignore = [];
+			tower.ignore = [foodTypes.OIL];
 			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
@@ -403,7 +416,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.FACTORY){
 		if(Buy(1200)){
-			tower = GetObj(GetSprite("factory", 0, 0, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
+			tower = GetObj(GetSprite("factory", 0, 0, 1.5, 1.5), x, y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.ANY];
 			tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
 			tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -551,14 +564,15 @@ function GetObj(obj, posX = 0, posY = 0, parent = app.stage, ignoreUIMargin = re
 	return obj;
 }
 
-var foodAnchor = -1;
+var foodAnchor = .5;
 
 function GetFood(subType, type, posX, posY){
 	let obj = new PIXI.Sprite(PIXI.Texture.fromFrame(foodNames[subType]));
 	//let obj = GetObj(GetSprite(foodNames[subType], .5, .5, foodScale, foodScale), posX, posY, foodContainer);
 
-	// /obj.rotation = Math.random() * Math.PI - Math.PI / 2;
+	//obj.pivot.set(5, 5);
 	obj.anchor.set(foodAnchor, foodAnchor);
+	obj.rotation = Math.random() * Math.PI - Math.PI / 2;
 	obj.scale.set(foodScale, foodScale);
 	obj.interactiveChildren = false;
 
