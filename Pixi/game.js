@@ -436,6 +436,11 @@ function AdjustScore(increaseBy){
 	moneyText.text = "Money: " + money;
 }
 
+function AdjustMoney(increaseBy){
+	money += increaseBy;
+	moneyText.text = "Money: " + money;
+}
+
 function AdjustLives(increaseBy){
 	lives += increaseBy;
 	livesText.text = "Lives: " + lives;
