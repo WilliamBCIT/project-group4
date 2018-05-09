@@ -4,7 +4,7 @@ const foodTypes = {
 		WATER:11,
 		OIL:12,
 	VEGETABLE:2,
-		POTATO:21,
+		EGGPLANT:21,
 		CARROT:22,
 		CABBAGE:23,
 	FRUIT:3,
@@ -19,18 +19,18 @@ const foodTypes = {
 };
 
 const foodNames = {
-	11:"water",
-	12:"oil",
-	21:"potato",
-	22:"carrot",
-	23:"cabbage",
-	31:"banana",
-	32:"orange",
-	33:"apple",
-	4:"bread",
-	51:"bone",
-	52:"steak",
-	53:"pork"
+	11:"water.png",
+	12:"Oil.png",
+	21:"eggplant.png",
+	22:"Carrot.png",
+	23:"Cabbage.png",
+	31:"bannana.png",
+	32:"orange.png",
+	33:"Apple.png",
+	4:"BreadPiece.png",
+	51:"Bone.png",
+	52:"Steak.png",
+	53:"Pork.png"
 };
 
 const towerTypes = {
@@ -105,6 +105,7 @@ function StartGame(){
 
 	gridSize = 18;
 	unit = app.renderer.width / gridSize;
+	foodScale = unit / 10 / 2;
 
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 	towers = new Array();
@@ -129,7 +130,8 @@ function StartGame(){
 			   .add("fullHP", "./images/HPBeaker.png")
                .add("fullXP", "./images/XPBeaker.png")
 			   .add("emptyBeaker", "./images/EmptyBeaker.png")
-			   // TODO: Add conveyor belts & foods
+			   .add("foodSheet", "./images/Food.json")
+			   // TODO: Add conveyor belt animation
 			   .load(StartGame2);
 }
 
@@ -237,7 +239,7 @@ function StartGame2(){
 
 	/* Proto */ wantToPlace = "";
 
-	foodContainer = new PIXI.particles.ParticleContainer(10000, {scale:true, position:true, rotation:false, uvs:false, alpha:true});
+	foodContainer = new PIXI.particles.ParticleContainer(10000, {scale:true, position:true, rotation:true, uvs:false, alpha:false});
 	app.stage.addChild(foodContainer);
 
 	app.ticker.add(delta => Update(delta)); // Defines the function that gets called every frame
@@ -251,7 +253,47 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 	if(frame == 15){
 		frame = 0;
 
-		GetFood(foodTypes.APPLE, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+		let val = Math.floor(Math.random() * 12);
+
+		switch(val){
+			case(0):
+				GetFood(foodTypes.APPLE, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(1):
+				GetFood(foodTypes.BANANA, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(2):
+				GetFood(foodTypes.OIL, foodTypes.LIQUID, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(3):
+				GetFood(foodTypes.BONE, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(4):
+				GetFood(foodTypes.BREAD, foodTypes.BREAD, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(5):
+				GetFood(foodTypes.CABBAGE, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(6):
+				GetFood(foodTypes.CARROT, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(7):
+				GetFood(foodTypes.EGGPLANT, foodTypes.VEGETABLE, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(8):
+				GetFood(foodTypes.ORANGE, foodTypes.FRUIT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(9):
+				GetFood(foodTypes.PORK, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(10):
+				GetFood(foodTypes.STEAK, foodTypes.MEAT, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+			case(11):
+				GetFood(foodTypes.WATER, foodTypes.LIQUID, 16 * unit, (.7 + Math.random() * .6) * unit);
+				break;
+		}
+
 		///* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -2 / 5, -2 / 5, unit * 3 / 5, unit * 3 / 5, Math.random() * 0xFFFFFF), (16) * unit, (0.7 + Math.random() * .6) * unit, foodContainer), "apple", "fruit"));
 	}else{
 		frame++;
@@ -314,6 +356,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 				if(towers[j].ignore.includes(food[i].type) || towers[j].ignore.includes(food[i].subType)){
 					l = -1;
+				}else{
+					l = Math.min(l, towers[j].max.length - 1);
 				}
 				
 				if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.abs(Math.pow(towers[j].x - food[i].x, 2)) + Math.abs(Math.pow(towers[j].y - food[i].y, 2)) <= maxDistSqrd){
@@ -507,13 +551,24 @@ function GetObj(obj, posX = 0, posY = 0, parent = app.stage, ignoreUIMargin = re
 	return obj;
 }
 
-var foodScale = 1;
+var foodAnchor = -1;
 
 function GetFood(subType, type, posX, posY){
-	let obj = GetObj(GetSprite(foodNames[subType], .5, .5, foodScale, foodScale), posX, posY, foodContainer);
+	let obj = new PIXI.Sprite(PIXI.Texture.fromFrame(foodNames[subType]));
+	//let obj = GetObj(GetSprite(foodNames[subType], .5, .5, foodScale, foodScale), posX, posY, foodContainer);
+
+	// /obj.rotation = Math.random() * Math.PI - Math.PI / 2;
+	obj.anchor.set(foodAnchor, foodAnchor);
+	obj.scale.set(foodScale, foodScale);
+	obj.interactiveChildren = false;
+
+	obj.x = posX;
+	obj.y = posY + uiMargin;
+
 	obj.type = type;
 	obj.subType = subType;
 
+	foodContainer.addChild(obj);
 	food.push(obj);
 
 	return obj;
