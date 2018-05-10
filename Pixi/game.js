@@ -574,13 +574,16 @@ function checkKeyInput(key) {
 
 function startEasterEgg() {       
 	AdjustMoney(20000);
-    
-	donateB = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * 2.23, uiMargin / 2, app.stage, relPos.SIDEBAR);
+    for (var pos = 0; pos <= 1000; pos++) {
+            for (var y = 0; y <= 30; y++) {
+	donateB = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 500, app.stage, relPos.SIDEBAR);
+                     
+
+                     
 	donateB.interactive = true;
-	donateB.buttonMode = true;
-	donateB.on('pointerdown', function(){wantToPlace = towerTypes.DONATION;})
-			.on('pointerover', function(){donateB.scale.x *= 1.2; donateB.scale.y *= 1.2;})
-			.on('pointerout', function(){donateB.scale.x /= 1.2; donateB.scale.y /= 1.2;});
+	//donateB.buttonMode = true;
+    }
+    }
     
     easterEggActive = true;
 }
