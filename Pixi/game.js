@@ -50,9 +50,9 @@ function Init(){
 	
 	
 	// Import textures
-	PIXI.loader.add("logo", "./images/logoWhiteBackground.png")
-			   .add("playB", "./images/PlayButton.png")
-			   .add("lBoardsB", "./images/LeaderboardsButton.png")
+	PIXI.loader.add("logo", "../pixi/images/logoWhiteBackground.png")
+			   .add("playB", "../pixi/images/PlayButton.png")
+			   .add("lBoardsB", "../pixi/images/LeaderboardsButton.png")
 			   .load(Init2);
     
 	//Prepare Easter Egg 
@@ -113,17 +113,17 @@ function StartGame(){
 	wantToPlace = "";
 
 	// Import textures
-	PIXI.loader.add("whiteBox", "./images/WhiteBox.png")
-			   .add("compost", "./images/towerCompost.png")
-			   .add("donate", "./images/towerDonate.png")
-			   .add("animals", "./images/towerFarm.png")
-			   .add("factory", "./images/towerFuel.png")
-			   .add("recycle", "./images/towerRecycle.png")
-			   .add("purify", "./images/towerWater.png")
-			   .add("garbage", "./images/garbageBin.png")
-			   .add("selectUI", "./images/towerSelection.png")
-			   .add("stage0", "./images/townBackground.png")
-               .add("dollar", "./images/DollarBill.png")
+	PIXI.loader.add("whiteBox", "../pixi/images/WhiteBox.png")
+			   .add("compost", "../pixi/images/towerCompost.png")
+			   .add("donate", "../pixi/images/towerDonate.png")
+			   .add("animals", "../pixi/images/towerFarm.png")
+			   .add("factory", "../pixi/images/towerFuel.png")
+			   .add("recycle", "../pixi/images/towerRecycle.png")
+			   .add("purify", "../pixi/images/towerWater.png")
+			   .add("garbage", "../pixi/images/garbageBin.png")
+			   .add("selectUI", "../pixi/images/towerSelection.png")
+			   .add("stage0", "../pixi/images/townBackground.png")
+               .add("dollar", "../pixi/images/DollarBill.png")
 			   .load(StartGame2);
 }
 
