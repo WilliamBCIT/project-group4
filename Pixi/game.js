@@ -47,12 +47,24 @@ function Init(){
 	frame = 0;
 	score = 0;
 
+	
+	
 	// Import textures
 	PIXI.loader.add("logo", "./images/logoWhiteBackground.png")
 			   .add("playB", "./images/PlayButton.png")
 			   .add("lBoardsB", "./images/LeaderboardsButton.png")
 			   .load(Init2);
-}
+    
+	//Prepare Easter Egg 
+	var password;
+    password = 0;
+    
+    var easterEggActive;
+    easterEggActive = false;
+	
+    document.addEventListener('keydown', checkKeyInput);
+	
+	}
 
 function Init2(){
 	let halfWidth = app.renderer.width / 2;
@@ -111,6 +123,7 @@ function StartGame(){
 			   .add("garbage", "./images/garbageBin.png")
 			   .add("selectUI", "./images/towerSelection.png")
 			   .add("stage0", "./images/townBackground.png")
+               .add("dollar", "./images/DollarBill.png")
 			   .load(StartGame2);
 }
 
@@ -302,6 +315,9 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			}
 		}
 	}
+
+
+
 }
 
 function PlaceTower(){
@@ -427,6 +443,11 @@ function AdjustScore(increaseBy){
 	moneyText.text = "Money: " + money;
 }
 
+function AdjustMoney(increaseBy){
+	money += increaseBy;
+	moneyText.text = "Money: " + money;
+}
+
 function AdjustLives(increaseBy){
 	lives += increaseBy;
 	livesText.text = "Lives: " + lives;
@@ -524,3 +545,45 @@ function Destroy(obj){
 		this.texture = textureButtonDown;
 		this.alpha = 1;
 }*/
+
+function checkKeyInput(key) {
+
+		moneyText.text = "INPUT";
+
+        if (key.keyCode === 77)    {
+			moneyText.text = "M";
+			password = 1;
+        }
+        if (key.keyCode === 79)    {
+            moneyText.text = "O";
+			password = 2;
+        }
+        if (key.keyCode === 78)    {
+			moneyText.text = "N";
+            password = 3;
+        }
+        if (key.keyCode === 69)    {
+			moneyText.text = "E";
+            password = 4;
+        }
+        if (key.keyCode === 89)    {
+			moneyText.text = "Y";
+            startEasterEgg();
+        } 
+}
+
+function startEasterEgg() {       
+	AdjustMoney(20000);
+    for (var pos = 0; pos <= 1000; pos++) {
+            for (var y = 0; y <= 30; y++) {
+	donateB = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 900, app.stage, relPos.SIDEBAR);
+                     
+
+                     
+	donateB.interactive = true;
+	//donateB.buttonMode = true;
+    }
+    }
+    
+    easterEggActive = true;
+}
