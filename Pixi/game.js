@@ -58,6 +58,9 @@ function Init(){
 	//Prepare Easter Egg 
 	var password;
     password = 0;
+    
+    var easterEggActive;
+    easterEggActive = false;
 	
     document.addEventListener('keydown', checkKeyInput);
 	
@@ -120,6 +123,7 @@ function StartGame(){
 			   .add("garbage", "./images/garbageBin.png")
 			   .add("selectUI", "./images/towerSelection.png")
 			   .add("stage0", "./images/townBackground.png")
+               .add("dollar", "./images/DollarBill.png")
 			   .load(StartGame2);
 }
 
@@ -311,6 +315,11 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			}
 		}
 	}
+
+if (easterEggActive) {
+
+}
+
 }
 
 function PlaceTower(){
@@ -567,4 +576,11 @@ function checkKeyInput(key) {
 
 function startEasterEgg() {       
 	AdjustMoney(20000);
+    
+    moneyBill = GetObj(GetSprite("dollar", 0, 0, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
+    moneyBill.position.x = 300;
+    moneyBill.position.y = 300;
+    app.stage.addChild(moneyBill);
+    
+    easterEggActive = true;
 }
