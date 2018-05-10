@@ -316,9 +316,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 		}
 	}
 
-if (easterEggActive) {
 
-}
 
 }
 
@@ -577,10 +575,12 @@ function checkKeyInput(key) {
 function startEasterEgg() {       
 	AdjustMoney(20000);
     
-    moneyBill = GetObj(GetSprite("dollar", 0, 0, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-    moneyBill.position.x = 300;
-    moneyBill.position.y = 300;
-    app.stage.addChild(moneyBill);
+	donateB = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * 2.23, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	donateB.interactive = true;
+	donateB.buttonMode = true;
+	donateB.on('pointerdown', function(){wantToPlace = towerTypes.DONATION;})
+			.on('pointerover', function(){donateB.scale.x *= 1.2; donateB.scale.y *= 1.2;})
+			.on('pointerout', function(){donateB.scale.x /= 1.2; donateB.scale.y /= 1.2;});
     
     easterEggActive = true;
 }
