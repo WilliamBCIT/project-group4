@@ -108,10 +108,11 @@ function StartGame(){
 	foodScale = unit / 10 / 2;
 
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
+	hudStyle = new PIXI.TextStyle({fontFamily:'Lucida Console', fontSize:15, fill:["#ffffff"]});
 	towers = new Array();
 	food = new Array();
 	frame = 0;
-	lives = 5;
+	lives = 100;
 	score = 0;
 	money = 70000;
 	wantToPlace = "";
@@ -131,6 +132,7 @@ function StartGame(){
 			   .add("fullHP", "./images/HPBeaker.png")
                .add("fullXP", "./images/XPBeaker.png")
 			   .add("emptyBeaker", "./images/EmptyBeaker.png")
+			   .add("barMask", "./images/BeakerMask.png")
 			   .add("foodSheet", "./images/Food.json")
 			   .add("conveyorSheet", "./images/conveyor.json")
 			   .load(StartGame2);
@@ -183,8 +185,10 @@ function StartGame2(){
 
 	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10, app.stage, relPos.IGNOREMARGIN);
 	/* Proto */ livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25, app.stage, relPos.IGNOREMARGIN);
-	/* Proto */ scoreText = GetObj(new PIXI.Text("Score: " + score, debugStyle), 10, 40, app.stage, relPos.IGNOREMARGIN);
-	/* Proto */ moneyText = GetObj(new PIXI.Text("Money: " + money, debugStyle), 10, 55, app.stage, relPos.IGNOREMARGIN);
+	/* Proto */ scoreText = GetObj(new PIXI.Text(score, hudStyle), 535, 88, app.stage, relPos.IGNOREMARGIN);
+	scoreText.anchor.set(.5, .5);
+	/* Proto */ moneyText = GetObj(new PIXI.Text(money, hudStyle), 659, 88, app.stage, relPos.IGNOREMARGIN);
+	moneyText.anchor.set(.5, .5);
 	
 	sidebarUnit = 720 / 8;
 
@@ -417,7 +421,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.FACTORY){
 		if(Buy(1200)){
-			tower = GetObj(GetSprite("factory", 0, 0, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
+			tower = GetObj(GetSprite("factory", 0.05, .05, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.ANY];
 			tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
 			tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
@@ -482,7 +486,7 @@ function Buy(cost){
 		return false;
 	}else{
 		money -= cost;
-		moneyText.text = "Money: " + money;
+		moneyText.text = money;
 
 		return true;
 	}
@@ -504,14 +508,14 @@ function TrackBuilder(){ // Helps laying track
 
 function AdjustScore(increaseBy){
 	score += increaseBy;
-	scoreText.text = "Score: " + score;
+	scoreText.text = score;
 	money += increaseBy;
-	moneyText.text = "Money: " + money;
+	moneyText.text = money;
 }
 
 function AdjustLives(increaseBy){
 	lives += increaseBy;
-	livesText.text = "Lives: " + lives;
+	livesText.text = lives;
 
 	if (lives <= 0) {
         var gameOverText = new PIXI.Text('Game Over!', {
