@@ -52,7 +52,7 @@ const relPos = {
 
 function Init(){
 	// Initialize game window
-	app = new PIXI.Application(720, 720 + uiMargin * 2, {backgroundColor:0x1099bb, antialias:true});
+	app = new PIXI.Application(720, 720 + uiMargin * 2, {backgroundColor:0x000000, antialias:true});
 	app.renderer.autoResize = true;
 	document.getElementById("playframe").appendChild(app.view);
 
@@ -121,12 +121,13 @@ function StartGame(){
 			   .add("compost", "./images/towerCompost.png")
 			   .add("donate", "./images/towerDonate.png")
 			   .add("animals", "./images/towerFarm.png")
-			   .add("factory", "./images/towerFuelALT.png")
+			   .add("factory", "./images/towerFuel.png")
 			   .add("recycle", "./images/towerRecycle.png")
 			   .add("purify", "./images/towerWater.png")
 			   .add("garbage", "./images/garbageBin.png")
 			   .add("selectUI", "./images/towerSelection.png")
 			   .add("stage0", "./images/townBackground.png")
+			   .add("hud", "./images/Compost_HUD.png")
 			   .add("fullHP", "./images/HPBeaker.png")
                .add("fullXP", "./images/XPBeaker.png")
 			   .add("emptyBeaker", "./images/EmptyBeaker.png")
@@ -141,11 +142,11 @@ function StartGame2(){
 	stageImg.buttonMode = true;
 	stageImg.on('pointerdown', PlaceTower);
 
-    hpBack = GetObj(GetSprite("emptyBeaker", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
-    hpBar = GetObj(GetSprite("fullHP", 0, 0, 1.5, 1.5), 125, 25, app.stage, relPos.IGNOREMARGIN);
-    
-    xpBack = GetObj(GetSprite("emptyBeaker", 0, 0, 1.5, 1.5), 155, 65, app.stage, relPos.IGNOREMARGIN);
-	xpBar = GetObj(GetSprite("fullXP", 0, 0, 1.5, 1.5), 155, 65, app.stage, relPos.IGNOREMARGIN);
+	let tmpN = 720 / 420;
+
+    hud = GetObj(GetSprite("hud", 0, 0, 1, 1), 0, 0, app.stage, relPos.IGNOREMARGIN);
+    hpBar = GetObj(GetSprite("fullHP", 0, 0, tmpN, tmpN), 80 * tmpN, 13 * tmpN + 20, app.stage, relPos.IGNOREMARGIN);
+    xpBar = GetObj(GetSprite("fullXP", 0, 0, tmpN, tmpN), 110 * tmpN, 38 * tmpN + 20, app.stage, relPos.IGNOREMARGIN);
 	
 	// Assuming one level
 	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
@@ -240,7 +241,7 @@ function StartGame2(){
 	purifierText = GetObj(new PIXI.Text("Purifier: $900", debugStyle), purifierB.x, purifierB.y + unit * .8, app.stage, relPos.IGNOREMARGIN);
 	purifierText.anchor.set(.5, .5);
 
-	factoryB = GetObj(GetSprite("factory", .5, .5, 1.2, 1.2), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	factoryB = GetObj(GetSprite("factory", .5, .5, .9, .9), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	factoryB.interactive = true;
 	factoryB.buttonMode = true;
 	factoryB.on('pointerdown', function(){wantToPlace = towerTypes.FACTORY;})
@@ -416,7 +417,7 @@ function PlaceTower(){
 		}
 	}else if(wantToPlace == towerTypes.FACTORY){
 		if(Buy(1200)){
-			tower = GetObj(GetSprite("factory", 0, 0, 1.5, 1.5), x, y, app.stage, relPos.IGNOREMARGIN);
+			tower = GetObj(GetSprite("factory", 0, 0, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
 			tower.allow = [foodTypes.ANY];
 			tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
 			tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
