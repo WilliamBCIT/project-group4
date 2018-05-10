@@ -576,7 +576,7 @@ function startEasterEgg() {
 	AdjustMoney(20000);
     for (var pos = 0; pos <= 1000; pos++) {
             for (var y = 0; y <= 30; y++) {
-	donateB = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 500, app.stage, relPos.SIDEBAR);
+	donateB = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 900, app.stage, relPos.SIDEBAR);
                      
 
                      
