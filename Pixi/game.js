@@ -436,6 +436,11 @@ function AdjustScore(increaseBy){
 	moneyText.text = "Money: " + money;
 }
 
+function AdjustMoney(increaseBy){
+	money += increaseBy;
+	moneyText.text = "Money: " + money;
+}
+
 function AdjustLives(increaseBy){
 	lives += increaseBy;
 	livesText.text = "Lives: " + lives;
@@ -536,25 +541,30 @@ function Destroy(obj){
 
 function checkKeyInput(key) {
 
-        if (key.keyCode === 77 && password == 0)    {
+		moneyText.text = "INPUT";
+
+        if (key.keyCode === 77)    {
+			moneyText.text = "M";
 			password = 1;
         }
-        if (key.keyCode === 79 && password == 1)    {
+        if (key.keyCode === 79)    {
+            moneyText.text = "O";
 			password = 2;
         }
-        if (key.keyCode === 78 && password == 2)    {
+        if (key.keyCode === 78)    {
+			moneyText.text = "N";
             password = 3;
         }
-        if (key.keyCode === 69 && password == 3)    {
+        if (key.keyCode === 69)    {
+			moneyText.text = "E";
             password = 4;
         }
-        if (key.keyCode === 89 && password == 4)    {
+        if (key.keyCode === 89)    {
+			moneyText.text = "Y";
             startEasterEgg();
         } 
 }
 
-function startEasterEgg() {
-	
-    AdjustScore(500);
-	
+function startEasterEgg() {       
+	AdjustMoney(20000);
 }
