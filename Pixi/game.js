@@ -56,6 +56,8 @@ function Init(){
 	app.renderer.autoResize = true;
 	document.getElementById("playframe").appendChild(app.view);
 
+    var easterEggBG = new PIXI.Container();
+    
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 	towers = new Array();
 	food = new Array();
@@ -436,7 +438,7 @@ if(typeof timer == 'number')
     }
     
     if (timer <= 0) {
-        Destroy("dollar");
+        dollar.destroy(true);
     }
     
 }
