@@ -63,9 +63,9 @@ function Init(){
 	score = 0;
 
 	// Import textures
-	PIXI.loader.add("logo", "../pixi/images/logoWhiteBackground.png")
-			   .add("playB", "../pixi/images/PlayButton.png")
-			   .add("lBoardsB", "../pixi/images/LeaderboardsButton.png")
+	PIXI.loader.add("logo", "../Pixi/images/logoWhiteBackground.png")
+			   .add("playB", "../Pixi/images/PlayButton.png")
+			   .add("lBoardsB", "../Pixi/images/LeaderboardsButton.png")
 			   .load(Init2);
 }
 
@@ -126,23 +126,23 @@ function StartGame(){
 	wantToPlace = "";
 
 	// Import textures
-	PIXI.loader.add("whiteBox", "../pixi/images/WhiteBox.png")
-			   .add("compost", "../pixi/images/towerCompost.png")
-			   .add("donate", "../pixi/images/towerDonate.png")
-			   .add("animals", "../pixi/images/towerFarm.png")
-			   .add("factory", "../pixi/images/towerFuel.png")
-			   .add("recycle", "../pixi/images/towerRecycle.png")
-			   .add("purify", "../pixi/images/towerWater.png")
-			   .add("garbage", "../pixi/images/garbageBin.png")
-			   .add("selectUI", "../pixi/images/towerSelection.png")
-			   .add("stage0", "../pixi/images/townBackground.png")
-			   .add("hud", "../pixi/images/Compost_HUD.png")
-			   .add("fullHP", "../pixi/images/HPBeaker.png")
-               .add("fullXP", "../pixi/images/XPBeaker.png")
-			   .add("emptyBeaker", "../pixi/images/EmptyBeaker.png")
-			   .add("barMask", "../pixi/images/BeakerMask.png")
-			   .add("foodSheet", "../pixi/images/Food.json")
-			   .add("conveyorSheet", "../pixi/images/conveyor.json")
+	PIXI.loader.add("whiteBox", "../Pixi/images/WhiteBox.png")
+			   .add("compost", "../Pixi/images/towerCompost.png")
+			   .add("donate", "../Pixi/images/towerDonate.png")
+			   .add("animals", "../Pixi/images/towerFarm.png")
+			   .add("factory", "../Pixi/images/towerFuel.png")
+			   .add("recycle", "../Pixi/images/towerRecycle.png")
+			   .add("purify", "../Pixi/images/towerWater.png")
+			   .add("garbage", "../Pixi/images/garbageBin.png")
+			   .add("selectUI", "../Pixi/images/towerSelection.png")
+			   .add("stage0", "../Pixi/images/townBackground.png")
+			   .add("hud", "../Pixi/images/Compost_HUD.png")
+			   .add("fullHP", "../Pixi/images/HPBeaker.png")
+               .add("fullXP", "../Pixi/images/XPBeaker.png")
+			   .add("emptyBeaker", "../Pixi/images/EmptyBeaker.png")
+			   .add("barMask", "../Pixi/images/BeakerMask.png")
+			   .add("foodSheet", "../Pixi/images/Food.json")
+			   .add("conveyorSheet", "../Pixi/images/conveyor.json")
 			   .load(StartGame2);
 }
 
@@ -155,13 +155,15 @@ function StartGame2(){
 	hudBarScale = 720 / 420;
 
 	hud = GetObj(GetSprite("hud", 0, 0, 1, 1), 0, 0, app.stage, relPos.IGNOREMARGIN);
+	hudContainer = new PIXI.Container();
+	app.stage.addChild(hudContainer);
 	
-	hpBar = GetObj(GetSprite("fullHP", 0, 0, hudBarScale, hudBarScale), 80 * hudBarScale, 13 * hudBarScale + 20, hud, relPos.IGNOREMARGIN);
-	hpMask = GetObj(GetSprite("barMask", 0, 0, hudBarScale, hudBarScale), 81 * hudBarScale, 13 * hudBarScale + 20, hud, relPos.IGNOREMARGIN);
+	hpBar = GetObj(GetSprite("fullHP", 0, 0, hudBarScale, hudBarScale), 80 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
+	hpMask = GetObj(GetSprite("barMask", 0, 0, hudBarScale, hudBarScale), 81 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	hpBar.mask = hpMask;
 
-	xpBar = GetObj(GetSprite("fullXP", 0, 0, hudBarScale, hudBarScale), 110 * hudBarScale, 38 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
-	xpMask = GetObj(GetSprite("barMask", 0, 0, 0, hudBarScale), 110 * hudBarScale, 38* hudBarScale + 20, hud, relPos.IGNOREMARGIN);
+	xpBar = GetObj(GetSprite("fullXP", 0, 0, hudBarScale, hudBarScale), 110 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
+	xpMask = GetObj(GetSprite("barMask", 0, 0, 0, hudBarScale), 111 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpBar.mask = xpMask;
 
 	// Assuming one level
@@ -347,7 +349,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 		}
 	}
 
-	for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.8; j < towers.length; j++){
+	for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.5; j < towers.length; j++){
 		let total = 0;
 
 		for(i = 0; i < towers[j].curr.length; i++){ // Increments counters of currently-being-processed food
