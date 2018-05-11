@@ -134,6 +134,8 @@ function StartGame(){
 	
     document.addEventListener('keydown', checkKeyInput);
     
+    var timer;
+    
 	// Import textures
 	PIXI.loader.add("whiteBox", "../Pixi/images/WhiteBox.png")
 			   .add("compost", "../Pixi/images/towerCompost.png")
@@ -426,6 +428,19 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			}
 		}
 	}
+
+if(typeof timer == 'number') 
+{
+    if (timer >= 0) {
+    timer--; 
+    }
+    
+    if (timer <= 0) {
+        Destroy("dollar");
+    }
+    
+}
+
 }
 
 function PlaceTower(){
@@ -567,7 +582,7 @@ function AdjustScore(increaseBy){
 
 function AdjustMoney(increaseBy){
 	money += increaseBy;
-	moneyText.text = "Money: " + money;
+	moneyText.text = money;
 }
 
 function AdjustLives(increaseBy){
@@ -687,9 +702,10 @@ function startEasterEgg() {
 	AdjustMoney(20000);
     for (var pos = 0; pos <= 100; pos++) {
         for (var y = 0; y <= 30; y++) {
-	donateB = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 900, app.stage, relPos.SIDEBAR);          
-	donateB.interactive = true;
+	moneyBill = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 900, app.stage, relPos.SIDEBAR);          
+	moneyBill.interactive = true;
     }
     }    
     easterEggActive = true;
+    timer = 300;
 }
