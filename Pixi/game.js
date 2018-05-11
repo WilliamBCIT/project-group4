@@ -279,6 +279,9 @@ function StartGame2(){
 	app.ticker.add(delta => Update(delta)); // Defines the function that gets called every frame
 }
 
+const foodProcessDist = 4 * 4;
+const foodTransferSpeed = 2.5;
+
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	/* Proto */ fpsText.text = Math.round(1 / delta * 60) + " fps";
 	
@@ -334,18 +337,26 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 	}
 
 	// TODO: Properly centre food along tracks
-	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 1.95; i < food.length; i++){
-		if(Math.abs(Math.pow(garbage.x - food[i].x, 2)) + Math.abs(Math.pow(garbage.y - food[i].y, 2)) <= maxDistSqrd){ // Destroy if near garbage can
+	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 2; i < food.length; i++){
+		if(food[i].towerTarget === false){
+			if(Math.pow(garbage.x - food[i].x, 2) + Math.pow(garbage.y - food[i].y, 2) <= maxDistSqrd){ // Destroy if near garbage can
+				Destroy(food[i]);
+				food.splice(i, 1);
+				AdjustLives(-1);
+			}else{
+				for(j = 0; j < track.length; j++){
+					if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
+						food[i].x += track[j].vx * delta;
+						food[i].y += track[j].vy * delta;
+					}
+				}
+			}	
+		}else if(Math.pow(food[i].towerTarget.x - food[i].x, 2) + Math.pow(food[i].towerTarget.y - food[i].y, 2) <= foodProcessDist){
 			Destroy(food[i]);
 			food.splice(i, 1);
-			AdjustLives(-1);
 		}else{
-			for(j = 0; j < track.length; j++){
-				if(Math.abs(Math.pow(track[j].x - food[i].x, 2)) + Math.abs(Math.pow(track[j].y - food[i].y, 2)) <= maxDistSqrd){ // Move if near track
-					food[i].x += track[j].vx * delta;
-					food[i].y += track[j].vy * delta;
-				}
-			}
+			food[i].x += (food[i].towerTarget.x - food[i].x > 0 ? 1 : -1) * foodTransferSpeed * delta;
+			food[i].y += (food[i].towerTarget.y - food[i].y > 0 ? 1 : -1) * foodTransferSpeed * delta;
 		}
 	}
 
@@ -384,22 +395,23 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			towers[j].ready++;
 		}else{ // Checks if any applicable foods are in range, and if so, begins processing them
 			for(i = 0; i < food.length && towers[j].ready == 3; i++){
-				let l = towers[j].allow.findIndex(function(element){
-					return element == foodTypes.ANY || food[i].type == element || food[i].subType == element;
-				});
+				if(food[i].towerTarget === false){
+					let l = towers[j].allow.findIndex(function(element){
+						return element == foodTypes.ANY || food[i].type == element || food[i].subType == element;
+					});
+	
+					if(towers[j].ignore.includes(food[i].type) || towers[j].ignore.includes(food[i].subType)){
+						l = -1;
+					}else{
+						l = Math.min(l, towers[j].max.length - 1);
+					}
 
-				if(towers[j].ignore.includes(food[i].type) || towers[j].ignore.includes(food[i].subType)){
-					l = -1;
-				}else{
-					l = Math.min(l, towers[j].max.length - 1);
-				}
-				
-				if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.abs(Math.pow(towers[j].x - food[i].x, 2)) + Math.abs(Math.pow(towers[j].y - food[i].y, 2)) <= maxDistSqrd){
-					towers[j].curr[l].push(0);
-					Destroy(food[i]);
-					food.splice(i, 1);
-					towers[j].currCount++;
-					towers[j].ready = 0;
+					if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.pow(towers[j].x - food[i].x, 2) + Math.pow(towers[j].y - food[i].y, 2) <= maxDistSqrd){
+						towers[j].curr[l].push(0);
+						food[i].towerTarget = {x:towers[j].x, y:towers[j].y};
+						towers[j].currCount++;
+						towers[j].ready = 0;
+					}
 				}
 			}
 		}
@@ -618,6 +630,7 @@ function GetFood(subType, type, posX, posY){
 
 	obj.type = type;
 	obj.subType = subType;
+	obj.towerTarget = false;
 
 	foodContainer.addChild(obj);
 	food.push(obj);
