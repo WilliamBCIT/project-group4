@@ -57,11 +57,15 @@ const relPos = {
 
 const waves = [
    // FORMAT: time:TIME TO START IN SECONDS, type:foodTypes.ANY, startRate:FRAMES BETWEEN SPAWNING A NEW FOOD, endRate:AMOUNT OF FOOD SPAWNED IS LERPED BETWEEN startRate AND THIS, length:HOW LONG FOOD WILL BE SPAWNED
-	[{time:0, type:foodTypes.APPLE, startRate:80, endRate:60, length:60}],
-	[{time:0, type:foodTypes.CABBAGE, startRate:80, endRate:60, length:60}],
-	[{time:0, type:foodTypes.BREAD, startRate:80, endRate:60, length:60}],
-	[{time:0, type:foodTypes.WATER, startRate:80, endRate:60, length:60}]
+	[{time:1, type:foodTypes.FRUIT, startRate:1.2, endRate:.8, length:20, from:0}],
+	[{time:1, type:foodTypes.VEGETABLE, startRate:.6, endRate:.4, length:20, from:1}],
+	[{time:1, type:foodTypes.LIQUID, startRate:.3, endRate:.2, length:20, from:2}],
+	[{time:1, type:foodTypes.ANY, startRate:2.25, endRate:.1, length:20, from:3}]
 ];
+
+var inProgress = [];
+
+const secondsPerFrame = 1 / 60;
 
 function Init(){
 	// Initialize game window
@@ -70,10 +74,6 @@ function Init(){
 	document.getElementById("playframe").appendChild(app.view);
 
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
-	towers = new Array();
-	food = new Array();
-	frame = 0;
-	score = 0;
 
 	// Import textures
 	PIXI.loader.add("logo", "../Pixi/images/logoWhiteBackground.png")
@@ -97,6 +97,9 @@ function Init2(){
 	mmLBoards.on("pointerdown", ShowLBoards);
 
 	scaleToWindow(app.view);
+
+	// Prints render type (Khide's desktop uses WebGL & masking does not work)
+	if(app instanceof PIXI.CanvasRenderer) {console.log("CANVAS");} else {console.log("WEBGL");}
 }
 
 function ShowLBoards(){
@@ -112,7 +115,7 @@ function ClosePauseMenu(){
 }
 
 const startLives = 100;
-const startMoney = 70000;
+const startMoney = 1000;
 
 function StartGame(){
 	Destroy(mmLogo);
@@ -120,6 +123,10 @@ function StartGame(){
 	Destroy(mmLBoards);
 
 	// TODO: Loading bar
+
+	wave = 0;
+	wavePos = 0;
+	elapsed = 0;
 
 	gridSize = 18;
 	unit = app.renderer.width / gridSize;
@@ -129,7 +136,6 @@ function StartGame(){
 	hudStyle = new PIXI.TextStyle({fontFamily:'Lucida Console', fontSize:18, fill:["#FFFFFF"]});
 	towers = new Array();
 	food = new Array();
-	frame = 0;
 	lives = startLives;
 	score = 0;
 	money = startMoney;
@@ -300,133 +306,121 @@ const foodTransferSpeed = 2.5;
 
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	/* Proto */ fpsText.text = Math.round(1 / delta * 60) + " fps";
+	elapsed += secondsPerFrame * delta;
 	
     mousePos = app.renderer.plugins.interaction.mouse.global;
 
-	if(frame == 15){
-		frame = 0;
+	if(lives > 0){ // time:0, type:foodTypes.FRUIT, startRate:80, endRate:60, length:60
+		for(let i = inProgress.length - 1; i >= 0; i--){
+			if(inProgress[i].time + inProgress[i].length < elapsed){
+				inProgress.splice(i, 1);
 
-		let val = Math.floor(Math.random() * 12);
-
-		switch(val){
-			case(0):
-				GetFood(foodTypes.APPLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(1):
-				GetFood(foodTypes.BANANA, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(2):
-				GetFood(foodTypes.OIL, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(3):
-				GetFood(foodTypes.BONE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(4):
-				GetFood(foodTypes.BREAD, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(5):
-				GetFood(foodTypes.CABBAGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(6):
-				GetFood(foodTypes.CARROT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(7):
-				GetFood(foodTypes.EGGPLANT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(8):
-				GetFood(foodTypes.ORANGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(9):
-				GetFood(foodTypes.PORK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(10):
-				GetFood(foodTypes.STEAK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
-			case(11):
-				GetFood(foodTypes.WATER, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-				break;
+				console.log("waveEntry finished!");
+			}else{
+				if(inProgress[i].next < elapsed){
+					GetFood(inProgress[i].type, 16.5 * unit, (1.3 + Math.random() * .6) * unit); // TODO: Implement different "from"'s
+	
+					inProgress[i].next = elapsed + Lerp(inProgress[i].startRate, inProgress[i].endRate, (elapsed - inProgress[i].time) / inProgress[i].length);
+				}
+			}
 		}
 
-		///* Proto */ food.push(GetFood(GetObj(GetSprite("whiteBox", -2 / 5, -2 / 5, unit * 3 / 5, unit * 3 / 5, Math.random() * 0xFFFFFF), (16) * unit, (0.7 + Math.random() * .6) * unit, foodContainer), "apple", "fruit"));
-	}else{
-		frame++;
-	}
+		if(wave < waves.length){
+			if(wavePos < waves[wave].length){
+				if(waves[wave][wavePos].time <= elapsed){
+					inProgress.push(waves[wave][wavePos]);
+					inProgress[inProgress.length - 1].next = 0;
 
-	// TODO: Properly centre food along tracks
-	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 1.75; i < food.length; i++){
-		if(food[i].towerTarget === false){
-			if(Math.pow(garbage.x - food[i].x, 2) + Math.pow(garbage.y - food[i].y, 2) <= maxDistSqrd){ // Destroy if near garbage can
+					wavePos++;
+					elapsed = 0;
+				}
+			}else if(inProgress.length == 0){
+				wave++;
+				wavePos = 0;
+
+				console.log("Next wave!");
+			}
+		}else{
+
+			// TODO: Infinite waves
+		}
+		
+		// TODO: Properly centre food along tracks
+		for(let i = 0, j = 0, maxDistSqrd = unit * unit / 1.75; i < food.length; i++){
+			if(food[i].towerTarget === false){
+				if(Math.pow(garbage.x - food[i].x, 2) + Math.pow(garbage.y - food[i].y, 2) <= maxDistSqrd){ // Destroy if near garbage can
+					Destroy(food[i]);
+					food.splice(i, 1);
+					AdjustLives(-1);
+				}else{
+					for(j = 0; j < track.length; j++){
+						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
+							food[i].x += track[j].vx * delta;
+							food[i].y += track[j].vy * delta;
+						}
+					}
+				}	
+			}else if(Math.pow(food[i].towerTarget.x - food[i].x, 2) + Math.pow(food[i].towerTarget.y - food[i].y, 2) <= foodProcessDist){
 				Destroy(food[i]);
 				food.splice(i, 1);
-				AdjustLives(-1);
 			}else{
-				for(j = 0; j < track.length; j++){
-					if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
-						food[i].x += track[j].vx * delta;
-						food[i].y += track[j].vy * delta;
-					}
-				}
-			}	
-		}else if(Math.pow(food[i].towerTarget.x - food[i].x, 2) + Math.pow(food[i].towerTarget.y - food[i].y, 2) <= foodProcessDist){
-			Destroy(food[i]);
-			food.splice(i, 1);
-		}else{
-			food[i].x += (food[i].towerTarget.x - food[i].x > 0 ? 1 : -1) * foodTransferSpeed * delta;
-			food[i].y += (food[i].towerTarget.y - food[i].y > 0 ? 1 : -1) * foodTransferSpeed * delta;
-		}
-	}
-
-	for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.5; j < towers.length; j++){
-		let total = 0;
-
-		for(i = 0; i < towers[j].curr.length; i++){ // Increments counters of currently-being-processed food
-			for(l = towers[j].curr[i].length - 1; l >= 0; l--){
-				towers[j].curr[i][l] += delta;
-
-				if(towers[j].curr[i][l] > towers[j].processTime){ // Removes finished food
-					towers[j].curr[i].splice(l, 1);
-					towers[j].finished[i]++;
-					towers[j].currCount--;
-				}
-			}
-
-			if(towers[j].finished[i] == towers[j].max[i]){
-				total++;
-				towers[j].curr[i] = [];
+				food[i].x += (food[i].towerTarget.x - food[i].x > 0 ? 1 : -1) * foodTransferSpeed * delta;
+				food[i].y += (food[i].towerTarget.y - food[i].y > 0 ? 1 : -1) * foodTransferSpeed * delta;
 			}
 		}
-		
-		if(total == towers[j].max.length){ // Increases score if tower is finished, and clears it
-			for(i = 0; i < towers[j].max.length; i++){
-				towers[j].curr[i] = [];
-				towers[j].finished[i] = 0;
-			}
-
-			AdjustScore(towers[j].value);
-		}
-
-		// TODO: Display currently-being-processed foods
-		
-		if(towers[j].ready < 3){
-			towers[j].ready++;
-		}else{ // Checks if any applicable foods are in range, and if so, begins processing them
-			for(i = 0; i < food.length && towers[j].ready == 3; i++){
-				if(food[i].towerTarget === false){
-					let l = towers[j].allow.findIndex(function(element){
-						return element == foodTypes.ANY || food[i].type == element || food[i].subType == element;
-					});
 	
-					if(towers[j].ignore.includes(food[i].type) || towers[j].ignore.includes(food[i].subType)){
-						l = -1;
-					}else{
-						l = Math.min(l, towers[j].max.length - 1);
+		for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.5; j < towers.length; j++){
+			let total = 0;
+	
+			for(i = 0; i < towers[j].curr.length; i++){ // Increments counters of currently-being-processed food
+				for(l = towers[j].curr[i].length - 1; l >= 0; l--){
+					towers[j].curr[i][l] += delta;
+	
+					if(towers[j].curr[i][l] > towers[j].processTime){ // Removes finished food
+						towers[j].curr[i].splice(l, 1);
+						towers[j].finished[i]++;
+						towers[j].currCount--;
 					}
-
-					if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.pow(towers[j].x - food[i].x, 2) + Math.pow(towers[j].y - food[i].y, 2) <= maxDistSqrd){
-						towers[j].curr[l].push(0);
-						food[i].towerTarget = {x:towers[j].x, y:towers[j].y};
-						towers[j].currCount++;
-						towers[j].ready = 0;
+				}
+	
+				if(towers[j].finished[i] == towers[j].max[i]){
+					total++;
+					towers[j].curr[i] = [];
+				}
+			}
+			
+			if(total == towers[j].max.length){ // Increases score if tower is finished, and clears it
+				for(i = 0; i < towers[j].max.length; i++){
+					towers[j].curr[i] = [];
+					towers[j].finished[i] = 0;
+				}
+	
+				AdjustScore(towers[j].value);
+			}
+	
+			// TODO: Display currently-being-processed foods
+			
+			if(towers[j].ready < 3){
+				towers[j].ready++;
+			}else{ // Checks if any applicable foods are in range, and if so, begins processing them
+				for(i = 0; i < food.length && towers[j].ready == 3; i++){
+					if(food[i].towerTarget === false){
+						let l = towers[j].allow.findIndex(function(element){
+							return element == foodTypes.ANY || food[i].type == element || food[i].subType == element;
+						});
+		
+						if(towers[j].ignore.includes(food[i].type) || towers[j].ignore.includes(food[i].subType)){
+							l = -1;
+						}else{
+							l = Math.min(l, towers[j].max.length - 1);
+						}
+	
+						if(l != -1 && towers[j].finished[l] + towers[j].curr[l].length < towers[j].max[l] && towers[j].currCount < towers[j].atOnce && Math.pow(towers[j].x - food[i].x, 2) + Math.pow(towers[j].y - food[i].y, 2) <= maxDistSqrd){
+							towers[j].curr[l].push(0);
+							food[i].towerTarget = {x:towers[j].x, y:towers[j].y};
+							towers[j].currCount++;
+							towers[j].ready = 0;
+						}
 					}
 				}
 			}
@@ -435,91 +429,93 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 }
 
 function PlaceTower(){
-	var tower = false;
-	let x = (Math.floor(mousePos.x / unit) + .5) * unit;
-	let y = (Math.floor(mousePos.y / unit) + .5) * unit;
+	if(lives > 0){
+		var tower = false;
+		let x = (Math.floor(mousePos.x / unit) + .5) * unit;
+		let y = (Math.floor(mousePos.y / unit) + .5) * unit;
 
-	if(wantToPlace == towerTypes.COMPOST){
-		if(Buy(250)){
-			tower = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-			tower.allow = [foodTypes.ANY];
-			tower.ignore = [foodTypes.OIL];
-			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
-			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
-			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-			tower.atOnce = 5; // Amount of concurrent users
-			tower.processTime = 360; // Frames required to process one food item
-			tower.value = 85; // Amount of score and money gained when all maxes have been met
+		if(wantToPlace == towerTypes.COMPOST){
+			if(Buy(250)){
+				tower = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
+				tower.allow = [foodTypes.ANY];
+				tower.ignore = [foodTypes.OIL];
+				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+				tower.atOnce = 5; // Amount of concurrent users
+				tower.processTime = 360; // Frames required to process one food item
+				tower.value = 85; // Amount of score and money gained when all maxes have been met
+			}
+		}else if(wantToPlace == towerTypes.ANIMALS){
+			if(Buy(770)){
+				tower = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
+				tower.allow = [foodTypes.MEAT];
+				tower.ignore = [];
+				tower.max = [4]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+				tower.atOnce = 4; // Amount of concurrent users
+				tower.processTime = 20; // Frames required to process one food item
+				tower.value = 80; // Amount of score and money gained when all maxes have been met
+			}
+		}else if(wantToPlace == towerTypes.FACTORY){
+			if(Buy(1200)){
+				tower = GetObj(GetSprite("factory", .55, .55, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
+				tower.allow = [foodTypes.ANY];
+				tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
+				tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+				tower.atOnce = 2; // Amount of concurrent users
+				tower.processTime = 30; // Frames required to process one food item
+				tower.value = 700; // Amount of score and money gained when all maxes have been met
+			}
+		}else if(wantToPlace == towerTypes.DONATION){
+			if(Buy(400)){
+				tower = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
+				tower.allow = [foodTypes.VEGETABLE, foodTypes.FRUIT, foodTypes.BREAD];
+				tower.ignore = [];
+				tower.max = [2]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+				tower.atOnce = 1; // Amount of concurrent users
+				tower.processTime = 45; // Frames required to process one food item
+				tower.value = 50; // Amount of score and money gained when all maxes have been met
+			}
+		}else if(wantToPlace == towerTypes.RECYCLE){
+			if(Buy(650)){
+				tower = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
+				tower.allow = [foodTypes.ANY];
+				tower.ignore = [foodTypes.MEAT, foodTypes.LIQUID];
+				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+				tower.atOnce = 1; // Amount of concurrent users
+				tower.processTime = 60; // Frames required to process one food item
+				tower.value = 100; // Amount of score and money gained when all maxes have been met
+			}
+		}else if(wantToPlace == towerTypes.PURIFIER){
+			if(Buy(900)){
+				tower = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
+				tower.allow = [foodTypes.WATER];
+				tower.ignore = [];
+				tower.max = [20]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
+				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
+				tower.atOnce = 2; // Amount of concurrent users
+				tower.processTime = 20; // Frames required to process one food item
+				tower.value = 200; // Amount of score and money gained when all maxes have been met
+			}
 		}
-	}else if(wantToPlace == towerTypes.ANIMALS){
-		if(Buy(770)){
-			tower = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-			tower.allow = [foodTypes.MEAT];
-			tower.ignore = [];
-			tower.max = [4]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
-			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
-			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-			tower.atOnce = 4; // Amount of concurrent users
-			tower.processTime = 20; // Frames required to process one food item
-			tower.value = 80; // Amount of score and money gained when all maxes have been met
-		}
-	}else if(wantToPlace == towerTypes.FACTORY){
-		if(Buy(1200)){
-			tower = GetObj(GetSprite("factory", .55, .55, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
-			tower.allow = [foodTypes.ANY];
-			tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
-			tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
-			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
-			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-			tower.atOnce = 2; // Amount of concurrent users
-			tower.processTime = 30; // Frames required to process one food item
-			tower.value = 700; // Amount of score and money gained when all maxes have been met
-		}
-	}else if(wantToPlace == towerTypes.DONATION){
-		if(Buy(400)){
-			tower = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-			tower.allow = [foodTypes.VEGETABLE, foodTypes.FRUIT, foodTypes.BREAD];
-			tower.ignore = [];
-			tower.max = [2]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
-			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
-			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-			tower.atOnce = 1; // Amount of concurrent users
-			tower.processTime = 45; // Frames required to process one food item
-			tower.value = 50; // Amount of score and money gained when all maxes have been met
-		}
-	}else if(wantToPlace == towerTypes.RECYCLE){
-		if(Buy(650)){
-			tower = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-			tower.allow = [foodTypes.ANY];
-			tower.ignore = [foodTypes.MEAT, foodTypes.LIQUID];
-			tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
-			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
-			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-			tower.atOnce = 1; // Amount of concurrent users
-			tower.processTime = 60; // Frames required to process one food item
-			tower.value = 100; // Amount of score and money gained when all maxes have been met
-		}
-	}else if(wantToPlace == towerTypes.PURIFIER){
-		if(Buy(900)){
-			tower = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-			tower.allow = [foodTypes.WATER];
-			tower.ignore = [];
-			tower.max = [20]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
-			tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
-			tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-			tower.atOnce = 2; // Amount of concurrent users
-			tower.processTime = 20; // Frames required to process one food item
-			tower.value = 200; // Amount of score and money gained when all maxes have been met
-		}
-	}
 
-	if(tower != false){
-		tower.type = wantToPlace;
-		tower.currCount = 0;
-		tower.interactive = true;
-		tower.ready = 3;
+		if(tower != false){
+			tower.type = wantToPlace;
+			tower.currCount = 0;
+			tower.interactive = true;
+			tower.ready = 3;
 
-		towers.push(tower);
+			towers.push(tower);
+		}
 	}
 }
 
@@ -633,7 +629,94 @@ var foodAnchor = .5;
 
 function GetFood(subType, posX, posY){
 	let obj;
+	let type;
 	//let obj = GetObj(GetSprite(foodNames[subType], .5, .5, foodScale, foodScale), posX, posY, foodContainer);
+
+	const majorTypes = [foodTypes.ANY, foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.MEAT, foodTypes.LIQUID];
+
+	if(subType == foodTypes.BREAD){
+		type = subType;
+	}else if(majorTypes.includes(subType)){
+		switch(subType){
+			case(foodTypes.ANY):
+				let val = Math.floor(Math.random() * 12);
+
+				switch(val){
+					case(0):
+						subType = foodTypes.APPLE;
+						type = foodTypes.FRUIT;
+						break;
+					case(1):
+						subType = foodTypes.BANANA;
+						type = foodTypes.FRUIT;
+						break;
+					case(2):
+						subType = foodTypes.OIL;
+						type = foodTypes.LIQUID;
+						break;
+					case(3):
+						subType = foodTypes.BONE;
+						type = foodTypes.MEAT;
+						break;
+					case(4):
+						subType = foodTypes.BREAD;
+						type = foodTypes.BREAD;
+						break;
+					case(5):
+						subType = foodTypes.CABBAGE;
+						type = foodTypes.VEGETABLE;
+						break;
+					case(6):
+						subType = foodTypes.CARROT;
+						type = foodTypes.VEGETABLE;
+						break;
+					case(7):
+						subType = foodTypes.EGGPLANT;
+						type = foodTypes.VEGETABLE;
+						break;
+					case(8):
+						subType = foodTypes.ORANGE;
+						type = foodTypes.FRUIT;
+						break;
+					case(9):
+						subType = foodTypes.PORK;
+						type = foodTypes.MEAT;
+						break;
+					case(10):
+						subType = foodTypes.STEAK;
+						type = foodTypes.MEAT;
+						break;
+					case(11):
+						subType = foodTypes.WATER;
+						type = foodTypes.LIQUID;
+						break;
+				};
+			break;
+			case(foodTypes.FRUIT):
+				type = subType;
+				subType = fruits[Math.floor(Math.random() * fruits.length)];
+			break;
+			case(foodTypes.VEGETABLE):
+				type = subType;
+				subType = vegetables[Math.floor(Math.random() * vegetables.length)];	
+			break;
+			case(foodTypes.MEAT):
+				type = subType;
+				subType = meats[Math.floor(Math.random() * meats.length)];
+			break;
+			case(foodTypes.LIQUID):
+				type = subType;
+				subType = liquids[Math.floor(Math.random() * liquids.length)];
+			break;
+		};
+	}else{
+		type = vegetables.includes(subType) ? foodTypes.VEGETABLE : fruits.includes(subType) ? foodTypes.FRUIT : meats.includes(subType) ? foodTypes.MEAT : liquids.includes(subType) ? foodTypes.LIQUID : foodTypes.BREAD;
+	}
+
+	obj = new PIXI.Sprite(PIXI.Texture.fromFrame(foodNames[subType]));
+	obj.towerTarget = false;
+	obj.type = type;
+	obj.subType = subType;
 
 	//obj.pivot.set(5, 5);
 	obj.anchor.set(foodAnchor, foodAnchor);
@@ -644,84 +727,14 @@ function GetFood(subType, posX, posY){
 	obj.x = posX;
 	obj.y = posY + uiMargin;
 
-	const majorTypes = [foodTypes.ANY, foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.MEAT, foodTypes.LIQUID];
-
-	if(subType == foodTypes.BREAD){
-		obj.subType = subType;
-		obj.type = subType;
-	}else if(majorTypes.includes(subType)){
-		switch(subType){
-			case(foodTypes.ANY):
-				let val = Math.floor(Math.random() * 12);
-
-				switch(val){
-					case(0):
-						GetFood(foodTypes.APPLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(1):
-						GetFood(foodTypes.BANANA, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(2):
-						GetFood(foodTypes.OIL, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(3):
-						GetFood(foodTypes.BONE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(4):
-						GetFood(foodTypes.BREAD, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(5):
-						GetFood(foodTypes.CABBAGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(6):
-						GetFood(foodTypes.CARROT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(7):
-						GetFood(foodTypes.EGGPLANT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(8):
-						GetFood(foodTypes.ORANGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(9):
-						GetFood(foodTypes.PORK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(10):
-						GetFood(foodTypes.STEAK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-					case(11):
-						GetFood(foodTypes.WATER, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
-						break;
-				};
-			break;
-			case(foodTypes.FRUIT):
-				obj.type = subType;
-				obj.subType = fruits[Math.floor(Math.random() * fruits.length)];
-			break;
-			case(foodTypes.VEGETABLE):
-				obj.type = subType;
-				obj.subType = vegetables[Math.floor(Math.random() * vegetables.length)];	
-			break;
-			case(foodTypes.MEAT):
-				obj.type = subType;
-				obj.subType = meats[Math.floor(Math.random() * meats.length)];
-			break;
-			case(foodTypes.LIQUID):
-				obj.type = subType;
-				obj.subType = liquids[Math.floor(Math.random() * liquids.length)];
-			break;
-		};
-	}else{
-		obj.subType = subType;
-		obj.type = vegetables.includes(subType) ? foodTypes.VEGETABLE : fruits.includes(subType) ? foodTypes.FRUIT : meats.includes(subType) ? foodTypes.MEAT : liquids.includes(subType) ? foodTypes.LIQUID : foodTypes.BREAD;
-	}
-
-	obj.assign(new PIXI.Sprite(PIXI.Texture.fromFrame(foodNames[obj.subType])));
-	obj.towerTarget = false;
-
 	foodContainer.addChild(obj);
 	food.push(obj);
 
 	return obj;
+}
+
+function Lerp(a, b, t){
+	return a + t * (b - a);
 }
 
 function Destroy(obj){
