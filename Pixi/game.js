@@ -18,6 +18,11 @@ const foodTypes = {
 		PORK:53
 };
 
+const liquids = [11, 12];
+const vegetables = [21, 22, 23];
+const fruits = [31, 32, 33];
+const meats = [51, 52, 53];
+
 const foodNames = {
 	11:"water.png",
 	12:"Oil.png",
@@ -49,6 +54,14 @@ const relPos = {
 	USEMARGIN:1,
 	SIDEBAR:2
 };
+
+const waves = [
+   // FORMAT: time:TIME TO START IN SECONDS, type:foodTypes.ANY, startRate:FRAMES BETWEEN SPAWNING A NEW FOOD, endRate:AMOUNT OF FOOD SPAWNED IS LERPED BETWEEN startRate AND THIS, length:HOW LONG FOOD WILL BE SPAWNED
+	[{time:0, type:foodTypes.APPLE, startRate:80, endRate:60, length:60}],
+	[{time:0, type:foodTypes.CABBAGE, startRate:80, endRate:60, length:60}],
+	[{time:0, type:foodTypes.BREAD, startRate:80, endRate:60, length:60}],
+	[{time:0, type:foodTypes.WATER, startRate:80, endRate:60, length:60}]
+];
 
 function Init(){
 	// Initialize game window
@@ -113,7 +126,7 @@ function StartGame(){
 	foodScale = unit / 10 / 2;
 
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
-	hudStyle = new PIXI.TextStyle({fontFamily:'Lucida Console', fontSize:15, fill:["#ffffff"]});
+	hudStyle = new PIXI.TextStyle({fontFamily:'Lucida Console', fontSize:18, fill:["#FFFFFF"]});
 	towers = new Array();
 	food = new Array();
 	frame = 0;
@@ -158,6 +171,9 @@ function StartGame2(){
 	hudContainer = new PIXI.Container();
 	app.stage.addChild(hudContainer);
 	
+	livesText = new PIXI.Text(lives, hudStyle);
+	livesText.anchor.set(.5, .5);
+	livesText = GetObj(livesText, 425.5, 52.5, app.stage, relPos.IGNOREMARGIN);
 	hpBar = GetObj(GetSprite("fullHP", 0, 0, hudBarScale, hudBarScale), 80 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	hpMask = GetObj(GetSprite("barMask", 0, 0, hudBarScale, hudBarScale), 81 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	hpBar.mask = hpMask;
@@ -200,7 +216,7 @@ function StartGame2(){
 	garbage = GetObj(GetSprite("garbage", .5, .5, 1.25, 1.25, 0x555555), 1.5 * unit, 17.5 * unit);
 
 	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10, app.stage, relPos.IGNOREMARGIN);
-	/* Proto */ livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25, app.stage, relPos.IGNOREMARGIN);
+	//livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25, app.stage, relPos.IGNOREMARGIN);
 	moneyText = GetObj(new PIXI.Text(money, hudStyle), 535, 88, app.stage, relPos.IGNOREMARGIN);
 	moneyText.anchor.set(.5, .5);
 	scoreText = GetObj(new PIXI.Text(score, hudStyle), 659, 88, app.stage, relPos.IGNOREMARGIN);
@@ -294,40 +310,40 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 
 		switch(val){
 			case(0):
-				GetFood(foodTypes.APPLE, foodTypes.FRUIT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.APPLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(1):
-				GetFood(foodTypes.BANANA, foodTypes.FRUIT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.BANANA, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(2):
-				GetFood(foodTypes.OIL, foodTypes.LIQUID, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.OIL, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(3):
-				GetFood(foodTypes.BONE, foodTypes.MEAT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.BONE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(4):
-				GetFood(foodTypes.BREAD, foodTypes.BREAD, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.BREAD, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(5):
-				GetFood(foodTypes.CABBAGE, foodTypes.VEGETABLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.CABBAGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(6):
-				GetFood(foodTypes.CARROT, foodTypes.VEGETABLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.CARROT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(7):
-				GetFood(foodTypes.EGGPLANT, foodTypes.VEGETABLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.EGGPLANT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(8):
-				GetFood(foodTypes.ORANGE, foodTypes.FRUIT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.ORANGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(9):
-				GetFood(foodTypes.PORK, foodTypes.MEAT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.PORK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(10):
-				GetFood(foodTypes.STEAK, foodTypes.MEAT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.STEAK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 			case(11):
-				GetFood(foodTypes.WATER, foodTypes.LIQUID, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+				GetFood(foodTypes.WATER, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
 				break;
 		}
 
@@ -337,7 +353,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 	}
 
 	// TODO: Properly centre food along tracks
-	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 2; i < food.length; i++){
+	for(let i = 0, j = 0, maxDistSqrd = unit * unit / 1.75; i < food.length; i++){
 		if(food[i].towerTarget === false){
 			if(Math.pow(garbage.x - food[i].x, 2) + Math.pow(garbage.y - food[i].y, 2) <= maxDistSqrd){ // Destroy if near garbage can
 				Destroy(food[i]);
@@ -615,8 +631,8 @@ function GetObj(obj, posX = 0, posY = 0, parent = app.stage, ignoreUIMargin = re
 
 var foodAnchor = .5;
 
-function GetFood(subType, type, posX, posY){
-	let obj = new PIXI.Sprite(PIXI.Texture.fromFrame(foodNames[subType]));
+function GetFood(subType, posX, posY){
+	let obj;
 	//let obj = GetObj(GetSprite(foodNames[subType], .5, .5, foodScale, foodScale), posX, posY, foodContainer);
 
 	//obj.pivot.set(5, 5);
@@ -628,8 +644,78 @@ function GetFood(subType, type, posX, posY){
 	obj.x = posX;
 	obj.y = posY + uiMargin;
 
-	obj.type = type;
-	obj.subType = subType;
+	const majorTypes = [foodTypes.ANY, foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.MEAT, foodTypes.LIQUID];
+
+	if(subType == foodTypes.BREAD){
+		obj.subType = subType;
+		obj.type = subType;
+	}else if(majorTypes.includes(subType)){
+		switch(subType){
+			case(foodTypes.ANY):
+				let val = Math.floor(Math.random() * 12);
+
+				switch(val){
+					case(0):
+						GetFood(foodTypes.APPLE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(1):
+						GetFood(foodTypes.BANANA, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(2):
+						GetFood(foodTypes.OIL, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(3):
+						GetFood(foodTypes.BONE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(4):
+						GetFood(foodTypes.BREAD, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(5):
+						GetFood(foodTypes.CABBAGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(6):
+						GetFood(foodTypes.CARROT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(7):
+						GetFood(foodTypes.EGGPLANT, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(8):
+						GetFood(foodTypes.ORANGE, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(9):
+						GetFood(foodTypes.PORK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(10):
+						GetFood(foodTypes.STEAK, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+					case(11):
+						GetFood(foodTypes.WATER, 16.5 * unit, (1.3 + Math.random() * .6) * unit);
+						break;
+				};
+			break;
+			case(foodTypes.FRUIT):
+				obj.type = subType;
+				obj.subType = fruits[Math.floor(Math.random() * fruits.length)];
+			break;
+			case(foodTypes.VEGETABLE):
+				obj.type = subType;
+				obj.subType = vegetables[Math.floor(Math.random() * vegetables.length)];	
+			break;
+			case(foodTypes.MEAT):
+				obj.type = subType;
+				obj.subType = meats[Math.floor(Math.random() * meats.length)];
+			break;
+			case(foodTypes.LIQUID):
+				obj.type = subType;
+				obj.subType = liquids[Math.floor(Math.random() * liquids.length)];
+			break;
+		};
+	}else{
+		obj.subType = subType;
+		obj.type = vegetables.includes(subType) ? foodTypes.VEGETABLE : fruits.includes(subType) ? foodTypes.FRUIT : meats.includes(subType) ? foodTypes.MEAT : liquids.includes(subType) ? foodTypes.LIQUID : foodTypes.BREAD;
+	}
+
+	obj.assign(new PIXI.Sprite(PIXI.Texture.fromFrame(foodNames[obj.subType])));
 	obj.towerTarget = false;
 
 	foodContainer.addChild(obj);
