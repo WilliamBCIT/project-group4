@@ -57,7 +57,7 @@ function Init(){
 	document.getElementById("playframe").appendChild(app.view);
 
     var easterEggBG = new PIXI.Container();
-    
+        
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 	towers = new Array();
 	food = new Array();
@@ -701,13 +701,17 @@ function checkKeyInput(key) {
 }
 
 function startEasterEgg() {       
-	AdjustMoney(20000);
-   /* for (var pos = 0; pos <= 100; pos++) {
+	
+    var moneyContents =  new Array();
+    
+    AdjustMoney(20000);
+    for (var x = 0; x <= 100; x++) {
+        moneyContents[x] =  new Array();
         for (var y = 0; y <= 30; y++) {
-	moneyBill = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 900, app.stage, relPos.SIDEBAR);          
-	moneyBill.interactive = true;
+	moneyContents[x][y] = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * x, y * 50 - 900, app.stage, relPos.SIDEBAR);          
+	moneyContents[x][y].interactive = true;
     }
-    } */
+    } 
     
     easterEggActive = true;
     timer = 300;
