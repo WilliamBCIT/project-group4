@@ -702,12 +702,13 @@ function checkKeyInput(key) {
 
 function startEasterEgg() {       
 	AdjustMoney(20000);
-    for (var pos = 0; pos <= 100; pos++) {
+   /* for (var pos = 0; pos <= 100; pos++) {
         for (var y = 0; y <= 30; y++) {
 	moneyBill = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * pos, y * 50 - 900, app.stage, relPos.SIDEBAR);          
 	moneyBill.interactive = true;
     }
-    }    
+    } */
+    
     easterEggActive = true;
     timer = 300;
 }
