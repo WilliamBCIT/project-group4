@@ -115,7 +115,7 @@ function ClosePauseMenu(){
 }
 
 const startLives = 100;
-const startMoney = 1000;
+const startMoney = 10000;
 
 function StartGame(){
 	Destroy(mmLogo);
@@ -337,11 +337,10 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			}else if(inProgress.length == 0){
 				wave++;
 				wavePos = 0;
-
+				
 				console.log("Next wave!");
 			}
 		}else{
-
 			// TODO: Infinite waves
 		}
 		
@@ -513,6 +512,13 @@ function PlaceTower(){
 			tower.currCount = 0;
 			tower.interactive = true;
 			tower.ready = 3;
+			tower.buttonMode = true;
+			tower.on('pointerdown', function(){
+						towers.splice(towers.indexOf(this), 1);
+						Destroy(this);
+					})
+				 .on('pointerover', function(){tower.tint = 0xFF9999})
+				 .on('pointerout', function(){tower.tint = 0xFFFFFF});
 
 			towers.push(tower);
 		}
