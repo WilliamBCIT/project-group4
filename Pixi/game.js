@@ -448,16 +448,17 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
             console.log("Timer - 1.");
 		}
 				if(timer <= 0){
-        console.log("Easter egg over.");
 
 			    for (var x = 0; x <= 100; x++) {
                 //moneyContents[x] =  new Array();
         for (var y = 0; y <= 30; y++) {
-	           Destroy(moneyContents[x][y]);          
-	           //moneyContents[x][y].interactive = true; Not needed, since you don't do anything when the money is clicked
+	        console.log("Delete bill x: " + x + " y: " + y);   
+            Destroy(moneyContents[x][y]);          
+	          
     }
     } 
-            delete moneyContents;
+            timer = "Done";
+            //delete moneyContents;
 		}
     }
 }
@@ -790,36 +791,29 @@ function AdjustMoney(increaseBy){
 }
 
 function checkKeyInput(key) {
-
-		moneyText.text = "INPUT";
-
-        if (key.keyCode === 77)    {
-			moneyText.text = "M";
-			password = 1;
+        if (key.keyCode === 89 && password == 4)    {
+            password = 0;
+            startEasterEgg();
         }
-        if (key.keyCode === 79)    {
-            moneyText.text = "O";
-			password = 2;
-        }
-        if (key.keyCode === 78)    {
-			moneyText.text = "N";
-            password = 3;
-        }
-        if (key.keyCode === 69)    {
-			moneyText.text = "E";
+        if (key.keyCode === 69 && password == 3)    {
             password = 4;
         }
-        if (key.keyCode === 89)    {
-			moneyText.text = "Y";
-            startEasterEgg();
-        } 
+        if (key.keyCode === 78 && password == 2)    {
+            password = 3;
+        }
+        if (key.keyCode === 79 && password == 1)    {
+			password = 2;
+        }
+        if (key.keyCode === 77)    {
+			password = 1;
+        }
 }
 
 function startEasterEgg() {       
 	
-    moneyContents =  new Array();
+    moneyContents = new Array();
     
-    AdjustMoney(20000);
+    AdjustMoney(10000);
     for (var x = 0; x <= 100; x++) {
         moneyContents[x] =  new Array();
         for (var y = 0; y <= 30; y++) {
@@ -830,5 +824,5 @@ function startEasterEgg() {
     
     easterEggActive = true;
             console.log("Timer set.");
-    timer = 300;
+    timer = 180;
 }
