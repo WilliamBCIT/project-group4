@@ -381,9 +381,13 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				food[i].y += (food[i].towerTarget.y - food[i].y > 0 ? 1 : -1) * foodTransferSpeed * delta;
 			}
 		}
-	
+		
+		let total;
+		let currProgress;
+
 		for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.5; j < towers.length; j++){
-			let total = 0;
+			total = 0;
+			currProgress = 0;
 	
 			for(i = 0; i < towers[j].curr.length; i++){ // Increments counters of currently-being-processed food
 				for(l = towers[j].curr[i].length - 1; l >= 0; l--){
@@ -393,6 +397,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 						towers[j].curr[i].splice(l, 1);
 						towers[j].finished[i]++;
 						towers[j].currCount--;
+					}else{
+						currProgress += towers[j].curr[i][l];
 					}
 				}
 	
@@ -407,10 +413,14 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					towers[j].curr[i] = [];
 					towers[j].finished[i] = 0;
 				}
-	
+				
 				AdjustScore(towers[j].value);
 			}
-	
+
+			towers[j].finish.scale.x = (towers[j].finished.reduce(function(total, num){return total + num;}) * towers[j].processTime) / towers[j].totalProcess * unit;
+			towers[j].progress.scale.x = currProgress / towers[j].totalProcess * unit;
+			towers[j].progress.x = towers[j].finish.x + towers[j].finish.scale.x;
+			
 			// TODO: Display currently-being-processed foods
 			
 			if(towers[j].ready < 3){
@@ -447,11 +457,11 @@ function PlaceTower(){
 		let x = (Math.floor(mousePos.x / unit) + .5) * unit;
 		let y = (Math.floor(mousePos.y / unit) + .5) * unit;
 
-		if(wantToPlace == towerTypes.COMPOST){
+		if(wantToPlace == towerTypes.COMPOST){ // Cheap & takes in anything but liquids, but is slow & doesn't make much
 			if(Buy(250)){
 				tower = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.ANY];
-				tower.ignore = [foodTypes.OIL];
+				tower.ignore = [foodTypes.LIQUID];
 				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
@@ -459,7 +469,7 @@ function PlaceTower(){
 				tower.processTime = 360; // Frames required to process one food item
 				tower.value = 85; // Amount of score and money gained when all maxes have been met
 			}
-		}else if(wantToPlace == towerTypes.ANIMALS){
+		}else if(wantToPlace == towerTypes.ANIMALS){ // Ravenously devours meat
 			if(Buy(770)){
 				tower = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.MEAT];
@@ -471,11 +481,11 @@ function PlaceTower(){
 				tower.processTime = 20; // Frames required to process one food item
 				tower.value = 80; // Amount of score and money gained when all maxes have been met
 			}
-		}else if(wantToPlace == towerTypes.FACTORY){
+		}else if(wantToPlace == towerTypes.FACTORY){ // A mass-processing machine that accepts anything but meat, only processing a few at a time. Isn't very profitable
 			if(Buy(1200)){
 				tower = GetObj(GetSprite("factory", .55, .55, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
-				tower.allow = [foodTypes.ANY];
-				tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
+				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BONE, foodTypes.OIL];
+				tower.ignore = [];
 				tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
@@ -483,23 +493,23 @@ function PlaceTower(){
 				tower.processTime = 30; // Frames required to process one food item
 				tower.value = 700; // Amount of score and money gained when all maxes have been met
 			}
-		}else if(wantToPlace == towerTypes.DONATION){
+		}else if(wantToPlace == towerTypes.DONATION){ // More expensive & picky than composting, but is faster & worth more
 			if(Buy(400)){
 				tower = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-				tower.allow = [foodTypes.VEGETABLE, foodTypes.FRUIT, foodTypes.BREAD];
+				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE];
 				tower.ignore = [];
 				tower.max = [2]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 1; // Amount of concurrent users
 				tower.processTime = 45; // Frames required to process one food item
-				tower.value = 50; // Amount of score and money gained when all maxes have been met
+				tower.value = 60; // Amount of score and money gained when all maxes have been met
 			}
 		}else if(wantToPlace == towerTypes.RECYCLE){
 			if(Buy(650)){
 				tower = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-				tower.allow = [foodTypes.ANY];
-				tower.ignore = [foodTypes.MEAT, foodTypes.LIQUID];
+				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BREAD, foodTypes.WATER];
+				tower.ignore = [];
 				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
@@ -524,8 +534,11 @@ function PlaceTower(){
 		if(tower != false){
 			tower.type = wantToPlace;
 			tower.currCount = 0;
-			tower.interactive = true;
+			tower.totalProcess = tower.max.reduce(function(total, num){return total + num;}) * tower.processTime;
+			tower.finish = GetObj(GetSprite("whiteBox", 0, 1, unit, 5, 0x00FF00), tower.x - unit / 2, tower.y + unit / 2 - 1, app.stage, relPos.IGNOREMARGIN);
+			tower.progress = GetObj(GetSprite("whiteBox", 0, 1, unit, 5, 0xFF0000), tower.x - unit / 2, tower.y + unit / 2 - 1, app.stage, relPos.IGNOREMARGIN);
 			tower.ready = 3;
+			tower.interactive = true;
 			tower.buttonMode = true;
 			tower.on('pointerdown', function(){
 						towers.splice(towers.indexOf(this), 1);
@@ -771,11 +784,6 @@ function Destroy(obj){
 	obj.parent.removeChild(obj);
 }
 
-function AdjustMoney(increaseBy){
-	money += increaseBy;
-	moneyText.text = money;
-}
-
 function checkKeyInput(key) {
 
 		moneyText.text = "INPUT";
@@ -802,11 +810,23 @@ function checkKeyInput(key) {
         } 
 }
 
+function getWave(){
+	return wave;
+}
+
+function getScore(){
+	return score;
+}
+
+function getMoney(){
+	return money;
+}
+
 function startEasterEgg() {       
 	
     var moneyContents =  new Array();
     
-    AdjustMoney(20000);
+    AdjustScore(20000);
     for (var x = 0; x <= 100; x++) {
         moneyContents[x] =  new Array();
         for (var y = 0; y <= 30; y++) {
