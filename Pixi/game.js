@@ -156,6 +156,7 @@ function StartGame(){
     document.addEventListener('keydown', checkKeyInput);
     
     var timer;
+    var moneyContents;
 
 	// Import textures
 	PIXI.loader.add("whiteBox", "../Pixi/images/WhiteBox.png")
@@ -439,6 +440,26 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			}
 		}
 	}
+    
+    if(typeof timer == 'number'){
+            
+    		if(timer >= 0){
+			timer--; 
+            console.log("Timer - 1.");
+		}
+				if(timer <= 0){
+        console.log("Easter egg over.");
+
+			    for (var x = 0; x <= 100; x++) {
+                //moneyContents[x] =  new Array();
+        for (var y = 0; y <= 30; y++) {
+	           Destroy(moneyContents[x][y]);          
+	           //moneyContents[x][y].interactive = true; Not needed, since you don't do anything when the money is clicked
+    }
+    } 
+            delete moneyContents;
+		}
+    }
 }
 
 function PlaceTower(){
@@ -538,15 +559,7 @@ function PlaceTower(){
 		}
 	}
 
-	if(typeof timer == 'number'){
-		if(timer >= 0){
-			timer--; 
-		}
-		
-		if(timer <= 0){
-			dollar.destroy(true);
-		}
-	}
+
 }
 
 function Buy(cost){
@@ -804,7 +817,7 @@ function checkKeyInput(key) {
 
 function startEasterEgg() {       
 	
-    var moneyContents =  new Array();
+    moneyContents =  new Array();
     
     AdjustMoney(20000);
     for (var x = 0; x <= 100; x++) {
@@ -816,5 +829,6 @@ function startEasterEgg() {
     } 
     
     easterEggActive = true;
+            console.log("Timer set.");
     timer = 300;
 }
