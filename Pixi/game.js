@@ -441,18 +441,25 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 		}
 	}
     
+    
+    
     if(typeof timer == 'number'){
             
     		if(timer >= 0){
 			timer--; 
-            console.log("Timer - 1.");
+               			    for (var x = 0; x <= 100; x++) {
+         for (var y = 0; y <= 30; y++) {            
+              moneyContents[x][y].rotation += 0.05 * delta;
+              moneyContents[x][y].y += 3.2;
+
+                }
+    } 
 		}
 				if(timer <= 0){
 
 			    for (var x = 0; x <= 100; x++) {
                 //moneyContents[x] =  new Array();
         for (var y = 0; y <= 30; y++) {
-	        console.log("Delete bill x: " + x + " y: " + y);   
             Destroy(moneyContents[x][y]);          
 	          
     }
@@ -823,6 +830,5 @@ function startEasterEgg() {
     } 
     
     easterEggActive = true;
-            console.log("Timer set.");
-    timer = 180;
+    timer = 325;
 }
