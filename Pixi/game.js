@@ -73,6 +73,8 @@ function Init(){
 	app.renderer.autoResize = true;
 	document.getElementById("playframe").appendChild(app.view);
 
+    var easterEggBG = new PIXI.Container();
+
 	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 
 	// Import textures
@@ -144,6 +146,17 @@ function StartGame(){
 	wave = 0;
 	wantToPlace = "";
 
+    //Prepare Easter Egg 
+	var password;
+    password = 0;
+    
+    var easterEggActive;
+    easterEggActive = false;
+	
+    document.addEventListener('keydown', checkKeyInput);
+    
+    var timer;
+
 	// Import textures
 	PIXI.loader.add("whiteBox", "../Pixi/images/WhiteBox.png")
 			   .add("compost", "../Pixi/images/towerCompost.png")
@@ -162,6 +175,7 @@ function StartGame(){
 			   .add("barMask", "../Pixi/images/BeakerMask.png")
 			   .add("foodSheet", "../Pixi/images/Food.json")
 			   .add("conveyorSheet", "../Pixi/images/conveyor.json")
+               .add("dollar", "../pixi/images/DollarBill.png")
 			   .load(StartGame2);
 }
 
@@ -523,6 +537,16 @@ function PlaceTower(){
 			towers.push(tower);
 		}
 	}
+
+	if(typeof timer == 'number'){
+		if(timer >= 0){
+			timer--; 
+		}
+		
+		if(timer <= 0){
+			dollar.destroy(true);
+		}
+	}
 }
 
 function Buy(cost){
@@ -745,4 +769,52 @@ function Lerp(a, b, t){
 
 function Destroy(obj){
 	obj.parent.removeChild(obj);
+}
+
+function AdjustMoney(increaseBy){
+	money += increaseBy;
+	moneyText.text = money;
+}
+
+function checkKeyInput(key) {
+
+		moneyText.text = "INPUT";
+
+        if (key.keyCode === 77)    {
+			moneyText.text = "M";
+			password = 1;
+        }
+        if (key.keyCode === 79)    {
+            moneyText.text = "O";
+			password = 2;
+        }
+        if (key.keyCode === 78)    {
+			moneyText.text = "N";
+            password = 3;
+        }
+        if (key.keyCode === 69)    {
+			moneyText.text = "E";
+            password = 4;
+        }
+        if (key.keyCode === 89)    {
+			moneyText.text = "Y";
+            startEasterEgg();
+        } 
+}
+
+function startEasterEgg() {       
+	
+    var moneyContents =  new Array();
+    
+    AdjustMoney(20000);
+    for (var x = 0; x <= 100; x++) {
+        moneyContents[x] =  new Array();
+        for (var y = 0; y <= 30; y++) {
+	moneyContents[x][y] = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * x, y * 50 - 900, app.stage, relPos.SIDEBAR);          
+	//moneyContents[x][y].interactive = true; Not needed, since you don't do anything when the money is clicked
+    }
+    } 
+    
+    easterEggActive = true;
+    timer = 300;
 }
