@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Operation Compost Game</title>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
-        <title>Collapsible sidebar using Bootstrap 3</title>
 
-         <!-- Bootstrap CSS CDN -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- Bootstrap CSS CDN -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <!-- Our Custom CSS -->
-        <link rel="stylesheet" href="./css/style.css">
-    </head>
-    <body>
+	<link rel="stylesheet" href="./css/style2.css">
+	<link rel="stylesheet" href="./css/style2.css">
+	<script type="text/javascript"  src="../pixi/pixi.min.js"/></script>
+	<script type="text/javascript" src="../pixi/scaleToWindow.js"></script>
+	<script type="text/javascript" src="../pixi/game.js"></script>
+	<script src="./js/overlay.js"></script>
 
-
-
-        <div class="wrapper">
+</head>
+<body>
+	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5af40a0c677ae05c"></script>
+	<div class="container-fluid">
+	  <div class="row row-gutters">
+		<div class="col-3 d-none d-md-block">
             <!-- Sidebar Holder -->
             <nav id="sidebar">
                 <div class="sidebar-header">
-                    <h3>Bootstrap Sidebar</h3>
+                    <h3>Operation Compost</h3>
                 </div>
 
                 <ul class="list-unstyled components">
@@ -53,87 +63,91 @@
                     <li>David</li>
                     <li>Sagar</li>
                 </ul>
+				
+                <div class="addthis_inline_share_toolbox"></div>		
             </nav>
-			
-			
-			
-			<!-- Leaderboard holder -->
-			
+		</div>
+		<div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+				<!--Navbar-->
+				<nav class="navbar navbar-light navbar-1 white d-md-none d-lg-none d-xl-none">
+
+						<!-- Navbar brand -->
+					<a class="navbar-brand" href="#"><h3></h3></a>
+
+						<!-- Collapse button -->
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent15" aria-controls="navbarSupportedContent15"
+						aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+						<!-- Collapsible content -->
+					<div class="collapse navbar-collapse" id="navbarSupportedContent15">
+
+							<!-- Links -->
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item active">
+								<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Features</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Pricing</a>
+							</li>
+						</ul>
+							<!-- Links -->
+
+					</div>
+						<!-- Collapsible content -->
+
+				</nav>
+					<!--/.Navbar-->                
+				
+				
+				
+            <!-- Page Content Holder -->
+            <div id="middleblock">
+					<div id="playframe">
+					
+						<script type="text/javascript">
+							Init();
+					</script>
+				
+				</div>
+			</div>
+        </div>
+		<!-- Leaderboard holder -->
+
+		<div class="col-3 d-none d-md-block">
 			<nav id="leaderboard" >
                 <div class="leaderboard-header ">
                     <h3>Leaderboard</h3>
                 </div>
-				<div class="components"
-                <h2>Your Score: 10000</h2>
-
-                <ul class="list-unstyled components">
-                    <li class="active">
-
-				<p>High Scores</p>
-                    <li>1. Tommy</li>
-                    <li>2. William</li>
-                    <li>3. Khide</li>
-                    <li>4. David</li>
-                    <li>5. Sagar</li>
-                </ul>
+				<div class="components">
+					<div class="col-xs-12">
+						<form action="recordScore.php" method="post">
+							<div class="form-group">
+							  <label for="name" class = "whiteText">Full Name:</label>
+							  <input type="text" class="form-control" name="fullname" placeholder="Full Name">
+							</div>
+							<div class="form-group">
+							  <label for="score" class = "whiteText"></label>
+							  <input type="hidden" class="form-control" name="score" id = "scoreForm" placeholder="Enter score">
+							</div>
+							<button type="submit" class="btn btn-default" onclick="setScore();">Submit</button>
+						</form>
+						<h2>Your Score: </h2><h2 id="score"></h2>
+						<ul class="list-unstyled components">
+							<li class="active"><p>High Scores</p></li>
+							<li>1. Tommy</li>
+							<li>2. William</li>
+							<li>3. Khide</li>
+							<li>4. David</li>
+							<li>5. Sagar</li>
+						</ul>
+					</div>
 				</div>
             </nav>
-			
-
-            <!-- Page Content Holder -->
-            <div id="content">
-
-                <nav class="navbar navbar-default">
-                    <div class="container-fluid">
-
-                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                                <span>Toggle Sidebar</span>
-                            </button>
-
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav navbar-right">
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="container-fluid">
-
-                            <button type="button" id="leaderboardCollapse" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                                <span>Toggle Leaderboard</span>
-                            </button>
-
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav navbar-right">
-
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-				<img src="./images/banner.png" class="banner-image" alt="banner image">
-			</div>
-			
-        </div>
-
-
-
-
-
-        <!-- jQuery CDN -->
-         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-         <!-- Bootstrap Js CDN -->
-         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-         <script type="text/javascript">
-             $(document).ready(function () {
-                 $('#sidebarCollapse').on('click', function () {
-                     $('#sidebar').toggleClass('active');
-                 });
-				 $('#leaderboardCollapse').on('click', function () {
-                     $('#leaderboard').toggleClass('active');
-                 });
-             });
-         </script>
-    </body>
+		</div>
+	</div>
+</div>
+</body>
 </html>

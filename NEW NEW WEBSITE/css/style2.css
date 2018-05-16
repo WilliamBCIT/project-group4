@@ -174,3 +174,29 @@ ul.CTAs a {
 	margin-right: 0;
 	
 }
+
+.navbar {
+	background-color: #466551;
+    color: white;
+}
+
+
+.hamburger-menu-icon {
+    vertical-align: middle;
+    font-size: 1.8em;
+    color: black;
+}
+
+.nav-link {
+	padding-right: .5rem !important;
+    padding-left: .5rem !important;
+}
+    
+.ml-auto .dropdown-menu {
+    left: auto !important;
+    right: 0px;
+}
+
+.navbar.navbar-1 .navbar-toggler-icon {
+    background-image: url('https://mdbootstrap.com/img/svg/hamburger1.svg?color=6a1b9a');
+}
