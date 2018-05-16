@@ -378,6 +378,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					Destroy(food[i]);
 					food.splice(i, 1);
 					AdjustLives(-1);
+					GetPopup("-1", garbage.x, garbage.y - unit * 3 / 4, 1, 1, 0x000000);
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
