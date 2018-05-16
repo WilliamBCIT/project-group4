@@ -73,9 +73,9 @@ function Init(){
 	app.renderer.autoResize = true;
 	document.getElementById("playframe").appendChild(app.view);
 
-    var easterEggBG = new PIXI.Container();
+    var easterEggBG = new PIXI.particles.ParticleContainer(10000, {scale:true, position:true, rotation:true, uvs:false, alpha:false});
 
-	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
+	hudStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 
 	// Import textures
 	PIXI.loader.add("logo", "../Pixi/images/logoWhiteBackground.png")
@@ -134,7 +134,7 @@ function StartGame(){
 	unit = app.renderer.width / gridSize;
 	foodScale = unit / 10 / 2;
 
-	debugStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
+	hudStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 	hudStyle = new PIXI.TextStyle({fontFamily:'Lucida Console', fontSize:18, fill:["#FFFFFF"]});
 	towers = new Array();
 	food = new Array();
@@ -145,6 +145,7 @@ function StartGame(){
 	targetXP = 1000;
 	wave = 0;
 	wantToPlace = "";
+	popups = [];
 
     //Prepare Easter Egg 
 	var password;
@@ -236,8 +237,8 @@ function StartGame2(){
 
 	garbage = GetObj(GetSprite("garbage", .5, .5, 1.25, 1.25, 0x555555), 1.5 * unit, 17.5 * unit);
 
-	/* Proto */ fpsText = GetObj(new PIXI.Text("", debugStyle), 10, 10, app.stage, relPos.IGNOREMARGIN);
-	//livesText = GetObj(new PIXI.Text("Lives: " + lives, debugStyle), 10, 25, app.stage, relPos.IGNOREMARGIN);
+	/* Proto */ fpsText = GetObj(new PIXI.Text("", hudStyle), 10, 10, app.stage, relPos.IGNOREMARGIN);
+	//livesText = GetObj(new PIXI.Text("Lives: " + lives, hudStyle), 10, 25, app.stage, relPos.IGNOREMARGIN);
 	moneyText = GetObj(new PIXI.Text(money, hudStyle), 535, 88, app.stage, relPos.IGNOREMARGIN);
 	moneyText.anchor.set(.5, .5);
 	scoreText = GetObj(new PIXI.Text(score, hudStyle), 659, 88, app.stage, relPos.IGNOREMARGIN);
@@ -255,7 +256,7 @@ function StartGame2(){
 			.on('pointerover', function(){compostB.scale.x *= 1.2; compostB.scale.y *= 1.2;})
 			.on('pointerout', function(){compostB.scale.x /= 1.2; compostB.scale.y /= 1.2;});
 	
-	compostText = GetObj(new PIXI.Text("Compost: $250", debugStyle), compostB.x, compostB.y + unit * .8, app.stage, relPos.IGNOREMARGIN);
+	compostText = GetObj(new PIXI.Text("Compost: $250", hudStyle), compostB.x, compostB.y + unit, app.stage, relPos.IGNOREMARGIN);
 	compostText.anchor.set(.5, .5);
 
 	donateB = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), sidebarUnit * 2.23, uiMargin / 2, app.stage, relPos.SIDEBAR);
@@ -265,7 +266,7 @@ function StartGame2(){
 			.on('pointerover', function(){donateB.scale.x *= 1.2; donateB.scale.y *= 1.2;})
 			.on('pointerout', function(){donateB.scale.x /= 1.2; donateB.scale.y /= 1.2;});
 	
-	donateText = GetObj(new PIXI.Text("Donate: $400", debugStyle), donateB.x, donateB.y - unit * .8, app.stage, relPos.IGNOREMARGIN);
+	donateText = GetObj(new PIXI.Text("Donate: $400", hudStyle), donateB.x, donateB.y - unit, app.stage, relPos.IGNOREMARGIN);
 	donateText.anchor.set(.5, .5);
 
 	recycleB = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), sidebarUnit * 3.41, uiMargin / 2, app.stage, relPos.SIDEBAR);
@@ -275,7 +276,7 @@ function StartGame2(){
 			.on('pointerover', function(){recycleB.scale.x *= 1.2; recycleB.scale.y *= 1.2;})
 			.on('pointerout', function(){recycleB.scale.x /= 1.2; recycleB.scale.y /= 1.2;});
 	
-	recycleText = GetObj(new PIXI.Text("Recycle: $650", debugStyle), recycleB.x, recycleB.y + unit * .8, app.stage, relPos.IGNOREMARGIN);
+	recycleText = GetObj(new PIXI.Text("Recycle: $650", hudStyle), recycleB.x, recycleB.y + unit, app.stage, relPos.IGNOREMARGIN);
 	recycleText.anchor.set(.5, .5);
 
 	animalsB = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), sidebarUnit * 4.59, uiMargin / 2, app.stage, relPos.SIDEBAR);
@@ -285,17 +286,17 @@ function StartGame2(){
 			.on('pointerover', function(){animalsB.scale.x *= 1.2; animalsB.scale.y *= 1.2;})
 			.on('pointerout', function(){animalsB.scale.x /= 1.2; animalsB.scale.y /= 1.2;});
 	
-	animalsText = GetObj(new PIXI.Text("Animals: $770", debugStyle), animalsB.x, animalsB.y - unit * .8, app.stage, relPos.IGNOREMARGIN);
+	animalsText = GetObj(new PIXI.Text("Animals: $770", hudStyle), animalsB.x, animalsB.y - unit, app.stage, relPos.IGNOREMARGIN);
 	animalsText.anchor.set(.5, .5);
 
 	purifierB = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), sidebarUnit * 5.77, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	purifierB.interactive = true;
 	purifierB.buttonMode = true;
 	purifierB.on('pointerdown', function(){wantToPlace = towerTypes.PURIFIER;})
-			.on('pointerover', function(){purifierB.scale.x *= 1.2; purifierB.scale.y *= 1.2;})
-			.on('pointerout', function(){purifierB.scale.x /= 1.2; purifierB.scale.y /= 1.2;});
+			 .on('pointerover', function(){purifierB.scale.x *= 1.2; purifierB.scale.y *= 1.2;})
+			 .on('pointerout', function(){purifierB.scale.x /= 1.2; purifierB.scale.y /= 1.2;});
 	
-	purifierText = GetObj(new PIXI.Text("Purifier: $900", debugStyle), purifierB.x, purifierB.y + unit * .8, app.stage, relPos.IGNOREMARGIN);
+	purifierText = GetObj(new PIXI.Text("Purifier: $900", hudStyle), purifierB.x, purifierB.y + unit, app.stage, relPos.IGNOREMARGIN);
 	purifierText.anchor.set(.5, .5);
 
 	factoryB = GetObj(GetSprite("factory", .5, .5, .9, .9), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
@@ -305,7 +306,7 @@ function StartGame2(){
 			.on('pointerover', function(){factoryB.scale.x *= 1.2; factoryB.scale.y *= 1.2;})
 			.on('pointerout', function(){factoryB.scale.x /= 1.2; factoryB.scale.y /= 1.2;});
 	
-	factoryText = GetObj(new PIXI.Text("Factory: $1200", debugStyle), factoryB.x, factoryB.y - unit, app.stage, relPos.IGNOREMARGIN);
+	factoryText = GetObj(new PIXI.Text("Factory: $1200", hudStyle), factoryB.x, factoryB.y - unit, app.stage, relPos.IGNOREMARGIN);
 	factoryText.anchor.set(.5, .5);
 
 	/* Proto */ wantToPlace = "";
@@ -319,13 +320,24 @@ function StartGame2(){
 const foodProcessDist = 4 * 4;
 const foodTransferSpeed = 2.5;
 
+const popupSpeed = -1;
+const popupDuration = .4;
+
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
-	/* Proto */ fpsText.text = Math.round(1 / delta * 60) + " fps";
 	elapsed += secondsPerFrame * delta;
-	
     mousePos = app.renderer.plugins.interaction.mouse.global;
 
 	if(lives > 0){ // time:0, type:foodTypes.FRUIT, startRate:80, endRate:60, length:60
+		for(let i = popups.length - 1; i >= 0; i--){
+			if(popups[i].elapsed >= popupDuration){
+				Destroy(popups[i]);
+				popups.splice(i, 1);
+			}else{
+				popups[i].elapsed += secondsPerFrame * delta;
+				popups[i].y += popupSpeed * delta;
+			}
+		}
+		
 		for(let i = inProgress.length - 1; i >= 0; i--){
 			if(inProgress[i].time + inProgress[i].length < elapsed){
 				inProgress.splice(i, 1);
@@ -382,9 +394,13 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				food[i].y += (food[i].towerTarget.y - food[i].y > 0 ? 1 : -1) * foodTransferSpeed * delta;
 			}
 		}
-	
+		
+		let total;
+		let currProgress;
+
 		for(let j = 0, i = 0, l = 0, maxDistSqrd = unit * unit * 2.5; j < towers.length; j++){
-			let total = 0;
+			total = 0;
+			currProgress = 0;
 	
 			for(i = 0; i < towers[j].curr.length; i++){ // Increments counters of currently-being-processed food
 				for(l = towers[j].curr[i].length - 1; l >= 0; l--){
@@ -394,6 +410,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 						towers[j].curr[i].splice(l, 1);
 						towers[j].finished[i]++;
 						towers[j].currCount--;
+					}else{
+						currProgress += towers[j].curr[i][l];
 					}
 				}
 	
@@ -408,10 +426,15 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					towers[j].curr[i] = [];
 					towers[j].finished[i] = 0;
 				}
-	
+				
 				AdjustScore(towers[j].value);
+				GetPopup("+" + towers[j].value, towers[j].x, towers[j].y - unit * 3 / 4, 1, 1, 0x000000);
 			}
-	
+
+			towers[j].finish.scale.x = (towers[j].finished.reduce(function(total, num){return total + num;}) * towers[j].processTime) / towers[j].totalProcess * unit;
+			towers[j].progress.scale.x = currProgress / towers[j].totalProcess * unit;
+			towers[j].progress.x = towers[j].finish.x + towers[j].finish.scale.x;
+			
 			// TODO: Display currently-being-processed foods
 			
 			if(towers[j].ready < 3){
@@ -476,11 +499,11 @@ function PlaceTower(){
 		let x = (Math.floor(mousePos.x / unit) + .5) * unit;
 		let y = (Math.floor(mousePos.y / unit) + .5) * unit;
 
-		if(wantToPlace == towerTypes.COMPOST){
+		if(wantToPlace == towerTypes.COMPOST){ // Cheap & takes in anything but liquids, but is slow & doesn't make much
 			if(Buy(250)){
 				tower = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.ANY];
-				tower.ignore = [foodTypes.OIL];
+				tower.ignore = [foodTypes.LIQUID];
 				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
@@ -488,7 +511,7 @@ function PlaceTower(){
 				tower.processTime = 360; // Frames required to process one food item
 				tower.value = 85; // Amount of score and money gained when all maxes have been met
 			}
-		}else if(wantToPlace == towerTypes.ANIMALS){
+		}else if(wantToPlace == towerTypes.ANIMALS){ // Ravenously devours meat
 			if(Buy(770)){
 				tower = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.MEAT];
@@ -500,11 +523,11 @@ function PlaceTower(){
 				tower.processTime = 20; // Frames required to process one food item
 				tower.value = 80; // Amount of score and money gained when all maxes have been met
 			}
-		}else if(wantToPlace == towerTypes.FACTORY){
+		}else if(wantToPlace == towerTypes.FACTORY){ // A mass-processing machine that accepts anything but meat, only processing a few at a time. Isn't very profitable
 			if(Buy(1200)){
 				tower = GetObj(GetSprite("factory", .55, .55, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
-				tower.allow = [foodTypes.ANY];
-				tower.ignore = [foodTypes.WATER, foodTypes.BREAD];
+				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BONE, foodTypes.OIL];
+				tower.ignore = [];
 				tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
@@ -512,23 +535,23 @@ function PlaceTower(){
 				tower.processTime = 30; // Frames required to process one food item
 				tower.value = 700; // Amount of score and money gained when all maxes have been met
 			}
-		}else if(wantToPlace == towerTypes.DONATION){
+		}else if(wantToPlace == towerTypes.DONATION){ // More expensive & picky than composting, but is faster & worth more
 			if(Buy(400)){
 				tower = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-				tower.allow = [foodTypes.VEGETABLE, foodTypes.FRUIT, foodTypes.BREAD];
+				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE];
 				tower.ignore = [];
 				tower.max = [2]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 1; // Amount of concurrent users
 				tower.processTime = 45; // Frames required to process one food item
-				tower.value = 50; // Amount of score and money gained when all maxes have been met
+				tower.value = 60; // Amount of score and money gained when all maxes have been met
 			}
 		}else if(wantToPlace == towerTypes.RECYCLE){
 			if(Buy(650)){
 				tower = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
-				tower.allow = [foodTypes.ANY];
-				tower.ignore = [foodTypes.MEAT, foodTypes.LIQUID];
+				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BREAD, foodTypes.WATER];
+				tower.ignore = [];
 				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
@@ -553,11 +576,17 @@ function PlaceTower(){
 		if(tower != false){
 			tower.type = wantToPlace;
 			tower.currCount = 0;
-			tower.interactive = true;
+			tower.totalProcess = tower.max.reduce(function(total, num){return total + num;}) * tower.processTime;
+			tower.finish = GetObj(GetSprite("whiteBox", 0, 1, unit, 5, 0x00FF00), tower.x - unit / 2, tower.y + unit / 2 - 1, app.stage, relPos.IGNOREMARGIN);
+			tower.progress = GetObj(GetSprite("whiteBox", 0, 1, unit, 5, 0xFF0000), tower.x - unit / 2, tower.y + unit / 2 - 1, app.stage, relPos.IGNOREMARGIN);
 			tower.ready = 3;
+			tower.interactive = true;
 			tower.buttonMode = true;
 			tower.on('pointerdown', function(){
 						towers.splice(towers.indexOf(this), 1);
+						
+						Destroy(this.finish);
+						Destroy(this.progress);
 						Destroy(this);
 					})
 				 .on('pointerover', function(){tower.tint = 0xFF9999})
@@ -676,7 +705,21 @@ function GetObj(obj, posX = 0, posY = 0, parent = app.stage, ignoreUIMargin = re
 	return obj;
 }
 
+function GetPopup(text, posX, posY, scaleX = 1, scaleY = 1, tint = 0xFFFFFF){
+	let popup = GetObj(new PIXI.Text(text, hudStyle), posX, posY, app.stage, relPos.IGNOREMARGIN);
+	popup.scale.set(scaleX, scaleY);
+	popup.elapsed = 0;
+	popup.anchor.set(.5, .5);
+
+	popups.push(popup);
+}
+
 var foodAnchor = .5;
+
+function setScore() {
+	document.getElementById("scoreForm1").value = getScore();
+	document.getElementById("scoreForm2").value = getScore();
+}
 
 function GetFood(subType, posX, posY){
 	let obj;
@@ -792,11 +835,6 @@ function Destroy(obj){
 	obj.parent.removeChild(obj);
 }
 
-function AdjustMoney(increaseBy){
-	money += increaseBy;
-	moneyText.text = money;
-}
-
 function checkKeyInput(key) {
         if (key.keyCode === 89 && password == 4)    {
             password = 0;
@@ -814,6 +852,23 @@ function checkKeyInput(key) {
         if (key.keyCode === 77)    {
 			password = 1;
         }
+}
+
+function AdjustMoney(adjustBy){
+	money += adjustBy;
+	moneyText.text = money;
+}
+
+function getWave(){
+	return wave;
+}
+
+function getScore(){
+	return score;
+}
+
+function getMoney(){
+	return money;
 }
 
 function startEasterEgg() {       
