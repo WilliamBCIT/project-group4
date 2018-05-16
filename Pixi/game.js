@@ -57,10 +57,8 @@ const relPos = {
 
 const waves = [
    // FORMAT: time:TIME TO START IN SECONDS, type:foodTypes.ANY, startRate:FRAMES BETWEEN SPAWNING A NEW FOOD, endRate:AMOUNT OF FOOD SPAWNED IS LERPED BETWEEN startRate AND THIS, length:HOW LONG FOOD WILL BE SPAWNED
-	[{time:1, type:foodTypes.FRUIT, startRate:1.2, endRate:.8, length:20, from:0}],
-	[{time:1, type:foodTypes.VEGETABLE, startRate:.6, endRate:.4, length:20, from:1}],
-	[{time:1, type:foodTypes.LIQUID, startRate:.3, endRate:.2, length:20, from:2}],
-	[{time:1, type:foodTypes.ANY, startRate:2.25, endRate:.1, length:20, from:3}]
+	[{time: 2, type: foodTypes.FRUIT, startRate: 2.1, endRate: 2.1, length: 20, from: 0}],
+	[{time: 2, type: foodTypes.FRUIT, startRate: 2, endRate: 1.6, length: 40, from: 0}]
 ];
 
 var inProgress = [];
@@ -117,7 +115,7 @@ function ClosePauseMenu(){
 }
 
 const startLives = 100;
-const startMoney = 10000;
+const startMoney = 250;
 
 function StartGame(){
 	Destroy(mmLogo);
@@ -178,6 +176,7 @@ function StartGame(){
 			   .add("foodSheet", "../Pixi/images/Food.json")
 			   .add("conveyorSheet", "../Pixi/images/conveyor.json")
                .add("dollar", "../pixi/images/DollarBill.png")
+               .add("nextWave", "../pixi/images/nextWave.png")
 			   .load(StartGame2);
 }
 
@@ -186,6 +185,7 @@ function StartGame2(){
 	stageImg.interactive = true;
 	stageImg.buttonMode = true;
 	stageImg.on('pointerdown', PlaceTower);
+	//stageImg.on('touchstart', function(e){mousePos.x = e.pageX; mousePosY = e.pageY; console.log("touch! (" + mousePos.x + " " + mousePos.y + ")")}, true);
 
 	hudBarScale = 720 / 420;
 
@@ -213,6 +213,8 @@ function StartGame2(){
 	for(let i = 0; i < 27; i++){
 		trackAnim.push(PIXI.Texture.fromFrame(i + ".png"));
 	}
+
+	waitingForNextWave = false;
 
 	for(let i = 0; i < track.length; i++){
 		let x = track[i].x;
@@ -252,7 +254,7 @@ function StartGame2(){
 	compostB = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), sidebarUnit * 1.05, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	compostB.interactive = true;
 	compostB.buttonMode = true;
-	compostB.on('pointerdown', function(){wantToPlace = towerTypes.COMPOST;})
+	compostB.on('pointerdown', function(){wantToPlace = towerTypes.COMPOST; GetPlaceIcon();})
 			.on('pointerover', function(){compostB.scale.x *= 1.2; compostB.scale.y *= 1.2;})
 			.on('pointerout', function(){compostB.scale.x /= 1.2; compostB.scale.y /= 1.2;});
 	
@@ -262,7 +264,7 @@ function StartGame2(){
 	donateB = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), sidebarUnit * 2.23, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	donateB.interactive = true;
 	donateB.buttonMode = true;
-	donateB.on('pointerdown', function(){wantToPlace = towerTypes.DONATION;})
+	donateB.on('pointerdown', function(){wantToPlace = towerTypes.DONATION; GetPlaceIcon();})
 			.on('pointerover', function(){donateB.scale.x *= 1.2; donateB.scale.y *= 1.2;})
 			.on('pointerout', function(){donateB.scale.x /= 1.2; donateB.scale.y /= 1.2;});
 	
@@ -272,7 +274,7 @@ function StartGame2(){
 	recycleB = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), sidebarUnit * 3.41, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	recycleB.interactive = true;
 	recycleB.buttonMode = true;
-	recycleB.on('pointerdown', function(){wantToPlace = towerTypes.RECYCLE;})
+	recycleB.on('pointerdown', function(){wantToPlace = towerTypes.RECYCLE; GetPlaceIcon();})
 			.on('pointerover', function(){recycleB.scale.x *= 1.2; recycleB.scale.y *= 1.2;})
 			.on('pointerout', function(){recycleB.scale.x /= 1.2; recycleB.scale.y /= 1.2;});
 	
@@ -282,7 +284,7 @@ function StartGame2(){
 	animalsB = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), sidebarUnit * 4.59, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	animalsB.interactive = true;
 	animalsB.buttonMode = true;
-	animalsB.on('pointerdown', function(){wantToPlace = towerTypes.ANIMALS;})
+	animalsB.on('pointerdown', function(){wantToPlace = towerTypes.ANIMALS; GetPlaceIcon();})
 			.on('pointerover', function(){animalsB.scale.x *= 1.2; animalsB.scale.y *= 1.2;})
 			.on('pointerout', function(){animalsB.scale.x /= 1.2; animalsB.scale.y /= 1.2;});
 	
@@ -292,7 +294,7 @@ function StartGame2(){
 	purifierB = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), sidebarUnit * 5.77, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	purifierB.interactive = true;
 	purifierB.buttonMode = true;
-	purifierB.on('pointerdown', function(){wantToPlace = towerTypes.PURIFIER;})
+	purifierB.on('pointerdown', function(){wantToPlace = towerTypes.PURIFIER; GetPlaceIcon();})
 			 .on('pointerover', function(){purifierB.scale.x *= 1.2; purifierB.scale.y *= 1.2;})
 			 .on('pointerout', function(){purifierB.scale.x /= 1.2; purifierB.scale.y /= 1.2;});
 	
@@ -302,19 +304,43 @@ function StartGame2(){
 	factoryB = GetObj(GetSprite("factory", .5, .5, .9, .9), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
 	factoryB.interactive = true;
 	factoryB.buttonMode = true;
-	factoryB.on('pointerdown', function(){wantToPlace = towerTypes.FACTORY;})
+	factoryB.on('pointerdown', function(){wantToPlace = towerTypes.FACTORY; GetPlaceIcon();})
 			.on('pointerover', function(){factoryB.scale.x *= 1.2; factoryB.scale.y *= 1.2;})
 			.on('pointerout', function(){factoryB.scale.x /= 1.2; factoryB.scale.y /= 1.2;});
 	
 	factoryText = GetObj(new PIXI.Text("Factory: $1200", hudStyle), factoryB.x, factoryB.y - unit, app.stage, relPos.IGNOREMARGIN);
 	factoryText.anchor.set(.5, .5);
 
-	/* Proto */ wantToPlace = "";
+	wantToPlace = "";
+	toPlaceIcon = false;
 
 	foodContainer = new PIXI.particles.ParticleContainer(10000, {scale:true, position:true, rotation:true, uvs:false, alpha:false});
 	app.stage.addChild(foodContainer);
 
 	app.ticker.add(delta => Update(delta)); // Defines the function that gets called every frame
+}
+
+function GetPlaceIcon(){
+	Destroy(toPlaceIcon);
+	toPlaceIcon = false;
+	let pointer;
+	PIXI.InteractionData.prototype.getLocalPosition(stageImg, pointer);
+
+	if(wantToPlace == towerTypes.COMPOST){ // Cheap & takes in anything but liquids, but is slow & doesn't make much
+		toPlaceIcon = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), mousePos.x, mousePos.y, app.stage, relPos.IGNOREMARGIN);
+	}else if(wantToPlace == towerTypes.ANIMALS){ // Ravenously devours meat
+		toPlaceIcon = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), mousePos.x, mousePos.y, app.stage, relPos.IGNOREMARGIN);
+	}else if(wantToPlace == towerTypes.FACTORY){ // A mass-processing machine that accepts anything but meat, only processing a few at a time. Isn't very profitable
+		toPlaceIcon = GetObj(GetSprite("factory", .55, .55, .9, .9), mousePos.x, mousePos.y, app.stage, relPos.IGNOREMARGIN);
+	}else if(wantToPlace == towerTypes.DONATION){ // More expensive & picky than composting, but is faster & worth more
+		toPlaceIcon = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), mousePos.x, mousePos.y, app.stage, relPos.IGNOREMARGIN);
+	}else if(wantToPlace == towerTypes.RECYCLE){
+		toPlaceIcon = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), mousePos.x, mousePos.y, app.stage, relPos.IGNOREMARGIN);
+	}else if(wantToPlace == towerTypes.PURIFIER){
+		toPlaceIcon = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), mousePos.x, mousePos.y, app.stage, relPos.IGNOREMARGIN);
+	}
+
+	toPlaceIcon.alpha = .75;
 }
 
 const foodProcessDist = 4 * 4;
@@ -327,22 +353,37 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 	elapsed += secondsPerFrame * delta;
     mousePos = app.renderer.plugins.interaction.mouse.global;
 
-	if(lives > 0){ // time:0, type:foodTypes.FRUIT, startRate:80, endRate:60, length:60
-		for(let i = popups.length - 1; i >= 0; i--){
-			if(popups[i].elapsed >= popupDuration){
-				Destroy(popups[i]);
-				popups.splice(i, 1);
-			}else{
-				popups[i].elapsed += secondsPerFrame * delta;
-				popups[i].y += popupSpeed * delta;
-			}
+	for(let i = popups.length - 1; i >= 0; i--){
+		if(popups[i].elapsed >= popupDuration){
+			Destroy(popups[i]);
+			popups.splice(i, 1);
+		}else{
+			popups[i].elapsed += secondsPerFrame * delta;
+			popups[i].y += popupSpeed * delta;
 		}
-		
+	}
+
+	if(toPlaceIcon != false){
+		toPlaceIcon.x = mousePos.x;
+		toPlaceIcon.y = mousePos.y;
+	}
+	
+	if(lives > 0){ // time:0, type:foodTypes.FRUIT, startRate:80, endRate:60, length:60
 		for(let i = inProgress.length - 1; i >= 0; i--){
 			if(inProgress[i].time + inProgress[i].length < elapsed){
 				inProgress.splice(i, 1);
 
-				console.log("waveEntry finished!");
+				waitingForNextWave = true;
+
+				nextWaveB = GetObj(GetSprite("nextWave", 1, 1, 1, 1), unit * 18, unit * 18, app.stage, relPos.USEMARGIN);
+				nextWaveB.interactive = true;
+				nextWaveB.buttonMode = true;
+				nextWaveB.on('pointerdown', function(){
+							waitingForNextWave = false;
+							Destroy(this);
+						})
+					 .on('pointerover', function(){this.scale.set(1.1, 1.1);})
+					 .on('pointerout', function(){this.scale.set(1 / 1.1, 1 / 1.1);});
 			}else{
 				if(inProgress[i].next < elapsed){
 					GetFood(inProgress[i].type, 16.5 * unit, (1.3 + Math.random() * .6) * unit); // TODO: Implement different "from"'s
@@ -361,11 +402,9 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					wavePos++;
 					elapsed = 0;
 				}
-			}else if(inProgress.length == 0){
+			}else if(inProgress.length == 0 && !waitingForNextWave){
 				wave++;
 				wavePos = 0;
-				
-				console.log("Next wave!");
 			}
 		}else{
 			// TODO: Infinite waves
@@ -378,7 +417,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					Destroy(food[i]);
 					food.splice(i, 1);
 					AdjustLives(-1);
-					GetPopup("-1", garbage.x, garbage.y - unit * 3 / 4, 1, 1, 0x000000);
+					GetPopup("-1", garbage.x, garbage.y - unit * 3 / 4, 1, 1, 0xFF0000);
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
@@ -429,7 +468,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}
 				
 				AdjustScore(towers[j].value);
-				GetPopup("+" + towers[j].value, towers[j].x, towers[j].y - unit * 3 / 4, 1, 1, 0x000000);
+				GetPopup("+" + towers[j].value, towers[j].x, towers[j].y - unit * 3 / 4, 1, 1, 0x00FF00);
 			}
 
 			towers[j].finish.scale.x = (towers[j].finished.reduce(function(total, num){return total + num;}) * towers[j].processTime) / towers[j].totalProcess * unit;
@@ -495,6 +534,10 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 }
 
 function PlaceTower(){
+	Destroy(toPlaceIcon);
+	toPlaceIcon = false;
+	mousePos = stageImg.data.getLocalPosition(stageImg.parent);
+
 	if(lives > 0){
 		var tower = false;
 		let x = (Math.floor(mousePos.x / unit) + .5) * unit;
@@ -510,7 +553,7 @@ function PlaceTower(){
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 5; // Amount of concurrent users
 				tower.processTime = 360; // Frames required to process one food item
-				tower.value = 85; // Amount of score and money gained when all maxes have been met
+				tower.value = 80; // Amount of score and money gained when all maxes have been met
 			}
 		}else if(wantToPlace == towerTypes.ANIMALS){ // Ravenously devours meat
 			if(Buy(770)){
@@ -522,7 +565,7 @@ function PlaceTower(){
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 4; // Amount of concurrent users
 				tower.processTime = 20; // Frames required to process one food item
-				tower.value = 80; // Amount of score and money gained when all maxes have been met
+				tower.value = 100; // Amount of score and money gained when all maxes have been met
 			}
 		}else if(wantToPlace == towerTypes.FACTORY){ // A mass-processing machine that accepts anything but meat, only processing a few at a time. Isn't very profitable
 			if(Buy(1200)){
@@ -534,7 +577,7 @@ function PlaceTower(){
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 2; // Amount of concurrent users
 				tower.processTime = 30; // Frames required to process one food item
-				tower.value = 700; // Amount of score and money gained when all maxes have been met
+				tower.value = 250; // Amount of score and money gained when all maxes have been met
 			}
 		}else if(wantToPlace == towerTypes.DONATION){ // More expensive & picky than composting, but is faster & worth more
 			if(Buy(400)){
@@ -558,7 +601,7 @@ function PlaceTower(){
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 1; // Amount of concurrent users
 				tower.processTime = 60; // Frames required to process one food item
-				tower.value = 100; // Amount of score and money gained when all maxes have been met
+				tower.value = 175; // Amount of score and money gained when all maxes have been met
 			}
 		}else if(wantToPlace == towerTypes.PURIFIER){
 			if(Buy(900)){
@@ -568,15 +611,16 @@ function PlaceTower(){
 				tower.max = [20]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-				tower.atOnce = 2; // Amount of concurrent users
+				tower.atOnce = 1; // Amount of concurrent users
 				tower.processTime = 20; // Frames required to process one food item
-				tower.value = 200; // Amount of score and money gained when all maxes have been met
+				tower.value = 225; // Amount of score and money gained when all maxes have been met
 			}
 		}
 
 		if(tower != false){
 			tower.type = wantToPlace;
 			tower.currCount = 0;
+			console.log("Tower placed at " + tower.x + " " + tower.y);
 			tower.totalProcess = tower.max.reduce(function(total, num){return total + num;}) * tower.processTime;
 			tower.finish = GetObj(GetSprite("whiteBox", 0, 1, unit, 5, 0x00FF00), tower.x - unit / 2, tower.y + unit / 2 - 1, app.stage, relPos.IGNOREMARGIN);
 			tower.progress = GetObj(GetSprite("whiteBox", 0, 1, unit, 5, 0xFF0000), tower.x - unit / 2, tower.y + unit / 2 - 1, app.stage, relPos.IGNOREMARGIN);
@@ -585,7 +629,9 @@ function PlaceTower(){
 			tower.buttonMode = true;
 			tower.on('pointerdown', function(){
 						towers.splice(towers.indexOf(this), 1);
-						
+						AdjustMoney(this.value);
+						GetPopup("+" + this.value, this.x, this.y - unit * 3 / 4, 1, 1, 0x00FF00);
+
 						Destroy(this.finish);
 						Destroy(this.progress);
 						Destroy(this);
@@ -711,6 +757,7 @@ function GetPopup(text, posX, posY, scaleX = 1, scaleY = 1, tint = 0xFFFFFF){
 	popup.scale.set(scaleX, scaleY);
 	popup.elapsed = 0;
 	popup.anchor.set(.5, .5);
+	popup.tint = tint;
 
 	popups.push(popup);
 }
@@ -833,7 +880,7 @@ function Lerp(a, b, t){
 }
 
 function Destroy(obj){
-	obj.parent.removeChild(obj);
+	if(obj.parent != undefined) obj.parent.removeChild(obj);
 }
 
 function checkKeyInput(key) {
