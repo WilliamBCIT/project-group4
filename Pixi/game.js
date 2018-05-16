@@ -879,7 +879,9 @@ function startEasterEgg() {
     for (var x = 0; x <= 100; x++) {
         moneyContents[x] =  new Array();
         for (var y = 0; y <= 30; y++) {
-	moneyContents[x][y] = GetObj(GetSprite("dollar", .5, .5, 1.25, 1.25), sidebarUnit * x, y * 50 - 900, app.stage, relPos.SIDEBAR);          
+	moneyContents[x][y] = GetObj(new PIXI.Sprite(PIXI.Texture.fromFrame("dollar")), sidebarUnit * x, y * 50 - 900, app.stage, relPos.SIDEBAR);  
+	moneyContents[x][y].anchor.set(.5, .5);
+	moneyContents[x][y].scale.set(1.25, 1.25);        
 	//moneyContents[x][y].interactive = true; Not needed, since you don't do anything when the money is clicked
     }
     } 
