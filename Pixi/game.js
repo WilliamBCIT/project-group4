@@ -65,9 +65,16 @@ const waves = [
 
 var inProgress = [];
 
-var tutorial01 = new PIXI.Text("Health Bar - This will decrease as food is wasted. It's Game Over when it hits zero!");
-tutorial01.x = 30;
-tutorial01.y = 90;
+var style = new PIXI.TextStyle({
+    fontFamily: 'Arial',
+    fontSize: 20,
+    stroke: '#ffffff',
+    strokeThickness: 30,
+    });
+
+var tutorial01 = new PIXI.Text("Health Bar - This will decrease as food is wasted.\nIt's Game Over when it hits zero!", style);
+tutorial01.x = 80;
+tutorial01.y = 123;
 var tutorial02 = new PIXI.Text("Money - Use your savings to invest in towers to help save food.");
 tutorial02.x = 30;
 tutorial02.y = 90;
@@ -99,7 +106,6 @@ var tutorial11 = new PIXI.Text("Purifier Tower - Effeciently processes water.");
 tutorial11.x = 30;
 tutorial11.y = 90;
 
-app.stage.addChild(basicText);
 
 const secondsPerFrame = 1 / 60;
 
@@ -228,6 +234,8 @@ function StartGame2(){
 	hud = GetObj(GetSprite("hud", 0, 0, 1, 1), 0, 0, app.stage, relPos.IGNOREMARGIN);
 	hudContainer = new PIXI.Container();
 	app.stage.addChild(hudContainer);
+    
+    app.stage.addChild(tutorial01);
 	
 	livesText = new PIXI.Text(lives, hudStyle);
 	livesText.anchor.set(.5, .5);
