@@ -65,6 +65,42 @@ const waves = [
 
 var inProgress = [];
 
+var tutorial01 = new PIXI.Text("Health Bar - This will decrease as food is wasted. It's Game Over when it hits zero!");
+tutorial01.x = 30;
+tutorial01.y = 90;
+var tutorial02 = new PIXI.Text("Money - Use your savings to invest in towers to help save food.");
+tutorial02.x = 30;
+tutorial02.y = 90;
+var tutorial03 = new PIXI.Text("Score - Gain points by preventing food waste with towers!");
+tutorial03.x = 30;
+tutorial03.y = 90;
+var tutorial04 = new PIXI.Text("Experience Bar - Increase this by saving food to face new challenges.");
+tutorial04.x = 30;
+tutorial04.y = 90;
+var tutorial05 = new PIXI.Text("Garbage Bin - If food on the conveyor belt reaches the bin, you will lose health!");
+tutorial05.x = 30;
+tutorial05.y = 90;
+var tutorial06 = new PIXI.Text("Compost Tower - Inexpensive and accepts anything non-liquid, slow and not greatly profitable.");
+tutorial06.x = 30;
+tutorial06.y = 90;
+var tutorial07 = new PIXI.Text("Animal Tower - Ravenously devours meats.");
+tutorial07.x = 30;
+tutorial07.y = 90;
+var tutorial08 = new PIXI.Text("Factory Tower - Accepts everything except meats. Is not very profitable.");
+tutorial08.x = 30;
+tutorial08.y = 90;
+var tutorial09 = new PIXI.Text("Donation Tower - Expensive and selective, yet quick and profitable.");
+tutorial09.x = 30;
+tutorial09.y = 90;
+var tutorial10 = new PIXI.Text("Recyling Tower - Accepts food and water.");
+tutorial10.x = 30;
+tutorial10.y = 90;
+var tutorial11 = new PIXI.Text("Purifier Tower - Effeciently processes water.");
+tutorial11.x = 30;
+tutorial11.y = 90;
+
+app.stage.addChild(basicText);
+
 const secondsPerFrame = 1 / 60;
 
 function Init(){
