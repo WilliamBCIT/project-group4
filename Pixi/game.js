@@ -167,11 +167,66 @@ function ShowLBoards(){
 		lBoardTitle.y = app.screen.height / 7;
         
         app.stage.addChild(lBoardTitle);
+        
+        connect();
 }
 
 function connect() {
     //Connect to MS SQL server
+    var Connection = require('tedious').Connection;
+    var Request = require('tedious').Request;
+
+// Create connection to database
+    var config = 
+   {
+     userName: 'apollo78124', 
+     password: 'bcitGroup4$', 
+     server: 'disk1.database.windows.net', 
+     options: 
+        {
+           database: 'disk1'
+           , encrypt: true
+        }
+           }
+        var connection = new Connection(config);
+
+        // Attempt to connect and execute queries if connection goes through
+        connection.on('connect', function(err) 
+           {
+             if (err) 
+               {
+                  console.log(err)
+               }
+            else
+               {
+                   queryDatabase()
+               }
+           }
+         );
+
 }
+
+function queryDatabase() { 
+    
+    console.log('Reading rows from the Table...');
+
+       // Read all rows from table
+     request = new Request(
+          "SELECT TOP 10 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo ORDER BY s.score DESC;",
+             function(err, rowCount, rows) 
+                {
+                    console.log(rowCount + ' row(s) returned');
+                    process.exit();
+                }
+            );
+
+     request.on('row', function(columns) {
+        columns.forEach(function(column) {
+            console.log("%s\t%s", column.metadata.colName, column.value);
+         });
+             });
+     connection.execSql(request);
+   }
 
 function printRow() {
     //Print one row in the MS SQL Table 
