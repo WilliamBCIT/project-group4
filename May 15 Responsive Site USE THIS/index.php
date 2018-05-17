@@ -53,7 +53,7 @@
 					</script>
 				</div>
 			</div>
-			<div id="leaderboard" class="yellow col s0 m0 l4 hide-on-med-and-down">
+			<div id="leaderboard" class="green col s0 m0 l4 hide-on-med-and-down">
 				
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
@@ -80,9 +80,7 @@
             </form> 
 			<br />
 			<div class="addthis_inline_share_toolbox"></div>
-			<br />
-			<br />
-			<h2>Your Score: </h2><h2 id="scoreUpdate"></h2>
+			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
 			
 			<script>
 				function setScore() {
@@ -92,7 +90,7 @@
 			</script>
 
 			<ul class="list-unstyled components">
-				<li class="active"><p>High Scores</p></li>
+				<li class="active"><h3>High Scores</h3></li>
 			</ul>
 			<?php
 			/*
@@ -127,8 +125,8 @@
 	</div>
 </div>			
 		
-<div class="container">
-	<div id="leaderboard2" class="red col s12 hide-on-large-only">				
+<div id="leaderboard2container">
+	<div id="leaderboard2" class="green col s12 hide-on-large-only">				
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
                     Login to Record Your Score <br />and Share it on Facebook!
@@ -156,7 +154,7 @@
 			<div class="addthis_inline_share_toolbox"></div>
 			<br />
 			<br />
-			<h2>Your Score: </h2><h2 id="scoreUpdate"></h2>
+			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
 			
 			<script>
 				function setScore() {
@@ -166,7 +164,7 @@
 			</script>
 
 			<ul class="list-unstyled components">
-				<li class="active"><p>High Scores</p></li>
+				<li class="active"><h3>High Scores</h3></li>
 			</ul>
 			<?php
 			/*

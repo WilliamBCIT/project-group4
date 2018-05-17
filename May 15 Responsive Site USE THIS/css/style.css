@@ -59,11 +59,20 @@ footer.page-footer {
 #playframe{
 }
 #leaderboard{
-		min-height:600px;
+	min-height:600px;
+	height:100%;
+	color: white;
+	
 
 }
-#leaderboard2{
+#leaderboard2container{
 	min-height:80px;
+	padding-left:5vw;
+	padding-right:5vw;
+	color: white;
+	text-align: center;
+
+
 }
 #main{
 	
@@ -71,8 +80,10 @@ footer.page-footer {
 	margin: 0 auto;
 	padding-left:5vw;
 	padding-right:5vw;
-	
-	
+}
+.whiteText{
+	color: white;
+
 }
 
 
