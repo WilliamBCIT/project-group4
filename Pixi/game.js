@@ -782,6 +782,14 @@ function AdjustScore(increaseBy){
 	moneyText.text = money;
 
 	xp += increaseBy;
+    
+    //Show chewing face when XP increases to certain values.
+    
+    if(xp >= targetXP / 2) {
+        
+        playerIcon = GetObj(GetSprite("faceC1", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+        
+    }
 
 	if(xp >= targetXP){
 		
