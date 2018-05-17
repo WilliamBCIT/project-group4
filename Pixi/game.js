@@ -148,6 +148,33 @@ function Init2(){
 
 function ShowLBoards(){
 	// TODO
+    Destroy(mmLogo);
+	Destroy(mmPlay);
+	Destroy(mmLBoards);
+    var lBoardTitle = new PIXI.Text('Leaderboard!', {
+			fontWeight: 'bold',
+			fontSize: 60,
+			fontFamily: 'Arial',
+			fill: '#CD0000',
+			align: 'center',
+			stroke: '#FFFFFF',
+			strokeThickness: 6
+		});
+
+		
+   		lBoardTitle.anchor.set(0.5);
+		lBoardTitle.x = app.screen.width / 2;
+		lBoardTitle.y = app.screen.height / 7;
+        
+        app.stage.addChild(lBoardTitle);
+}
+
+function connect() {
+    //Connect to MS SQL server
+}
+
+function printRow() {
+    //Print one row in the MS SQL Table 
 }
 
 function OpenPauseMenu(){
@@ -158,7 +185,7 @@ function ClosePauseMenu(){
 	//pm
 }
 
-const startLives = 100;
+const startLives = 5;
 const startMoney = 10000;
 
 function StartGame(){
@@ -708,7 +735,7 @@ function AdjustLives(increaseBy){
 			strokeThickness: 6
 		});
     
-        var scored = new PIXI.Text('You Scored: ' + score, {
+        var scored = new PIXI.Text('You Scored: ' + score + '!\n Share Your Record On Facebook!', {
 			fontWeight: 'bold',
 			fontSize: 30,
 			fontFamily: 'Arial',
@@ -717,19 +744,62 @@ function AdjustLives(increaseBy){
 			stroke: '#FFFFFF',
 			strokeThickness: 6
 		});
+        
+        var textureButton = PIXI.Texture.fromImage("./images/face.png");
+        
+        var shareButton = new PIXI.Sprite(textureButton);
+        shareButton.buttonMode = true;
+        shareButton.anchor.set(0.5);
+        shareButton.x = app.screen.width / 2 -100;
+        shareButton.y = app.screen.height / 2 + 250;
+        shareButton.interactive = true;
+        shareButton.buttonMode = true;
+
 		
    		gameOverText.anchor.set(0.5);
 		gameOverText.x = app.screen.width / 2;
 		gameOverText.y = app.screen.height / 2;
 		scored.anchor.set(0.5);
 		scored.x = app.screen.width / 2;
-		scored.y = app.screen.height / 2 + 70;
-
+		scored.y = app.screen.height / 2 + 100;
+        
+        app.stage.addChild(shareButton);
 		app.stage.addChild(gameOverText);
 		app.stage.addChild(scored);
 		app.ticker.remove(Update);
     }
 }
+
+function onButtonDown() {
+    this.isdown = true;
+}
+
+function onButtonUp() {
+    this.isdown = false;
+    if (this.isOver) {
+        //this.texture = textureButtonOver;
+    }
+    else {
+        //this.texture = textureButton;
+    }
+}
+
+function onButtonOver() {
+    this.isOver = true;
+    if (this.isdown) {
+        return;
+    }
+    //this.texture = textureButtonOver;
+}
+
+function onButtonOut() {
+    this.isOver = false;
+    if (this.isdown) {
+        //return;
+    }
+   // this.texture = textureButton;
+}
+
 
 function GetSprite(name, anchorX = 0, anchorY = 0, scaleX = 1, scaleY = 1, tint = 0xFFFFFF){
 	let sprite = new PIXI.Sprite(PIXI.loader.resources[name].texture);
