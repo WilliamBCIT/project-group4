@@ -46,14 +46,14 @@
 <div>
     <div class="section">
 		<div class="row" id="main">
-			<div id="game" class="teal col s12 m8">
+			<div id="game" class="teal col s12 m12 l8">
 				<div id="playframe">
 					<script type="text/javascript">
 						Init();
 					</script>
 				</div>
 			</div>
-			<div id="leaderboard" class="yellow col s0 m4 hide-on-med-and-down">
+			<div id="leaderboard" class="yellow col s0 m0 l4 hide-on-med-and-down">
 				
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
