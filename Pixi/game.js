@@ -184,7 +184,7 @@ function StartGame2(){
 	stageImg = GetObj(GetSprite("stage0", 0, 0, 1, 1));
 	stageImg.interactive = true;
 	stageImg.buttonMode = true;
-	stageImg.on('pointerdown', PlaceTower);
+	BuildPlacemat();
 	//stageImg.on('touchstart', function(e){mousePos.x = e.pageX; mousePosY = e.pageY; console.log("touch! (" + mousePos.x + " " + mousePos.y + ")")}, true);
 
 	hudBarScale = 720 / 420;
@@ -323,8 +323,6 @@ function StartGame2(){
 function GetPlaceIcon(){
 	Destroy(toPlaceIcon);
 	toPlaceIcon = false;
-	let pointer;
-	PIXI.InteractionData.prototype.getLocalPosition(stageImg, pointer);
 
 	if(wantToPlace == towerTypes.COMPOST){ // Cheap & takes in anything but liquids, but is slow & doesn't make much
 		toPlaceIcon = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), mousePos.x, mousePos.y, app.stage, relPos.IGNOREMARGIN);
@@ -341,6 +339,7 @@ function GetPlaceIcon(){
 	}
 
 	toPlaceIcon.alpha = .75;
+	TogglePlacemat();
 }
 
 const foodProcessDist = 4 * 4;
@@ -536,12 +535,12 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 function PlaceTower(){
 	Destroy(toPlaceIcon);
 	toPlaceIcon = false;
-	mousePos = stageImg.data.getLocalPosition(stageImg.parent);
+	TogglePlacemat();
 
 	if(lives > 0){
 		var tower = false;
-		let x = (Math.floor(mousePos.x / unit) + .5) * unit;
-		let y = (Math.floor(mousePos.y / unit) + .5) * unit;
+		let x = this.x;
+		let y = this.y;
 
 		if(wantToPlace == towerTypes.COMPOST){ // Cheap & takes in anything but liquids, but is slow & doesn't make much
 			if(Buy(250)){
@@ -659,19 +658,38 @@ function Buy(cost){
 	}
 }
 
-//	Proto{
+function BuildPlacemat(){ // Helps laying spaces
+	const pos = [{x:460, y:220}, {x:420, y:220}, {x:380, y:220}, {x:500, y:220}, {x:500, y:180}, {x:540, y:140}, {x:580, y:140}, {x:620, y:140}, {x:620, y:220}, {x:580, y:220}, {x:500, y:140}, {x:580, y:260}, {x:580, y:300}, {x:540, y:300}, {x:500, y:300}, {x:460, y:300}, {x:420, y:300}, {x:380, y:300}, {x:340, y:300}, {x:340, y:220}, {x:340, y:180}, {x:340, y:140}, {x:300, y:140}, {x:220, y:140}, {x:260, y:140}, {x:100, y:140}, {x:140, y:140}, {x:180, y:140}, {x:100, y:220}, {x:140, y:220}, {x:180, y:220}, {x:220, y:220}, {x:260, y:220}, {x:300, y:300}, {x:260, y:300}, {x:220, y:300}, {x:220, y:340}, {x:260, y:340}, {x:180, y:340}, {x:140, y:340}, {x:140, y:260}, {x:100, y:260}, {x:60, y:260}, {x:60, y:300}, {x:60, y:340}, {x:60, y:380}, {x:60, y:420}, {x:100, y:420}, {x:140, y:420}, {x:180, y:420}, {x:220, y:420}, {x:260, y:420}, {x:300, y:420}, {x:340, y:420}, {x:340, y:380}, {x:420, y:340}, {x:420, y:380}, {x:420, y:420}, {x:420, y:460}, {x:460, y:460}, {x:460, y:420}, {x:460, y:380}, {x:500, y:380}, {x:540, y:380}, {x:580, y:380}, {x:620, y:380}, {x:620, y:460}, {x:580, y:460}, {x:540, y:460}, {x:540, y:500}, {x:540, y:540}, {x:540, y:580}, {x:540, y:620}, {x:540, y:660}, {x:580, y:580}, {x:620, y:580}, {x:620, y:660}, {x:620, y:700}, {x:620, y:740}, {x:580, y:780}, {x:540, y:780}, {x:500, y:780}, {x:460, y:780}, {x:500, y:700}, {x:540, y:700}, {x:500, y:660}, {x:460, y:540}, {x:420, y:540}, {x:380, y:540}, {x:340, y:540}, {x:340, y:500}, {x:340, y:460}, {x:260, y:460}, {x:260, y:500}, {x:260, y:540}, {x:300, y:540}, {x:180, y:500}, {x:180, y:540}, {x:180, y:580}, {x:180, y:620}, {x:220, y:620}, {x:260, y:620}, {x:180, y:660}, {x:220, y:660}, {x:260, y:660}, {x:180, y:700}, {x:300, y:660}, {x:340, y:660}, {x:380, y:660}, {x:420, y:660}, {x:420, y:580}, {x:380, y:580}, {x:340, y:580}, {x:420, y:700}, {x:420, y:740}, {x:420, y:780}, {x:420, y:820}, {x:340, y:780}, {x:340, y:740}, {x:300, y:740}, {x:260, y:740}, {x:260, y:780}, {x:300, y:780}, {x:220, y:780}, {x:180, y:780}, {x:140, y:780}, {x:100, y:780}, {x:100, y:740}, {x:100, y:700}, {x:100, y:660}, {x:100, y:580}, {x:100, y:500}, {x:100, y:540}, {x:100, y:460}];
 
-function TrackBuilder(){ // Helps laying track
-	var pos = {x:this.x / unit, y:this.y / unit};
+	placemat = [];
 
-	if(!track.includes(pos)){
-		track.push(pos);
-		GetObj(GetSprite("whiteBox", 0, 0, unit, unit, 0x999999), pos.x * unit, pos.y * unit);
-		console.log(", {x:" + pos.x + ", y:" + pos.y + "}");
+	for(let i = 0; i < pos.length; i++){
+		let space = GetObj(GetSprite("whiteBox", .5, .5, unit * .8, unit * .8, 0xFF0000), pos[i].x, pos[i].y, app.stage, relPos.IGNOREMARGIN);
+		space.alpha = .666 / 2;
+		space.interactive = true;
+		space.buttonMode = true;
+		space.on("pointerdown", PlaceTower);
+		placemat.push(space);
 	}
+
+	TogglePlacemat();
 }
 
-//	Proto}
+function TogglePlacemat(){
+	if(placemat[0].alpha < .2){
+		for(let i = 0; i < placemat.length; i++){
+			placemat[i].alpha = .666 / 2;
+			placemat[i].interactive = true;
+			placemat[i].buttonMode = true;
+		}
+	}else{
+		for(let i = 0; i < placemat.length; i++){
+			placemat[i].alpha = 0;
+			placemat[i].interactive = false;
+			placemat[i].buttonMode = false;
+		}
+	}
+}
 
 function AdjustScore(increaseBy){
 	score += increaseBy;
