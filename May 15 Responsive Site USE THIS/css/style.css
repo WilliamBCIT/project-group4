@@ -57,11 +57,30 @@ footer.page-footer {
 }
 
 #playframe{
-	min-height:600px;
 }
 #leaderboard{
-	min-height:600px;
 }
 #leaderboard2{
 	min-height:80px;
+}
+#main{
+	
+	margin: 0 auto;
+	padding-left: 5vw;
+	padding-right: 5vw;
+	
+}
+
+
+
+#playframe{
+	margin: 0 auto;
+	
+	
+}
+
+#game{
+	
+	margin: 0 auto;
+	
 }
