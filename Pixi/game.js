@@ -425,8 +425,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
-							food[i].x += track[j].vx * delta;
-							food[i].y += track[j].vy * delta;
+							food[i].x += track[j].vx * delta * 2;
+							food[i].y += track[j].vy * delta * 2;
 						}
 					}
 				}	

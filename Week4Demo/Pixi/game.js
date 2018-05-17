@@ -116,7 +116,7 @@ function ClosePauseMenu(){
 	//pm
 }
 
-const startLives = 100;
+const startLives = 5;
 const startMoney = 10000;
 
 function StartGame(){
@@ -381,8 +381,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
-							food[i].x += track[j].vx * delta;
-							food[i].y += track[j].vy * delta;
+							food[i].x += track[j].vx * delta * 2;//Food speed
+							food[i].y += track[j].vy * delta * 2;//Food speed
 						}
 					}
 				}	
@@ -664,7 +664,7 @@ function AdjustLives(increaseBy){
 			strokeThickness: 6
 		});
     
-        var scored = new PIXI.Text('You Scored: ' + score, {
+        var scored = new PIXI.Text('You Scored: ' + score + '\n Share Your Record On Facebook!', {
 			fontWeight: 'bold',
 			fontSize: 30,
 			fontFamily: 'Arial',
