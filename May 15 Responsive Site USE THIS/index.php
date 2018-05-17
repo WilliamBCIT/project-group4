@@ -124,9 +124,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="parallax"><img class="lighten-5" src="./Pixi/images/town5background.png" alt="Unsplashed background img 2"></div>
-  </div>
-		
+	<div class="parallax"><img src="./Pixi/images/town5background.png" alt="Unsplashed background img 2"></div>
+</div>
+		<br/>
 <div id="leaderboard2container">
 	<div id="leaderboard2" class="green col s12 hide-on-large-only">				
 			<form action="loggedInRecordScore.php" method="post">

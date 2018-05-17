@@ -90,8 +90,15 @@ footer.page-footer {
 #playframe{
 	margin: 0 auto;
 	max-width: 100%;
-	max-height: 800px;
-	min-height: 600px;
+	max-height: 600px;
+	min-height:600px;
+	height:auto;
 	
+	
+}
+#game{
+	
+	margin: 0 auto;
+	padding:0;
 	
 }
