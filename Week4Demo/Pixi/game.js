@@ -116,7 +116,7 @@ function ClosePauseMenu(){
 	//pm
 }
 
-const startLives = 100;
+const startLives = 5;
 const startMoney = 10000;
 
 function StartGame(){
@@ -321,7 +321,7 @@ const foodProcessDist = 4 * 4;
 const foodTransferSpeed = 2.5;
 
 const popupSpeed = -1;
-const popupDuration = .4;
+const popupDuration = .1;
 
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	elapsed += secondsPerFrame * delta;
@@ -381,8 +381,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
-							food[i].x += track[j].vx * delta;
-							food[i].y += track[j].vy * delta;
+							food[i].x += track[j].vx * delta * 4;//Food speed
+							food[i].y += track[j].vy * delta * 4;//Food speed
 						}
 					}
 				}	
@@ -664,7 +664,7 @@ function AdjustLives(increaseBy){
 			strokeThickness: 6
 		});
     
-        var scored = new PIXI.Text('You Scored: ' + score, {
+        var scored = new PIXI.Text('You Scored: ' + score + '\n Share Your Record On Facebook!', {
 			fontWeight: 'bold',
 			fontSize: 30,
 			fontFamily: 'Arial',
@@ -673,6 +673,17 @@ function AdjustLives(increaseBy){
 			stroke: '#FFFFFF',
 			strokeThickness: 6
 		});
+        
+        var textureButton = PIXI.Texture.fromImage("./images/face.png");
+        
+        var shareButton = new PIXI.Sprite(textureButton);
+        shareButton.buttonMode = true;
+        shareButton.anchor.set(0.5);
+        shareButton.x = app.screen.width / 2;
+        shareButton.y = app.screen.height / 2 + 140;
+        shareButton.interactive = true;
+        shareButton.buttonMode = true;
+
 		
    		gameOverText.anchor.set(0.5);
 		gameOverText.x = app.screen.width / 2;
@@ -680,7 +691,8 @@ function AdjustLives(increaseBy){
 		scored.anchor.set(0.5);
 		scored.x = app.screen.width / 2;
 		scored.y = app.screen.height / 2 + 70;
-
+        
+        app.stage.addChild(shareButton);
 		app.stage.addChild(gameOverText);
 		app.stage.addChild(scored);
 		app.ticker.remove(Update);

@@ -72,6 +72,8 @@ var style = new PIXI.TextStyle({
     strokeThickness: 30,
     });
 
+var playericon;
+
 var tutorial01 = new PIXI.Text("Health Bar - This will decrease as food is wasted.\nIt's Game Over when it hits zero!", style);
 tutorial01.x = 80;
 tutorial01.y = 123;
@@ -109,7 +111,7 @@ tutorial11.y = 90;
 
 const secondsPerFrame = 1 / 60;
 
-function Init(){
+function Init() {
 	// Initialize game window
 	app = new PIXI.Application(720, 720 + uiMargin * 2, {backgroundColor:0x000000, antialias:true});
 	app.renderer.autoResize = true;
@@ -120,18 +122,18 @@ function Init(){
 	hudStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 
 	// Import textures
-	PIXI.loader.add("logo", "../Pixi/images/logoWhiteBackground.png")
-			   .add("playB", "../Pixi/images/PlayButton.png")
-			   .add("lBoardsB", "../Pixi/images/LeaderboardsButton.png")
+	PIXI.loader.add("logo", "../Pixi/images/menu.png")
+			   .add("playB", "../Pixi/images/PlayBut.png")
+			   .add("lBoardsB", "../Pixi/images/LeaderboardButton.png")
 			   .load(Init2);
 }
 
 function Init2(){
 	let halfWidth = app.renderer.width / 2;
-
-	mmLogo = GetObj(GetSprite("logo", .5, .5, .3, .3), halfWidth, 315, app.stage, relPos.IGNOREMARGIN);
-	mmPlay = GetObj(GetSprite("playB", .5, .5, 1.5, 1.5), halfWidth, 565, app.stage, relPos.IGNOREMARGIN);
-	mmLBoards = GetObj(GetSprite("lBoardsB", .5, .5, 1.5, 1.5), halfWidth, 665, app.stage, relPos.IGNOREMARGIN);
+    
+	mmLogo = GetObj(GetSprite("logo", .5, .5, 1, 1), halfWidth, 480, app.stage, relPos.IGNOREMARGIN);
+	mmPlay = GetObj(GetSprite("playB", .5, .5, 1.5, 1.5), halfWidth, 665, app.stage, relPos.IGNOREMARGIN);
+	mmLBoards = GetObj(GetSprite("lBoardsB", .5, .5, 1.5, 1.5), halfWidth, 785, app.stage, relPos.IGNOREMARGIN);
 
 	mmPlay.interactive = true;
 	mmPlay.buttonMode = true;
@@ -148,6 +150,88 @@ function Init2(){
 
 function ShowLBoards(){
 	// TODO
+    Destroy(mmLogo);
+	Destroy(mmPlay);
+	Destroy(mmLBoards);
+    var lBoardTitle = new PIXI.Text('Leaderboard!', {
+			fontWeight: 'bold',
+			fontSize: 60,
+			fontFamily: 'Arial',
+			fill: '#CD0000',
+			align: 'center',
+			stroke: '#FFFFFF',
+			strokeThickness: 6
+		});
+
+		
+   		lBoardTitle.anchor.set(0.5);
+		lBoardTitle.x = app.screen.width / 2;
+		lBoardTitle.y = app.screen.height / 7;
+        
+        app.stage.addChild(lBoardTitle);
+        
+        connect();
+}
+
+function connect() {
+    //Connect to MS SQL server
+    var Connection = require('tedious').Connection;
+    var Request = require('tedious').Request;
+
+// Create connection to database
+    var config = 
+   {
+     userName: 'apollo78124', 
+     password: 'bcitGroup4$', 
+     server: 'disk1.database.windows.net', 
+     options: 
+        {
+           database: 'disk1'
+           , encrypt: true
+        }
+           }
+        var connection = new Connection(config);
+
+        // Attempt to connect and execute queries if connection goes through
+        connection.on('connect', function(err) 
+           {
+             if (err) 
+               {
+                  console.log(err)
+               }
+            else
+               {
+                   queryDatabase()
+               }
+           }
+         );
+
+}
+
+function queryDatabase() { 
+    
+    console.log('Reading rows from the Table...');
+
+       // Read all rows from table
+     request = new Request(
+          "SELECT TOP 10 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo ORDER BY s.score DESC;",
+             function(err, rowCount, rows) 
+                {
+                    console.log(rowCount + ' row(s) returned');
+                    process.exit();
+                }
+            );
+
+     request.on('row', function(columns) {
+        columns.forEach(function(column) {
+            console.log("%s\t%s", column.metadata.colName, column.value);
+         });
+             });
+     connection.execSql(request);
+   }
+
+function printRow() {
+    //Print one row in the MS SQL Table 
 }
 
 function OpenPauseMenu(){
@@ -158,7 +242,7 @@ function ClosePauseMenu(){
 	//pm
 }
 
-const startLives = 100;
+const startLives = 5;
 const startMoney = 10000;
 
 function StartGame(){
@@ -220,6 +304,17 @@ function StartGame(){
 			   .add("foodSheet", "../Pixi/images/Food.json")
 			   .add("conveyorSheet", "../Pixi/images/conveyor.json")
                .add("dollar", "../pixi/images/DollarBill.png")
+               .add("faceNormal", "../pixi/images/face_normal.png")
+               .add("faceGrin", "../pixi/images/face_grin.png")
+               .add("faceFail", "../pixi/images/face_fail.png")
+               .add("faceC1", "../pixi/images/face_chew1.png")
+               .add("faceC2", "../pixi/images/face_chew2.png")
+               .add("faceSad1", "../pixi/images/face_sad1.png")
+               .add("faceSad2", "../pixi/images/face_sad2.png")
+               .add("faceSad3", "../pixi/images/face_sad3.png")
+               .add("faceHappy1", "../pixi/images/face_happy1.png")
+               .add("faceHappy2", "../pixi/images/face_happy2.png")
+               .add("faceHappy3", "../pixi/images/face_happy3.png")
 			   .load(StartGame2);
 }
 
@@ -235,7 +330,8 @@ function StartGame2(){
 	hudContainer = new PIXI.Container();
 	app.stage.addChild(hudContainer);
     
-    app.stage.addChild(tutorial01);
+    //Test tutorial bubble - commented out for demo
+    //app.stage.addChild(tutorial01);
 	
 	livesText = new PIXI.Text(lives, hudStyle);
 	livesText.anchor.set(.5, .5);
@@ -247,6 +343,9 @@ function StartGame2(){
 	xpBar = GetObj(GetSprite("fullXP", 0, 0, hudBarScale, hudBarScale), 110 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpMask = GetObj(GetSprite("barMask", 0, 0, 0, hudBarScale), 111 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpBar.mask = xpMask;
+    
+    //Boy Genius face icon
+    playerIcon = GetObj(GetSprite("faceNormal", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
 
 	// Assuming one level
 	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
@@ -406,7 +505,10 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					elapsed = 0;
 				}
 			}else if(inProgress.length == 0){
-				wave++;
+				//Player happy when new wave starts
+                playerIcon = GetObj(GetSprite("faceHappy3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+                
+                wave++;
 				wavePos = 0;
 				
 				console.log("Next wave!");
@@ -425,8 +527,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
-							food[i].x += track[j].vx * delta;
-							food[i].y += track[j].vy * delta;
+							food[i].x += track[j].vx * delta * 2;
+							food[i].y += track[j].vy * delta * 2;
 						}
 					}
 				}	
@@ -671,15 +773,29 @@ function TrackBuilder(){ // Helps laying track
 //	Proto}
 
 function AdjustScore(increaseBy){
-	score += increaseBy;
+	
+        playerIcon = GetObj(GetSprite("faceHappy1", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    
+    score += increaseBy;
 	scoreText.text = score;
 	money += increaseBy;
 	moneyText.text = money;
 
 	xp += increaseBy;
+    
+    //Show chewing face when XP increases to certain values.
+    
+    if(xp >= targetXP / 2) {
+        
+        playerIcon = GetObj(GetSprite("faceC1", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+        
+    }
 
 	if(xp >= targetXP){
-		xp = 0;
+		
+                playerIcon = GetObj(GetSprite("faceHappy2", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+        
+        xp = 0;
 
 		switch(targetXP){
 			case(1000):
@@ -697,7 +813,20 @@ function AdjustLives(increaseBy){
 
 	hpMask.scale.x = Math.max(0, hudBarScale * (lives / startLives));
 
+    if (lives >= 4) {
+        playerIcon = GetObj(GetSprite("faceSad1", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    }
+        if (lives < 4) {
+        playerIcon = GetObj(GetSprite("faceSad2", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    }
+        if (lives < 2) {
+        playerIcon = GetObj(GetSprite("faceSad3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    }
+    
 	if (lives <= 0) {
+        
+        playerIcon = GetObj(GetSprite("faceFail", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
+        
         var gameOverText = new PIXI.Text('Game Over!', {
 			fontWeight: 'bold',
 			fontSize: 60,
@@ -708,7 +837,7 @@ function AdjustLives(increaseBy){
 			strokeThickness: 6
 		});
     
-        var scored = new PIXI.Text('You Scored: ' + score, {
+        var scored = new PIXI.Text('You Scored: ' + score + '!\n Share Your Record On Facebook!', {
 			fontWeight: 'bold',
 			fontSize: 30,
 			fontFamily: 'Arial',
@@ -717,19 +846,62 @@ function AdjustLives(increaseBy){
 			stroke: '#FFFFFF',
 			strokeThickness: 6
 		});
+        
+        var textureButton = PIXI.Texture.fromImage("./images/face.png");
+        
+        var shareButton = new PIXI.Sprite(textureButton);
+        shareButton.buttonMode = true;
+        shareButton.anchor.set(0.5);
+        shareButton.x = app.screen.width / 2 -100;
+        shareButton.y = app.screen.height / 2 + 250;
+        shareButton.interactive = true;
+        shareButton.buttonMode = true;
+
 		
    		gameOverText.anchor.set(0.5);
 		gameOverText.x = app.screen.width / 2;
 		gameOverText.y = app.screen.height / 2;
 		scored.anchor.set(0.5);
 		scored.x = app.screen.width / 2;
-		scored.y = app.screen.height / 2 + 70;
-
+		scored.y = app.screen.height / 2 + 100;
+        
+        app.stage.addChild(shareButton);
 		app.stage.addChild(gameOverText);
 		app.stage.addChild(scored);
 		app.ticker.remove(Update);
     }
 }
+
+function onButtonDown() {
+    this.isdown = true;
+}
+
+function onButtonUp() {
+    this.isdown = false;
+    if (this.isOver) {
+        //this.texture = textureButtonOver;
+    }
+    else {
+        //this.texture = textureButton;
+    }
+}
+
+function onButtonOver() {
+    this.isOver = true;
+    if (this.isdown) {
+        return;
+    }
+    //this.texture = textureButtonOver;
+}
+
+function onButtonOut() {
+    this.isOver = false;
+    if (this.isdown) {
+        //return;
+    }
+   // this.texture = textureButton;
+}
+
 
 function GetSprite(name, anchorX = 0, anchorY = 0, scaleX = 1, scaleY = 1, tint = 0xFFFFFF){
 	let sprite = new PIXI.Sprite(PIXI.loader.resources[name].texture);
@@ -917,6 +1089,8 @@ function getMoney(){
 
 function startEasterEgg() {       
 	
+    playerIcon = GetObj(GetSprite("faceGrin", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
+    
     moneyContents = new Array();
     
     AdjustMoney(10000);
