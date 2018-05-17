@@ -43,8 +43,9 @@
     </div>
   </nav>
 
-<div>
-    <div class="section">
+ <div class="parallax-container valign-wrapper">
+
+  <div class="section">
 		<div class="row" id="main">
 			<div id="game" class="teal col s12 m12 l8">
 				<div id="playframe">
@@ -57,9 +58,6 @@
 				
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
-                    Login to Record Your Score <br />and Share it on Facebook!
-                    <br />
-                    <br />
             <?php
                 if(isset($_GET['Message'])){
                     echo $_GET['Message'];
@@ -73,11 +71,14 @@
 				</div>
 				<button type="submit" class="btn btn-default" onclick="setScore();">Login</button>
 			</form>
+			<div></div>
+
 			<br/>
 			<form action="registration.php" method="post">
                 <input type="hidden" class="form-control" name="score" id = "scoreForm2">
                     <button type="submit" class="btn btn-default" onclick="setScore();">Register</button>
             </form> 
+			<div></div>
 			<br />
 			<div class="addthis_inline_share_toolbox"></div>
 			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
@@ -123,7 +124,8 @@
 			</div>
 		</div>
 	</div>
-</div>			
+	<div class="parallax"><img class="lighten-5" src="./Pixi/images/town5background.png" alt="Unsplashed background img 2"></div>
+  </div>
 		
 <div id="leaderboard2container">
 	<div id="leaderboard2" class="green col s12 hide-on-large-only">				
@@ -194,10 +196,8 @@
 				sqlsrv_free_stmt( $stmt);
 				*/
 			?>
+		</div>
 	</div>
-	
-	
-	
 </div>
 
 
@@ -211,7 +211,6 @@
         </div>
       </div>
 	
-
 	<div class="row">
         <div class="col s12 center">
           <h4>How To Play</h4>

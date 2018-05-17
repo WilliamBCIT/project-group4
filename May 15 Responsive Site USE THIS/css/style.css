@@ -62,7 +62,7 @@ footer.page-footer {
 	min-height:600px;
 	height:100%;
 	color: white;
-	
+	padding-top: 5vh;	
 
 }
 #leaderboard2container{
@@ -76,7 +76,6 @@ footer.page-footer {
 }
 #main{
 	
-	text-align: center;
 	margin: 0 auto;
 	padding-left:5vw;
 	padding-right:5vw;
@@ -92,14 +91,7 @@ footer.page-footer {
 	margin: 0 auto;
 	max-width: 100%;
 	max-height: 800px;
-	min-height:600px;
+	min-height: 600px;
 	
-	
-}
-
-#game{
-	
-	margin: 0 auto;
-	padding:0;
 	
 }
