@@ -102,3 +102,47 @@ footer.page-footer {
 	padding:0;
 	
 }
+
+
+.responsive-image{
+	
+    width: 100%;
+    background-size: 100% 100%;
+	
+} 
+
+/* Retina display */
+@media screen and (min-width: 1024px){
+    .responsive-image{
+        background-image: url('../Pixi/images/town5background.png');
+    }
+}
+
+/* Desktop */
+@media screen and (min-width: 980px) and (max-width: 1024px){
+    .responsive-image{
+        background-image: url('../Pixi/images/town5background.png');
+    }
+}
+
+/* Tablet */
+@media screen and (min-width: 760px) and (max-width: 980px){
+    .responsive-image{
+        background-image: url('../Pixi/images/town5background.png');
+    }
+}
+
+/* Mobile HD */
+@media screen and (min-width: 350px) and (max-width: 760px){
+    .responsive-image{
+        background-image: url('../Pixi/images/town5background.png');
+    }
+}
+
+/* Mobile LD */
+@media screen and (max-width: 350px){
+    .responsive-image{
+        background-image: url('../Pixi/images/town5background.png');
+    }
+} 
+
