@@ -505,7 +505,10 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					elapsed = 0;
 				}
 			}else if(inProgress.length == 0){
-				wave++;
+				//Player happy when new wave starts
+                playerIcon = GetObj(GetSprite("faceHappy3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+                
+                wave++;
 				wavePos = 0;
 				
 				console.log("Next wave!");
@@ -770,7 +773,10 @@ function TrackBuilder(){ // Helps laying track
 //	Proto}
 
 function AdjustScore(increaseBy){
-	score += increaseBy;
+	
+        playerIcon = GetObj(GetSprite("faceHappy1", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    
+    score += increaseBy;
 	scoreText.text = score;
 	money += increaseBy;
 	moneyText.text = money;
@@ -778,7 +784,10 @@ function AdjustScore(increaseBy){
 	xp += increaseBy;
 
 	if(xp >= targetXP){
-		xp = 0;
+		
+                playerIcon = GetObj(GetSprite("faceHappy2", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+        
+        xp = 0;
 
 		switch(targetXP){
 			case(1000):
