@@ -59,12 +59,15 @@ footer.page-footer {
 #playframe{
 }
 #leaderboard{
+		min-height:600px;
+
 }
 #leaderboard2{
 	min-height:80px;
 }
 #main{
 	
+	text-align: center;
 	margin: 0 auto;
 	padding-left: 5vw;
 	padding-right: 5vw;
@@ -75,6 +78,9 @@ footer.page-footer {
 
 #playframe{
 	margin: 0 auto;
+	max-width: 100%;
+	max-height: 800px;
+	min-height:600px;
 	
 	
 }

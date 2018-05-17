@@ -53,7 +53,7 @@
 					</script>
 				</div>
 			</div>
-			<div id="leaderboard" class="yellow col s0 m4 hide-on-small-only">
+			<div id="leaderboard" class="yellow col s0 m4 hide-on-med-and-down">
 				
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
@@ -127,8 +127,8 @@
 	</div>
 </div>			
 		
-<div>
-	<div id="leaderboard2" class="red col s2 hide-on-med-and-up">				
+<div class="container">
+	<div id="leaderboard2" class="red col s12 hide-on-large-only">				
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
                     Login to Record Your Score <br />and Share it on Facebook!
@@ -143,13 +143,13 @@
 					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
                     <label for="pwd" class = "whiteText">Password: </label>
                     <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
-					<input type="hidden" class="form-control" name="score" id = "scoreForm1">
+					<input type="hidden" class="form-control" name="score" id = "scoreForm3">
 				</div>
 				<button type="submit" class="btn btn-default" onclick="setScore();">Login</button>
 			</form>
 			<br/>
 			<form action="registration.php" method="post">
-                <input type="hidden" class="form-control" name="score" id = "scoreForm2">
+                <input type="hidden" class="form-control" name="score" id = "scoreForm4">
                     <button type="submit" class="btn btn-default" onclick="setScore();">Register</button>
             </form> 
 			<br />
