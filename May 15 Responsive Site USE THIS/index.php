@@ -43,10 +43,10 @@
     </div>
   </nav>
 
- <!--<div class="parallax-container valign-wrapper"> -->
+<div class="parallax-container valign-wrapper">
      <div class="section no-pad-bot">
 
-
+<div class="container">
   <div class="section">
 		<div class="row" id="main">
 			<div id="game" class="teal col s12 m12 l8">
@@ -126,10 +126,11 @@
 			</div>
 		</div>
 	</div>
-	 <!-- <div class="parallax"><img src="./Pixi/images/town5background.png" alt="Unsplashed background img 2"></div> -->
+</div>
+	<div class="parallax"><img src="./Pixi/images/town5background.png" alt="Unsplashed background img 2"></div>
 </div>
 </div>
-		<br/>
+<br/>
 <div id="leaderboard2container">
 	<div id="leaderboard2" class="green col s12 hide-on-large-only">				
 			<form action="loggedInRecordScore.php" method="post">
@@ -203,8 +204,7 @@
 	</div>
 </div>
 
-
-  <div class="container">
+<div class="container">
     <div class="section">
 	
 	<div class="row">
@@ -293,7 +293,7 @@
 	  
 	  
     </div>
-  </div>
+</div>
 
 
   <div class="parallax-container valign-wrapper">
