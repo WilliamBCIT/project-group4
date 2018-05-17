@@ -309,7 +309,12 @@ function StartGame(){
                .add("faceFail", "../pixi/images/face_fail.png")
                .add("faceC1", "../pixi/images/face_chew1.png")
                .add("faceC2", "../pixi/images/face_chew2.png")
-
+               .add("faceSad1", "../pixi/images/face_sad1.png")
+               .add("faceSad2", "../pixi/images/face_sad2.png")
+               .add("faceSad3", "../pixi/images/face_sad3.png")
+               .add("faceHappy1", "../pixi/images/face_happy1.png")
+               .add("faceHappy2", "../pixi/images/face_happy2.png")
+               .add("faceHappy3", "../pixi/images/face_happy3.png")
 			   .load(StartGame2);
 }
 
@@ -325,7 +330,8 @@ function StartGame2(){
 	hudContainer = new PIXI.Container();
 	app.stage.addChild(hudContainer);
     
-    app.stage.addChild(tutorial01);
+    //Test tutorial bubble - commented out for demo
+    //app.stage.addChild(tutorial01);
 	
 	livesText = new PIXI.Text(lives, hudStyle);
 	livesText.anchor.set(.5, .5);
@@ -790,6 +796,16 @@ function AdjustLives(increaseBy){
 
 	hpMask.scale.x = Math.max(0, hudBarScale * (lives / startLives));
 
+    if (lives >= 4) {
+        playerIcon = GetObj(GetSprite("faceSad1", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    }
+        if (lives < 4) {
+        playerIcon = GetObj(GetSprite("faceSad2", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    }
+        if (lives < 2) {
+        playerIcon = GetObj(GetSprite("faceSad3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+    }
+    
 	if (lives <= 0) {
         
         playerIcon = GetObj(GetSprite("faceFail", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
