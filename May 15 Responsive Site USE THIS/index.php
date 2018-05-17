@@ -43,7 +43,9 @@
     </div>
   </nav>
 
- <div class="parallax-container valign-wrapper">
+ <!--<div class="parallax-container valign-wrapper"> -->
+     <div class="section no-pad-bot">
+
 
   <div class="section">
 		<div class="row" id="main">
@@ -124,7 +126,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="parallax"><img src="./Pixi/images/town5background.png" alt="Unsplashed background img 2"></div>
+	 <!-- <div class="parallax"><img src="./Pixi/images/town5background.png" alt="Unsplashed background img 2"></div> -->
+</div>
 </div>
 		<br/>
 <div id="leaderboard2container">
