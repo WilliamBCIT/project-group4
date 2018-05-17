@@ -111,7 +111,7 @@ tutorial11.y = 90;
 
 const secondsPerFrame = 1 / 60;
 
-function Init(){
+function Init() {
 	// Initialize game window
 	app = new PIXI.Application(720, 720 + uiMargin * 2, {backgroundColor:0x000000, antialias:true});
 	app.renderer.autoResize = true;
@@ -122,9 +122,9 @@ function Init(){
 	hudStyle = new PIXI.TextStyle({fontFamily:'Arial', fontSize:11});
 
 	// Import textures
-	PIXI.loader.add("logo", "../Pixi/images/logoWhiteBackground.png")
-			   .add("playB", "../Pixi/images/PlayButton.png")
-			   .add("lBoardsB", "../Pixi/images/LeaderboardsButton.png")
+	PIXI.loader.add("logo", "../Pixi/images/menu.png")
+			   .add("playB", "../Pixi/images/PlayBut.png")
+			   .add("lBoardsB", "../Pixi/images/LeaderboardButton.png")
 			   .load(Init2);
 }
 
