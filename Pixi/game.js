@@ -72,6 +72,8 @@ var style = new PIXI.TextStyle({
     strokeThickness: 30,
     });
 
+var playericon;
+
 var tutorial01 = new PIXI.Text("Health Bar - This will decrease as food is wasted.\nIt's Game Over when it hits zero!", style);
 tutorial01.x = 80;
 tutorial01.y = 123;
@@ -303,6 +305,11 @@ function StartGame(){
 			   .add("conveyorSheet", "../Pixi/images/conveyor.json")
                .add("dollar", "../pixi/images/DollarBill.png")
                .add("faceNormal", "../pixi/images/face_normal.png")
+               .add("faceGrin", "../pixi/images/face_grin.png")
+               .add("faceFail", "../pixi/images/face_fail.png")
+               .add("faceC1", "../pixi/images/face_chew1.png")
+               .add("faceC2", "../pixi/images/face_chew2.png")
+
 			   .load(StartGame2);
 }
 
@@ -784,6 +791,9 @@ function AdjustLives(increaseBy){
 	hpMask.scale.x = Math.max(0, hudBarScale * (lives / startLives));
 
 	if (lives <= 0) {
+        
+        playerIcon = GetObj(GetSprite("faceFail", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
+        
         var gameOverText = new PIXI.Text('Game Over!', {
 			fontWeight: 'bold',
 			fontSize: 60,
@@ -1046,6 +1056,8 @@ function getMoney(){
 
 function startEasterEgg() {       
 	
+    playerIcon = GetObj(GetSprite("faceGrin", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
+    
     moneyContents = new Array();
     
     AdjustMoney(10000);
