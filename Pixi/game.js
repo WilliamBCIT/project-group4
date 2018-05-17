@@ -130,10 +130,10 @@ function Init() {
 
 function Init2(){
 	let halfWidth = app.renderer.width / 2;
-
-	mmLogo = GetObj(GetSprite("logo", .5, .5, .3, .3), halfWidth, 315, app.stage, relPos.IGNOREMARGIN);
-	mmPlay = GetObj(GetSprite("playB", .5, .5, 1.5, 1.5), halfWidth, 565, app.stage, relPos.IGNOREMARGIN);
-	mmLBoards = GetObj(GetSprite("lBoardsB", .5, .5, 1.5, 1.5), halfWidth, 665, app.stage, relPos.IGNOREMARGIN);
+    
+	mmLogo = GetObj(GetSprite("logo", .5, .5, 1, 1), halfWidth, 480, app.stage, relPos.IGNOREMARGIN);
+	mmPlay = GetObj(GetSprite("playB", .5, .5, 1.5, 1.5), halfWidth, 665, app.stage, relPos.IGNOREMARGIN);
+	mmLBoards = GetObj(GetSprite("lBoardsB", .5, .5, 1.5, 1.5), halfWidth, 785, app.stage, relPos.IGNOREMARGIN);
 
 	mmPlay.interactive = true;
 	mmPlay.buttonMode = true;
