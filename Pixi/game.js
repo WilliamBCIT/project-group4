@@ -302,6 +302,7 @@ function StartGame(){
 			   .add("foodSheet", "../Pixi/images/Food.json")
 			   .add("conveyorSheet", "../Pixi/images/conveyor.json")
                .add("dollar", "../pixi/images/DollarBill.png")
+               .add("faceNormal", "../pixi/images/face_normal.png")
 			   .load(StartGame2);
 }
 
@@ -329,6 +330,9 @@ function StartGame2(){
 	xpBar = GetObj(GetSprite("fullXP", 0, 0, hudBarScale, hudBarScale), 110 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpMask = GetObj(GetSprite("barMask", 0, 0, 0, hudBarScale), 111 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpBar.mask = xpMask;
+    
+    //Boy Genius face icon
+    playerIcon = GetObj(GetSprite("faceNormal", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
 
 	// Assuming one level
 	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
