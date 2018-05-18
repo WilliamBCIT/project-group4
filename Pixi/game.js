@@ -62,7 +62,7 @@ const waves = [
    
    // FOR DEMO:
    [{time: 2, type: foodTypes.ANY, startRate: 1, endRate: .5, length: 35, from: 0}],
-   [{time: 2, type: foodTypes.ANY, startRate: .5, endRate: .1, length: 35, from: 0}]
+   [{time: 2, type: foodTypes.ANY, startRate: .3, endRate: .3, length: 35, from: 0}]
 ];
 
 var inProgress = [];
@@ -552,11 +552,6 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					wavePos++;
 					elapsed = 0;
 				}
-			}else if(inProgress.length == 0){
-				//Player happy when new wave starts
-                playerIcon = GetObj(GetSprite("faceHappy3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
-                
-                wave++;
 			}else if(inProgress.length == 0 && !waitingForNextWave){
 				//Player happy when new wave starts
 				playerIcon = GetObj(GetSprite("faceHappy3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
