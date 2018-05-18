@@ -15,20 +15,20 @@
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo">Achos</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="./index.html">Game Page</a></li>
-        <li><a href="./leaderboard.html">Leader board</a></li>
-		<li><a href="./signup.html">Sign Up</a></li>
-        <li><a href="./scorehistory.html">Score History</a></li>
+        <li><a href="./index.php">Game Page</a></li>
+        <li><a href="./leaderboard.php">Leader board</a></li>
+		<li><a href="./signup.php">Sign Up</a></li>
+        <li><a href="./scorehistory.php">Score History</a></li>
         <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
 
       </ul>
 
       <ul id="nav-mobile" class="sidenav">
-        <li><a href="./index.html">Game Page</a></li>
-        <li><a href="./leaderboard.html">Leader board</a></li>
-		<li><a href="./signup.html">Sign Up</a></li>
-        <li><a href="./scorehistory.html">Score History</a></li>
-		<li><a href="./plantsitemap.php'">Find Out Your Nearest Compost Site</a></li>
+        <li><a href="./index.php">Game Page</a></li>
+        <li><a href="./leaderboard.php">Leader board</a></li>
+		<li><a href="./signup.php">Sign Up</a></li>
+        <li><a href="./scorehistory.php">Score History</a></li>
+        <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
 
 		</ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -39,10 +39,45 @@
   <div class="container">
     <div class="section">
 		<h3>Hall of Fame</h3>
-		leaderboard goes here
+		
 		
 	<?php
-    ?>
+extract($_POST);
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Leaderboard.</title>
+  </head>
+  <body>
+<p>
+<?php
+        $serverName = "disk1.database.windows.net";
+            $connectionOptions = array(
+                "Database" => "disk1",
+                "Uid" => "apollo78124",
+                "PWD" => "bcitGroup4$"
+            );
+            //Establishes the connection
+            $conn = sqlsrv_connect($serverName, $connectionOptions);
+            if( $conn === false ) {
+                die( print_r( sqlsrv_errors(), true));
+            }
+    
+        $sql = "SELECT TOP 10 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo ORDER BY s.score DESC;";
+            $stmt = sqlsrv_query( $conn, $sql );
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+            }
+            $j = 1;
+            while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                  echo $j.". ".$row['userFirstName']." ".$row['userLastName']." ".$row['score']." ".date_format($row['dateRecorded'], 'y/m/d')."<br />";
+                $j++;
+            }
+
+            sqlsrv_free_stmt( $stmt);
+
+?>
 		
 		
 	
@@ -54,7 +89,7 @@
     <div class="section no-pad-bot">
       <div class="container">
         <div class="row center">
-          <h5 class="header col s12 light">Please kill me</h5>
+          <h5 class="header col s12 light"></h5>
         </div>
       </div>
     </div>

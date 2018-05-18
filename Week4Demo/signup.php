@@ -13,22 +13,22 @@
 <body>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo">Achos</a>
+      <a id="logo-container" href="index.php" class="brand-logo">Achos</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="./index.html">Game Page</a></li>
-        <li><a href="./leaderboard.html">Leader board</a></li>
-		<li><a href="./signup.html">Sign Up</a></li>
-        <li><a href="./scorehistory.html">Score History</a></li>
+        <li><a href="./index.php">Game Page</a></li>
+        <li><a href="./leaderboard.php">Leader board</a></li>
+		<li><a href="./signup.php">Sign Up</a></li>
+        <li><a href="./scorehistory.php">Score History</a></li>
         <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
 
       </ul>
 
       <ul id="nav-mobile" class="sidenav">
-        <li><a href="./index.html">Game Page</a></li>
-        <li><a href="./leaderboard.html">Leader board</a></li>
-		<li><a href="./signup.html">Sign Up</a></li>
-        <li><a href="./scorehistory.html">Score History</a></li>
-		<li><a href="./plantsitemap.php'">Find Out Your Nearest Compost Site</a></li>
+        <li><a href="./index.php">Game Page</a></li>
+        <li><a href="./leaderboard.php">Leader board</a></li>
+		<li><a href="./signup.php">Sign Up</a></li>
+        <li><a href="./scorehistory.php">Score History</a></li>
+        <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
 
 		</ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -37,15 +37,32 @@
 
 
 <div class="row">
-    <form class="col s12">
+    <form class="col s12" action="register.php" method="post">
 	  <div class="row center">
 	  <h3>Sign Up</h3>
+          <p>You scored : <?php echo $_SESSION["sscore"] ?></p>
 	  </div>
       <div class="row">
 		<div class="input-field col s3"></div>
         <div class="input-field col s12 m6">
-          <input placeholder="Placeholder" id="first_name" type="text" class="validate">
-          <label for="first_name">username</label>
+          <input type="email" class="validate" name="email">
+          <label for="email">Email</label>
+        </div>
+		<div class="input-field col s3"></div>
+	  </div>
+      <div class="row">
+		<div class="input-field col s3"></div>
+        <div class="input-field col s12 m6">
+          <input type="text" class="form-control" name="fname">
+          <label for="fname">First Name</label>
+        </div>
+		<div class="input-field col s3"></div>
+	  </div>
+      <div class="row">
+		<div class="input-field col s3"></div>
+        <div class="input-field col s12 m6">
+          <input type="text" class="form-control" name="lname">
+          <label for="fname">Last Name</label>
         </div>
 		<div class="input-field col s3"></div>
 	  </div>
@@ -53,13 +70,17 @@
 	    <div class="input-field col s0 m3"></div>
 		<div class="row">
         <div class="input-field col s12 m6">
-          <input id="password" type="password" class="validate">
+          <input type="password" class="validate" name="pwd">
           <label for="password">Password</label>
         </div>
       </div>
+          <button type="submit" class="btn btn-default">Create Account</button>
 	    <div class="input-field col s0 m3"></div>
 	  </div>
 	</form>
+    
+    
+		<!-- EDIT THIS  action-->
 </div>
 
 

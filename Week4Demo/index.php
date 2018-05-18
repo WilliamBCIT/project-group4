@@ -9,17 +9,25 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-</head>
+  
+  <!-- Script  -->
+  <script type="text/javascript"  src="./Pixi/pixi.min.js"/></script>
+  <script type="text/javascript" src="./Pixi/game.js"></script>
+  <script type="text/javascript" src="./Pixi/scaleToWindow.js"></script>
+
+
+  </head>
 <body>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5af40a0c677ae05c"></script>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo">Achos</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="./index.html">Game Page</a></li>
-        <li><a href="./leaderboard.html">Leader board</a></li>
-		<li><a href="./signup.html">Sign Up</a></li>
-        <li><a href="./scorehistory.html">Score History</a></li>
-        <li><a href="./plantsitemap.php">Nearest Compost Site</a></li>
+        <li><a href="./index.php">Game Page</a></li>
+        <li><a href="./leaderboard.php">Leader board</a></li>
+		<li><a href="./signup.php">Sign Up</a></li>
+        <li><a href="./scorehistory.php">Score History</a></li>
+        <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
 
       </ul>
 
@@ -28,23 +36,182 @@
         <li><a href="./leaderboard.php">Leader board</a></li>
 		<li><a href="./signup.php">Sign Up</a></li>
         <li><a href="./scorehistory.php">Score History</a></li>
-		<li><a href="./plantsitemap.php">Find Out Your Nearest Compost Site</a></li>
+        <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
 
-		</ul>
+	  </ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
   </nav>
 
+<div class="valign-wrapper">
+    <div class="section responsive-image">
+	<div class="container">
+  <div class="section">
+		<div class="row" id="main">
+			<div id="game" class="teal col s12 m12 l8">
+				<div id="playframe">
+					<script type="text/javascript">
+						Init();
+					</script>
+				</div>
+			</div>
+			<div id="leaderboard" class="green col s0 m0 l4 hide-on-med-and-down">
+				
+			<form action="loggedInRecordScore.php" method="post">
+				<div class="form-group">
+            <?php
+                if(isset($_GET['Message'])){
+                    echo $_GET['Message'];
+                }
+			?>
+					<label for="name" class = "whiteText">Email: </label>
+					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
+                    <label for="pwd" class = "whiteText">Password: </label>
+                    <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
+					<input type="hidden" class="form-control" name="score" id = "scoreForm1">
+				</div>
+				<button type="submit" class="btn btn-default" onclick="setScore();">Login</button>
+			</form>
+			<div></div>
 
-  <div id="playframe" class="container teal">
-	<script type="text/javascript">
-		Init();
-	</script>
-  </div>
-  
+			<br/>
+			<form action="signup.php" method="post">
+                <input type="hidden" class="form-control" name="score" id = "scoreForm2">
+                    <button type="submit" class="btn btn-default" onclick="setScore();">Register</button>
+            </form> 
+			<div></div>
+			<br />
+			<div class="addthis_inline_share_toolbox"></div>
+			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
+			
+			<script>
+				function setScore() {
+					document.getElementById("scoreForm1").value = getScore();
+					document.getElementById("scoreForm2").value = getScore();
+				}
+			</script>
 
+			<ul class="list-unstyled components">
+				<li class="active"><h3>High Scores</h3></li>
+			</ul>
+			<?php
+                extract($_POST);
+                ?>
+                <!DOCTYPE html>
+                <html lang="en">
+                  <head>
+                    <title>Leaderboard.</title>
+                  </head>
+                  <body>
+                <p>
+                <?php /**
+                        $serverName = "disk1.database.windows.net";
+                            $connectionOptions = array(
+                                "Database" => "disk1",
+                                "Uid" => "apollo78124",
+                                "PWD" => "bcitGroup4$"
+                            );
+                            //Establishes the connection
+                            $conn = sqlsrv_connect($serverName, $connectionOptions);
+                            if( $conn === false ) {
+                                die( print_r( sqlsrv_errors(), true));
+                            }
 
-  <div class="container">
+                        $sql = "SELECT TOP 10 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo ORDER BY s.score DESC;";
+                            $stmt = sqlsrv_query( $conn, $sql );
+                            if( $stmt === false) {
+                                die( print_r( sqlsrv_errors(), true) );
+                            }
+                            $j = 1;
+                            while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                                  echo $j.". ".$row['userFirstName']." ".$row['userLastName']." ".$row['score']." ".date_format($row['dateRecorded'], 'y/m/d')."<br />";
+                                $j++;
+                            }
+
+                            sqlsrv_free_stmt( $stmt);
+                            */
+                ?>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<br/>
+<div id="leaderboard2container">
+	<div id="leaderboard2" class="green col s12 hide-on-large-only">				
+			<form action="loggedInRecordScore.php" method="post">
+				<div class="form-group">
+                    Login to Record Your Score <br />and Share it on Facebook!
+                    <br />
+                    <br />
+            <?php
+                if(isset($_GET['Message'])){
+                    echo $_GET['Message'];
+                }
+			?>
+					<label for="name" class = "whiteText">Email: </label>
+					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
+                    <label for="pwd" class = "whiteText">Password: </label>
+                    <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
+					<input type="hidden" class="form-control" name="score" id = "scoreForm3">
+				</div>
+				<button type="submit" class="btn btn-default" onclick="setScore();">Login</button>
+			</form>
+			<br/>
+			<form action="registration.php" method="post">
+                <input type="hidden" class="form-control" name="score" id = "scoreForm4">
+                    <button type="submit" class="btn btn-default" onclick="setScore();">Register</button>
+            </form> 
+			<br />
+			<div class="addthis_inline_share_toolbox"></div>
+			<br />
+			<br />
+			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
+			
+			<script>
+				function setScore() {
+					document.getElementById("scoreForm1").value = getScore();
+					document.getElementById("scoreForm2").value = getScore();
+				}
+			</script>
+
+			<ul class="list-unstyled components">
+				<li class="active"><h3>High Scores</h3></li>
+			</ul>
+			<?php
+			/*
+				$serverName = "disk1.database.windows.net";
+				$connectionOptions = array(
+					"Database" => "disk1",
+					"Uid" => "apollo78124",
+					"PWD" => "bcitGroup4$"
+				);
+				//Establishes the connection
+				$conn = sqlsrv_connect($serverName, $connectionOptions);
+				if( $conn === false ) {
+					die( print_r( sqlsrv_errors(), true));
+				}
+    
+				$sql = "SELECT TOP 10 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo  ORDER BY s.score DESC;";
+				$stmt = sqlsrv_query( $conn, $sql ); 
+				if( $stmt === false) {
+					die( print_r( sqlsrv_errors(), true) );
+				}
+				$j = 1;
+				while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+					  echo $j.". ".$row['userFirstName']." ".$row['userLastName']." ".$row['score']." ".date_format($row['dateRecorded'], 'y/m/d')."<br />";
+					$j++;
+				}
+
+				sqlsrv_free_stmt( $stmt);
+				*/
+			?>
+		</div>
+	</div>
+</div>
+
+<div class="container">
     <div class="section">
 	
 	<div class="row">
@@ -54,7 +221,6 @@
         </div>
       </div>
 	
-
 	<div class="row">
         <div class="col s12 center">
           <h4>How To Play</h4>
@@ -134,7 +300,7 @@
 	  
 	  
     </div>
-  </div>
+</div>
 
 
   <div class="parallax-container valign-wrapper">
