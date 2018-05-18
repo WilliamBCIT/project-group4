@@ -57,8 +57,12 @@ const relPos = {
 
 const waves = [
    // FORMAT: time:TIME TO START IN SECONDS, type:foodTypes.ANY, startRate:FRAMES BETWEEN SPAWNING A NEW FOOD, endRate:AMOUNT OF FOOD SPAWNED IS LERPED BETWEEN startRate AND THIS, length:HOW LONG FOOD WILL BE SPAWNED
-   [{time: 2, type: foodTypes.FRUIT, startRate: 2.1, endRate: 2.1, length: 20, from: 0}],
-   [{time: 2, type: foodTypes.FRUIT, startRate: 2, endRate: 1.6, length: 40, from: 0}]
+   /*[{time: 2, type: foodTypes.FRUIT, startRate: 2.1, endRate: 2.1, length: 20, from: 0}],
+   [{time: 2, type: foodTypes.FRUIT, startRate: 2, endRate: 1.6, length: 40, from: 0}]*/
+   
+   // FOR DEMO:
+   [{time: 2, type: foodTypes.ANY, startRate: 1, endRate: .5, length: 35, from: 0}],
+   [{time: 2, type: foodTypes.ANY, startRate: .5, endRate: .1, length: 35, from: 0}]
 ];
 
 var inProgress = [];
@@ -422,8 +426,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
-							food[i].x += track[j].vx * delta;
-							food[i].y += track[j].vy * delta;
+							food[i].x += track[j].vx * delta * 1.5;
+							food[i].y += track[j].vy * delta * 1.5;
 						}
 					}
 				}	
