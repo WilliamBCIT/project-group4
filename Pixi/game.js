@@ -151,7 +151,7 @@ function Init2(){
 }
 
 function ShowLBoards(){
-	// TODO
+	// Show and animate the leaderboard. 
     Destroy(mmLogo);
 	Destroy(mmPlay);
 	Destroy(mmLBoards);
@@ -172,7 +172,8 @@ function ShowLBoards(){
         
         app.stage.addChild(lBoardTitle);
         
-        connect();
+       PIXI.loader.add("lBoardTitle", "lBoardTitle")
+			   .load(connect);
 }
 
 function connect() {
@@ -216,7 +217,7 @@ function queryDatabase() {
 
        // Read all rows from table
      request = new Request(
-          "SELECT TOP 10 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo ORDER BY s.score DESC;",
+          "SELECT TOP 30 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo ORDER BY s.score DESC;",
              function(err, rowCount, rows) 
                 {
                     console.log(rowCount + ' row(s) returned');
@@ -574,8 +575,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}else{
 					for(j = 0; j < track.length; j++){
 						if(Math.pow(track[j].x - food[i].x, 2) + Math.pow(track[j].y - food[i].y, 2) <= maxDistSqrd){ // Move if near track
-							food[i].x += track[j].vx * delta * 1.5;
-							food[i].y += track[j].vy * delta * 1.5;
+							food[i].x += track[j].vx * delta * 2;
+							food[i].y += track[j].vy * delta * 2;
 						}
 					}
 				}	

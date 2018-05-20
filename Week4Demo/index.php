@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,13 +24,13 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5af40a0c677ae05c"></script>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo">Achos</a>
+      <a id="logo-container" href="index.php" class="brand-logo">Achos</a>
       <ul class="right hide-on-med-and-down">
         <li><a href="./index.php">Game Page</a></li>
         <li><a href="./leaderboard.php">Leader board</a></li>
 		<li><a href="./signup.php">Sign Up</a></li>
         <li><a href="./scorehistory.php">Score History</a></li>
-        <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
+        <li><a href="./plantsitemap.php">Nearest Compost Site</a></li>
 
       </ul>
 
@@ -36,7 +39,7 @@
         <li><a href="./leaderboard.php">Leader board</a></li>
 		<li><a href="./signup.php">Sign Up</a></li>
         <li><a href="./scorehistory.php">Score History</a></li>
-        <li><a href="./plantsitemap.php'">Nearest Compost Site</a></li>
+        <li><a href="./plantsitemap.php">Nearest Compost Site</a></li>
 
 	  </ul>
       <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -56,43 +59,100 @@
 				</div>
 			</div>
 			<div id="leaderboard" class="green col s0 m0 l4 hide-on-med-and-down">
-				
+                <div class = "warning"> 
+                        <?php
+                        
+                            if(isset($_GET['Message'])){
+                                echo $_GET['Message'];
+                            }
+                        ?>
+                        </div>
+                <?php 
+                //echo "Hi <button>".$row['userFirstName']."</button></form><br />Record your current score by clicking the button below!<br />";
+                 
+                if(isset($_SESSION['userNo']))
+                   {
+                    $serverName = "disk1.database.windows.net";
+                    $connectionOptions = array(
+                    "Database" => "disk1",
+                    "Uid" => "apollo78124",
+                    "PWD" => "bcitGroup4$"
+                    );
+            //Establishes the connection
+                    $conn = sqlsrv_connect($serverName, $connectionOptions);
+                    if( $conn === false ) {
+                        die( print_r( sqlsrv_errors(), true));
+                    }
+                    $number = $_SESSION['userNo'];
+                $sql = "SELECT userNo, userFirstName FROM userInfo WHERE userNo = $number;";
+                    $stmt = sqlsrv_query( $conn, $sql );
+                    if( $stmt === false) {
+                        die( print_r( sqlsrv_errors(), true) );
+                    }
+                    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                        echo "Hi <button class=\"btn btn-primary btn-sm\">".$row['userFirstName']."</button></form><br />Record your current score by clicking the button below!<br />";
+                    }
+                    sqlsrv_free_stmt( $stmt);}?>
+                
+                    <?php if(!isset($_SESSION['userNo'])) echo "<!--";?>
+                    <form action="recordOnly.php" method="post">
+                        <input type="hidden" class="form-control" name="score" id = "scoreForm3">
+                        <button type="submit" class="btn btn-default" onclick="setScore3();">Record Current Score</button>
+                    </form>
+                    <form action="logout.php" method="post">
+                        <button type="submit" class="btn btn-default">Logout</button>
+                    </form>
+                    <?php if(!isset($_SESSION['userNo'])) echo "-->";?>
+                
+                   <?php if(isset($_SESSION['userNo'])) {echo "<!--";
+                   } else {
+                        echo "Login to record your score";}?>
+                
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
-            <?php
-                if(isset($_GET['Message'])){
-                    echo $_GET['Message'];
-                }
-			?>
 					<label for="name" class = "whiteText">Email: </label>
 					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
                     <label for="pwd" class = "whiteText">Password: </label>
                     <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
 					<input type="hidden" class="form-control" name="score" id = "scoreForm1">
 				</div>
-				<button type="submit" class="btn btn-default" onclick="setScore();">Login</button>
+				<button type="submit" class="btn btn-default" onclick="setScore1();">Login</button>
 			</form>
+            <form action="signup.php" method="post">
+                <input type="hidden" class="form-control" name="score" id = "scoreForm2">
+                    <button type="submit" class="btn btn-default" onclick="setScore2();">Register</button>
+            </form>
+    <?php if(isset($_SESSION['userNo']))
+                   {
+                    echo "-->";
+                   }?>
 			<div></div>
 
-			<br/>
-			<form action="signup.php" method="post">
-                <input type="hidden" class="form-control" name="score" id = "scoreForm2">
-                    <button type="submit" class="btn btn-default" onclick="setScore();">Register</button>
-            </form> 
+			<br/> 
 			<div></div>
 			<br />
 			<div class="addthis_inline_share_toolbox"></div>
-			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
 			
 			<script>
-				function setScore() {
+				function setScore1() {
 					document.getElementById("scoreForm1").value = getScore();
+				}
+                function setScore2() {
 					document.getElementById("scoreForm2").value = getScore();
+				}
+                function setScore3() {
+					document.getElementById("scoreForm3").value = getScore();
+				}
+                function setScore4() {
+					document.getElementById("scoreForm4").value = getScore();
+				}
+                function setScore5() {
+					document.getElementById("scoreForm5").value = getScore();
 				}
 			</script>
 
 			<ul class="list-unstyled components">
-				<li class="active"><h3>High Scores</h3></li>
+				<li class="active"><h4>High Scores</h4></li>
 			</ul>
 			<?php
                 extract($_POST);
@@ -104,7 +164,7 @@
                   </head>
                   <body>
                 <p>
-                <?php /**
+                <?php   
                         $serverName = "disk1.database.windows.net";
                             $connectionOptions = array(
                                 "Database" => "disk1",
@@ -129,7 +189,7 @@
                             }
 
                             sqlsrv_free_stmt( $stmt);
-                            */
+                     
                 ?>
 			</div>
 		</div>
@@ -154,33 +214,26 @@
 					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
                     <label for="pwd" class = "whiteText">Password: </label>
                     <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
-					<input type="hidden" class="form-control" name="score" id = "scoreForm3">
+					<input type="hidden" class="form-control" name="score" id = "scoreForm5">
 				</div>
-				<button type="submit" class="btn btn-default" onclick="setScore();">Login</button>
+				<button type="submit" class="btn btn-default" onclick="setScore5();">Login</button>
 			</form>
 			<br/>
-			<form action="registration.php" method="post">
+			<form action="signup.php" method="post">
                 <input type="hidden" class="form-control" name="score" id = "scoreForm4">
-                    <button type="submit" class="btn btn-default" onclick="setScore();">Register</button>
+                    <button type="submit" class="btn btn-default" onclick="setScore4();">Register</button>
             </form> 
 			<br />
 			<div class="addthis_inline_share_toolbox"></div>
 			<br />
 			<br />
 			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
-			
-			<script>
-				function setScore() {
-					document.getElementById("scoreForm1").value = getScore();
-					document.getElementById("scoreForm2").value = getScore();
-				}
-			</script>
 
 			<ul class="list-unstyled components">
 				<li class="active"><h3>High Scores</h3></li>
 			</ul>
 			<?php
-			/*
+			
 				$serverName = "disk1.database.windows.net";
 				$connectionOptions = array(
 					"Database" => "disk1",
@@ -205,7 +258,7 @@
 				}
 
 				sqlsrv_free_stmt( $stmt);
-				*/
+				
 			?>
 		</div>
 	</div>

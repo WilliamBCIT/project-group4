@@ -1,21 +1,14 @@
 <?php
-extract($_POST);
-?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Azure server test.</title>
-  </head>
-  <body>
-
-<?php
+    extract($_POST);
+    session_start();
+    $number = $_SESSION['userNo'];
     echo "Loading... Please Wait";
-    $userEmail = filter_var($userEmail);
-    $userPwd = filter_var($userPwd);
-    $score = filter_var($score);
-    Insert($userEmail, $userPwd, $score);
+    echo $number;
+    echo $score;
+    Insert($number, $score);
     die;
-    function Insert($Email,$Pwd,$Score){
+
+    function Insert($Number,$Score){
         /**
         if ($FullName != "" && $Score != "") {
             
@@ -29,7 +22,7 @@ extract($_POST);
             die();// write default values or show an error message 
             }
         */
-        if ($Email != "" && $Pwd != ""
+        if ($Number != "" && $Score != ""
            ) {
         $serverName = "disk1.database.windows.net";
             $connectionOptions = array(
@@ -40,27 +33,9 @@ extract($_POST);
             //Establishes the connection
             
             $conn = sqlsrv_connect($serverName, $connectionOptions);
-            $tsql= "SELECT userNo FROM dbo.userInfo 
-WHERE userEmail LIKE '$Email' AND userPwd LIKE '$Pwd';";
-            
-        //Get the number of the user. 
-        $stmt = sqlsrv_query($conn, $tsql);
-        if( $stmt === false) {
-            die( print_r( sqlsrv_errors(), true));
-            echo (sqlsrv_errors());
-            $Message = "User does not exist!";
-            header("location: index.php?Message={$Message}");
-        }
-
-        while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-            $userNo = $row['userNo'];
-        }
-            
-        session_start();
-        $_SESSION["userNo"]=$userNo;
             
         if ($Score > 0 && $Score != "") {
-        $tsql= "INSERT INTO ScoreRecord VALUES ($userNo, $Score, CURRENT_TIMESTAMP);";
+        $tsql= "INSERT INTO ScoreRecord VALUES ($Number, $Score, CURRENT_TIMESTAMP);";
         $getResults= sqlsrv_query($conn, $tsql);
             if ($getResults == FALSE) {
                 echo (sqlsrv_errors());
@@ -68,17 +43,16 @@ WHERE userEmail LIKE '$Email' AND userPwd LIKE '$Pwd';";
                 header("location: index.php?Message={$Message}");
             }
         sqlsrv_free_stmt($stmt);
-            $Message = "Logged in and recorded successfully";
+            $Message = "Recorded successfully";
         }
             
                 header("location: index.php?Message={$Message}");
         } else {
             echo (sqlsrv_errors());
             $Message = "Info is not correct or not set";
+            if ($Number == "")
+                $Message = "Number is not correct or not set";
             header("location: index.php?Message={$Message}");
         }
     }
 ?>
-
-  </body>
-</html>

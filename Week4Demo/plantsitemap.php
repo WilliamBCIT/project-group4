@@ -1,5 +1,5 @@
 <?php
-    extract($_POST);
+    session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <!-- Our Custom CSS -->
 	<link rel="stylesheet" href="./css/style2.css">
-	<link rel="stylesheet" href="./css/style2.css">
+	<link rel="stylesheet" href="./css/style.css">
 	<script type="text/javascript"  src="./pixi.min.js"/></script>
 	<script type="text/javascript" src="./scaleToWindow.js"></script>
 	<script type="text/javascript" src="./game.js"></script>
@@ -87,6 +87,7 @@
     
 </head>
 <body>
+    <div class = "whole">
 	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5af40a0c677ae05c"></script>
 	<div class="container-fluid">
 	  <div class="row row-gutters">
@@ -100,7 +101,7 @@
                 <ul class="list-unstyled components">
                     <p>Dummy Heading</p>
                     <li class="active">
-                        <a href="index.html" >Map</a>
+                        <a href="index.php" >Game</a>
                     </li>
                     <li>
                         <a href="#">About</a>
@@ -144,45 +145,103 @@
 		<div class="col-3 d-none d-md-block">
 			<nav id="leaderboard" >
                 <div class="leaderboard-header ">
-                    <h3>Leaderboard</h3>
-                </div>
-				<div class="components">
-					<div class="col-xs-12">
-						<form action="loggedInRecordScore.php" method="post">
-							<div class="form-group">
-                                Login<br />and Share it on Facebook!
-                                <br />
-                                <br />
-                                <?php
-                                if(isset($_GET['Message'])){
-                                    echo $_GET['Message'];
-                                }
-                                ?>
-							  <label for="name" class = "whiteText">Email: </label>
-							  <input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
-                                <label for="pwd" class = "whiteText">Password: </label>
-                              <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
-							
-
-							  <input type="hidden" class="form-control" name="score" id = "scoreForm1">
-							</div>
-							<button type="submit" class="btn btn-default" onclick="setScore();">Login</button>
-						</form>
-                        <br />
-                        
-                        <form action="registration.php" method="post">
-                        Not Registered Yet? Record your score of $$$$ by registering!
-                            <input type="hidden" class="form-control" name="score" id = "scoreForm2">
-                        <button type="submit" class="btn btn-default" onclick="setScore();">Register</button>
-                        </form> 
-                        <br />
-                        <div class="addthis_inline_share_toolbox"></div>
-                        <br />
-                        <br />
-						<ul class="list-unstyled components">
-							<li class="active"><p>High Scores</p></li>
-						</ul>
+                   <div class = "warning"> 
                         <?php
+                        
+                            if(isset($_GET['Message'])){
+                                echo $_GET['Message'];
+                            }
+                        ?>
+                        </div>
+                <?php 
+                //echo "Hi <button>".$row['userFirstName']."</button></form><br />Record your current score by clicking the button below!<br />";
+                 
+                if(isset($_SESSION['userNo']))
+                   {
+                    $serverName = "disk1.database.windows.net";
+                    $connectionOptions = array(
+                    "Database" => "disk1",
+                    "Uid" => "apollo78124",
+                    "PWD" => "bcitGroup4$"
+                    );
+            //Establishes the connection
+                    $conn = sqlsrv_connect($serverName, $connectionOptions);
+                    if( $conn === false ) {
+                        die( print_r( sqlsrv_errors(), true));
+                    }
+                    $number = $_SESSION['userNo'];
+                $sql = "SELECT userNo, userFirstName FROM userInfo WHERE userNo = $number;";
+                    $stmt = sqlsrv_query( $conn, $sql );
+                    if( $stmt === false) {
+                        die( print_r( sqlsrv_errors(), true) );
+                    }
+                    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
+                        echo "Hi <button class=\"btn btn-primary btn-sm\">".$row['userFirstName']."</button></form><br />Record your current score by clicking the button below!<br />";
+                    }
+                    sqlsrv_free_stmt( $stmt);}?>
+                
+                    <?php if(!isset($_SESSION['userNo'])) echo "<!--";?>
+                    <form action="recordOnly.php" method="post">
+                        <input type="hidden" class="form-control" name="score" id = "scoreForm3">
+                        <button type="submit" class="btn btn-default" onclick="setScore3();">Record Current Score</button>
+                    </form>
+                    <form action="logout.php" method="post">
+                        <button type="submit" class="btn btn-default">Logout</button>
+                    </form>
+                    <?php if(!isset($_SESSION['userNo'])) echo "-->";?>
+                
+                   <?php if(isset($_SESSION['userNo'])) {echo "<!--";
+                   } else {
+                        echo "Login to record your score";}?>
+                
+			<form action="loggedInRecordScore.php" method="post">
+				<div class="form-group">
+					<label for="name" class = "whiteText">Email: </label>
+					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
+                    <label for="pwd" class = "whiteText">Password: </label>
+                    <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
+					<input type="hidden" class="form-control" name="score" id = "scoreForm1">
+				</div>
+				<button type="submit" class="btn btn-default" onclick="setScore1();">Login</button>
+			</form>
+            <form action="signup.php" method="post">
+                <input type="hidden" class="form-control" name="score" id = "scoreForm2">
+                    <button type="submit" class="btn btn-default" onclick="setScore2();">Register</button>
+            </form>
+    <?php if(isset($_SESSION['userNo']))
+                   {
+                    echo "-->";
+                   }?>
+			<div></div>
+
+			<br/> 
+			<div></div>
+			<br />
+			<div class="addthis_inline_share_toolbox"></div>
+			
+			<script>
+				function setScore1() {
+					document.getElementById("scoreForm1").value = getScore();
+				}
+                function setScore2() {
+					document.getElementById("scoreForm2").value = getScore();
+				}
+                function setScore3() {
+					document.getElementById("scoreForm3").value = getScore();
+				}
+                function setScore4() {
+					document.getElementById("scoreForm4").value = getScore();
+				}
+                function setScore5() {
+					document.getElementById("scoreForm5").value = getScore();
+				}
+			</script>
+                    <br />
+			<ul class="list-unstyled components">
+				<li class="active"><h3>High Scores</h3></li>
+			</ul>
+			<?php
+                extract($_POST);
         $serverName = "disk1.database.windows.net";
             $connectionOptions = array(
                 "Database" => "disk1",
@@ -214,5 +273,6 @@
 		</div>
 	</div>
 </div>
+        </div>
 </body>
 </html>
