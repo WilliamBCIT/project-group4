@@ -57,12 +57,8 @@ const relPos = {
 
 const waves = [
    // FORMAT: time:TIME TO START IN SECONDS, type:foodTypes.ANY, startRate:FRAMES BETWEEN SPAWNING A NEW FOOD, endRate:AMOUNT OF FOOD SPAWNED IS LERPED BETWEEN startRate AND THIS, length:HOW LONG FOOD WILL BE SPAWNED
-   /*[{time: 2, type: foodTypes.FRUIT, startRate: 2.1, endRate: 2.1, length: 20, from: 0}],
-   [{time: 2, type: foodTypes.FRUIT, startRate: 2, endRate: 1.6, length: 40, from: 0}]*/
-   
-   // FOR DEMO:
-   [{time: 2, type: foodTypes.ANY, startRate: 1, endRate: .5, length: 35, from: 0}],
-   [{time: 2, type: foodTypes.ANY, startRate: .3, endRate: .3, length: 35, from: 0}]
+   [{time: 2, type: foodTypes.FRUIT, startRate: 2.1, endRate: 2.1, length: 20, from: 0}],
+   [{time: 2, type: foodTypes.FRUIT, startRate: 2, endRate: 1.6, length: 40, from: 0}]
 ];
 
 var inProgress = [];
@@ -109,7 +105,6 @@ tutorial10.y = 90;
 var tutorial11 = new PIXI.Text("Purifier Tower - Effeciently processes water.");
 tutorial11.x = 30;
 tutorial11.y = 90;
-
 
 const secondsPerFrame = 1 / 60;
 
@@ -183,7 +178,7 @@ function connect() {
 // Create connection to database
     var config = 
    {
-     userName: 'apollo78124', 
+     userName: 'apollo78124', // <- letting users see this seems incredibly unsafe
      password: 'bcitGroup4$', 
      server: 'disk1.database.windows.net', 
      options: 
@@ -244,10 +239,8 @@ function ClosePauseMenu(){
 	//pm
 }
 
-const startLives = 10;
-const startMoney = 10000;
-//const startLives = 100;
-//const startMoney = 250;
+const startLives = 100;
+const startMoney = 250;
 const sellRate = .25;
 
 function StartGame(){
@@ -942,7 +935,7 @@ function AdjustLives(increaseBy){
 			strokeThickness: 6
 		});
         
-        var textureButton = PIXI.Texture.fromImage("./images/face.png");
+        var textureButton = PIXI.Texture.fromImage("../pixi/images/face.png");
         
         var shareButton = new PIXI.Sprite(textureButton);
         shareButton.buttonMode = true;
