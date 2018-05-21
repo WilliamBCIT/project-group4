@@ -57,9 +57,22 @@ const relPos = {
 
 const waves = [
    // FORMAT: time:TIME TO START IN SECONDS, type:foodTypes.ANY, startRate:FRAMES BETWEEN SPAWNING A NEW FOOD, endRate:AMOUNT OF FOOD SPAWNED IS LERPED BETWEEN startRate AND THIS, length:HOW LONG FOOD WILL BE SPAWNED
-   [{time: 2, type: foodTypes.FRUIT, startRate: 2.1, endRate: 2.1, length: 20, from: 0}],
-   [{time: 2, type: foodTypes.FRUIT, startRate: 2, endRate: 1.6, length: 40, from: 0}]
+   [{time: 2, type: foodTypes.FRUIT, startRate: 1.75 / 2, endRate: 1.75 / 2, length: 20, from: 0}],
+   [{time: 2, type: foodTypes.FRUIT, startRate: 1.75 / 2, endRate: .325, length: 10, from: 0},
+	{time: 12, type: foodTypes.FRUIT, startRate: .325, endRate: .2, length: 30, from: 0}],
+   [{time: 2, type: foodTypes.FRUIT, startRate: 1, endRate: .6, length: 10, from: 0},
+    {time: 2.1, type: foodTypes.VEGETABLE, startRate: 1, endRate: .6, length: 10, from: 0},
+    {time: 17.5, type: foodTypes.FRUIT, startRate: .6, endRate: .3, length: 15, from: 0},
+    {time: 17.6, type: foodTypes.VEGETABLE, startRate: .6, endRate: .3, length: 15, from: 0},
+    {time: 31.5, type: foodTypes.FRUIT, startRate: .525, endRate: .275, length: 20, from: 0},
+    {time: 31.6, type: foodTypes.VEGETABLE, startRate: .525, endRate: .275, length: 20, from: 0}]
 ];
+
+const donateUnlockAfter = 1;
+const recyclerUnlockAfter = 3;
+const animalsUnlockAfter = 5;
+const purifierUnlockAfter = 7;
+const factoryUnlockAfter = 9;
 
 var inProgress = [];
 
@@ -239,8 +252,8 @@ function ClosePauseMenu(){
 	//pm
 }
 
-const startLives = 100;
-const startMoney = 250;
+const startLives = 125;
+const startMoney = 420;
 const sellRate = .25;
 
 function StartGame(){
@@ -406,6 +419,8 @@ function StartGame2(){
 	compostText.anchor.set(.5, .5);
 
 	donateB = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), sidebarUnit * 2.23, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	donateBLock = GetObj(GetSprite("donate", .5, .5, 1.3, 1.3, 0x000000), sidebarUnit * 2.23, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	donateBLock.interactive = true;
 	donateB.interactive = true;
 	donateB.buttonMode = true;
 	donateB.on('pointerdown', function(){wantToPlace = towerTypes.DONATION; GetPlaceIcon();})
@@ -416,6 +431,8 @@ function StartGame2(){
 	donateText.anchor.set(.5, .5);
 
 	recycleB = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), sidebarUnit * 3.41, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	recycleBLock = GetObj(GetSprite("recycle", .5, .5, 1.3, 1.3, 0x000000), sidebarUnit * 3.41, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	recycleBLock.interactive = true;
 	recycleB.interactive = true;
 	recycleB.buttonMode = true;
 	recycleB.on('pointerdown', function(){wantToPlace = towerTypes.RECYCLE; GetPlaceIcon();})
@@ -426,6 +443,8 @@ function StartGame2(){
 	recycleText.anchor.set(.5, .5);
 
 	animalsB = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), sidebarUnit * 4.59, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	animalsBLock = GetObj(GetSprite("animals", .5, .5, 1.3, 1.3, 0x000000), sidebarUnit * 4.59, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	animalsBLock.interactive = true;
 	animalsB.interactive = true;
 	animalsB.buttonMode = true;
 	animalsB.on('pointerdown', function(){wantToPlace = towerTypes.ANIMALS; GetPlaceIcon();})
@@ -436,6 +455,8 @@ function StartGame2(){
 	animalsText.anchor.set(.5, .5);
 
 	purifierB = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), sidebarUnit * 5.77, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	purifierBLock = GetObj(GetSprite("purify", .5, .5, 1.3, 1.3, 0x000000), sidebarUnit * 5.77, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	purifierBLock.interactive = true;
 	purifierB.interactive = true;
 	purifierB.buttonMode = true;
 	purifierB.on('pointerdown', function(){wantToPlace = towerTypes.PURIFIER; GetPlaceIcon();})
@@ -446,6 +467,8 @@ function StartGame2(){
 	purifierText.anchor.set(.5, .5);
 
 	factoryB = GetObj(GetSprite("factory", .5, .5, .9, .9), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	factoryBLock = GetObj(GetSprite("factory", .5, .5, .95, .95, 0x000000), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
+	factoryBLock.interactive = true;
 	factoryB.interactive = true;
 	factoryB.buttonMode = true;
 	factoryB.on('pointerdown', function(){wantToPlace = towerTypes.FACTORY; GetPlaceIcon();})
@@ -492,6 +515,8 @@ const foodTransferSpeed = 2.5;
 const popupSpeed = -1;
 const popupDuration = .4;
 
+const minBetweenIntake = 12;
+
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	elapsed += secondsPerFrame * delta;
     mousePos = app.renderer.plugins.interaction.mouse.global;
@@ -515,18 +540,45 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 		for(let i = inProgress.length - 1; i >= 0; i--){
 			if(inProgress[i].time + inProgress[i].length < elapsed){
 				inProgress.splice(i, 1);
+				
+				if(wavePos >= waves[wave].length){
+					waitingForNextWave = true;
 
-				waitingForNextWave = true;
+					if(donateBLock != false && wave >= donateUnlockAfter){
+						Destroy(donateBLock);
+						donateBLock = false;
+					}
 
-				nextWaveB = GetObj(GetSprite("nextWave", 1, 1, 1, 1), unit * 18, unit * 18, app.stage, relPos.USEMARGIN);
-				nextWaveB.interactive = true;
-				nextWaveB.buttonMode = true;
-				nextWaveB.on('pointerdown', function(){
-							waitingForNextWave = false;
-							Destroy(this);
-						})
-					 .on('pointerover', function(){this.scale.set(1.1, 1.1);})
-					 .on('pointerout', function(){this.scale.set(1 / 1.1, 1 / 1.1);});
+					if(recycleBLock != false && wave >= recyclerUnlockAfter){
+						Destroy(recycleBLock);
+						recycleBLock = false;
+					}
+
+					if(animalsBLock != false && wave >= animalsUnlockAfter){
+						Destroy(recycleBLock);
+						recycleBLock = false;
+					}
+
+					if(purifierBLock != false && wave >= purifierUnlockAfter){
+						Destroy(purifierBLock);
+						purifierBLock = false;
+					}
+
+					if(factoryBLock != false && wave >= factoryUnlockAfter){
+						Destroy(factoryBLock);
+						factoryBLock = false;
+					}
+	
+					nextWaveB = GetObj(GetSprite("nextWave", 1, 1, 1, 1), unit * 18, unit * 18, app.stage, relPos.USEMARGIN);
+					nextWaveB.interactive = true;
+					nextWaveB.buttonMode = true;
+					nextWaveB.on('pointerdown', function(){
+								waitingForNextWave = false;
+								Destroy(this);
+								})
+						 	 .on('pointerover', function(){this.scale.set(1.1, 1.1);})
+							 .on('pointerout', function(){this.scale.set(1 / 1.1, 1 / 1.1);});
+				}
 			}else{
 				if(inProgress[i].next < elapsed){
 					GetFood(inProgress[i].type, 16.5 * unit, (1.3 + Math.random() * .6) * unit); // TODO: Implement different "from"'s
@@ -623,10 +675,10 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			
 			// TODO: Display currently-being-processed foods
 			
-			if(towers[j].ready < 3){
+			if(towers[j].ready < minBetweenIntake){
 				towers[j].ready++;
 			}else{ // Checks if any applicable foods are in range, and if so, begins processing them
-				for(i = 0; i < food.length && towers[j].ready == 3; i++){
+				for(i = 0; i < food.length && towers[j].ready >= minBetweenIntake; i++){
 					if(food[i].towerTarget === false){
 						let l = towers[j].allow.findIndex(function(element){
 							return element == foodTypes.ANY || food[i].type == element || food[i].subType == element;
@@ -682,6 +734,8 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 function PlaceTower(){
 	Destroy(toPlaceIcon);
 	toPlaceIcon = false;
+	buildX = this.x;
+	buildY = this.y;
 	TogglePlacemat();
 
 	if(lives > 0){
@@ -694,10 +748,10 @@ function PlaceTower(){
 				tower = GetObj(GetSprite("compost", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.ANY];
 				tower.ignore = [foodTypes.LIQUID];
-				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-				tower.atOnce = 5; // Amount of concurrent users
+				tower.atOnce = 20; // Amount of concurrent users
 				tower.processTime = 360; // Frames required to process one food item
 				tower.value = 80; // Amount of score and money gained when all maxes have been met
 				tower.cost = 250;
@@ -707,11 +761,11 @@ function PlaceTower(){
 				tower = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.MEAT, foodTypes.BREAD];
 				tower.ignore = [];
-				tower.max = [4]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.max = [24]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-				tower.atOnce = 4; // Amount of concurrent users
-				tower.processTime = 80; // Frames required to process one food item
+				tower.atOnce = 16; // Amount of concurrent users
+				tower.processTime = 40; // Frames required to process one food item
 				tower.value = 100; // Amount of score and money gained when all maxes have been met
 				tower.cost = 770;
 			}
@@ -720,11 +774,11 @@ function PlaceTower(){
 				tower = GetObj(GetSprite("factory", .55, .55, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BONE, foodTypes.OIL];
 				tower.ignore = [];
-				tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.max = [180]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-				tower.atOnce = 2; // Amount of concurrent users
-				tower.processTime = 30; // Frames required to process one food item
+				tower.atOnce = 8; // Amount of concurrent users
+				tower.processTime = 15; // Frames required to process one food item
 				tower.value = 250; // Amount of score and money gained when all maxes have been met
 				tower.cost = 1200;
 			}
@@ -733,11 +787,11 @@ function PlaceTower(){
 				tower = GetObj(GetSprite("donate", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE];
 				tower.ignore = [];
-				tower.max = [2]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.max = [12]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-				tower.atOnce = 1; // Amount of concurrent users
-				tower.processTime = 45; // Frames required to process one food item
+				tower.atOnce = 4; // Amount of concurrent users
+				tower.processTime = 25; // Frames required to process one food item
 				tower.value = 60; // Amount of score and money gained when all maxes have been met
 				tower.cost = 400;
 			}
@@ -746,11 +800,11 @@ function PlaceTower(){
 				tower = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BREAD, foodTypes.WATER];
 				tower.ignore = [];
-				tower.max = [5]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.max = [30]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-				tower.atOnce = 1; // Amount of concurrent users
-				tower.processTime = 60; // Frames required to process one food item
+				tower.atOnce = 4; // Amount of concurrent users
+				tower.processTime = 145; // Frames required to process one food item
 				tower.value = 175; // Amount of score and money gained when all maxes have been met
 				tower.cost = 650;
 			}
@@ -759,11 +813,11 @@ function PlaceTower(){
 				tower = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.WATER];
 				tower.ignore = [];
-				tower.max = [20]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
+				tower.max = [120]; // If just one entry, then all entries in .allow will contribute towards the same max count, otherwise, individual maxes will be used
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
-				tower.atOnce = 1; // Amount of concurrent users
-				tower.processTime = 20; // Frames required to process one food item
+				tower.atOnce = 40; // Amount of concurrent users
+				tower.processTime = 200; // Frames required to process one food item
 				tower.value = 225; // Amount of score and money gained when all maxes have been met
 				tower.cost = 900;
 			}
@@ -800,7 +854,7 @@ function PlaceTower(){
 
 function Buy(cost){
 	if(money < cost){
-		console.log("PLAYER CANNOT AFFORD $" + cost);
+		GetPopup("Cannot afford $" + cost + "!", buildX, buildY - unit * 3 / 4, 1, 1, 0xFF0000);
 
 		return false;
 	}else{
