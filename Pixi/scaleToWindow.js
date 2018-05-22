@@ -3,5 +3,4 @@ function scaleToWindow(canvas, backgroundColor) {
     $(canvas).outerHeight($(window).height());
 	var height = canvas.style.height;
 	document.getElementById("leaderboard").style.height = height;
-
-  }
+}

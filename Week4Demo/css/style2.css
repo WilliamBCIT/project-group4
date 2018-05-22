@@ -167,9 +167,10 @@ ul.CTAs a {
 #middleblock{
 	background-color:red;
 	min-width:100%;
-	height:100%;
 	max-width:100vw;
-	max-height:100vh;
+	height: 100vh;
+	max-height:120vh;
+	min-height:120vh;
 	margin-left: 0;
 	margin-right: 0;
 	

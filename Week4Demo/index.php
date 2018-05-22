@@ -46,12 +46,16 @@ session_start();
     </div>
   </nav>
 
-<div class="valign-wrapper">
-    <div class="section responsive-image">
-	<div class="container">
+
+  
+<div id="a1" class="valign-wrapper">
+<div id="a2" class="section responsive-image">
+<div id="containerclass" class="container">
   <div class="section">
 		<div class="row" id="main">
-			<div id="game" class="teal col s12 m12 l8">
+			<div class="col s0 m2 l1"></div>
+
+			<div id="game" class="teal col s12 m8 l6">
 				<div id="playframe">
 					<script type="text/javascript">
 						Init();
@@ -68,6 +72,7 @@ session_start();
                         ?>
                         </div>
                 <?php 
+				/*
                 //echo "Hi <button>".$row['userFirstName']."</button></form><br />Record your current score by clicking the button below!<br />";
                  
                 if(isset($_SESSION['userNo']))
@@ -106,12 +111,14 @@ session_start();
                 
                    <?php if(isset($_SESSION['userNo'])) {echo "<!--";
                    } else {
-                        echo "Login to record your score";}?>
+                        echo "Login to record your score";}
+						
+						?>
                 
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
 					<label for="name" class = "whiteText">Email: </label>
-					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
+					<input type="email" class="form-control" name="userEmail" placeholder="Enter Your Email">
                     <label for="pwd" class = "whiteText">Password: </label>
                     <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
 					<input type="hidden" class="form-control" name="score" id = "scoreForm1">
@@ -125,7 +132,10 @@ session_start();
     <?php if(isset($_SESSION['userNo']))
                    {
                     echo "-->";
-                   }?>
+                   }
+				   
+				   
+				   */?>
 			<div></div>
 
 			<br/> 
@@ -164,8 +174,11 @@ session_start();
                   </head>
                   <body>
                 <p>
+				
                 <?php   
-                        $serverName = "disk1.database.windows.net";
+                      /*
+
+					  $serverName = "disk1.database.windows.net";
                             $connectionOptions = array(
                                 "Database" => "disk1",
                                 "Uid" => "apollo78124",
@@ -189,9 +202,11 @@ session_start();
                             }
 
                             sqlsrv_free_stmt( $stmt);
-                     
+                     */
                 ?>
 			</div>
+			<div class="col s0 m2 l1"></div>
+
 		</div>
 	</div>
 </div>
@@ -211,7 +226,7 @@ session_start();
                 }
 			?>
 					<label for="name" class = "whiteText">Email: </label>
-					<input type="text" class="form-control" name="userEmail" placeholder="Enter Your Email">
+					<input type="email" class="form-control" name="userEmail" placeholder="Enter Your Email">
                     <label for="pwd" class = "whiteText">Password: </label>
                     <input type="password" class="form-control" name="userPwd" placeholder="Enter Your Password">
 					<input type="hidden" class="form-control" name="score" id = "scoreForm5">
@@ -233,7 +248,6 @@ session_start();
 				<li class="active"><h3>High Scores</h3></li>
 			</ul>
 			<?php
-			
 				$serverName = "disk1.database.windows.net";
 				$connectionOptions = array(
 					"Database" => "disk1",
@@ -258,7 +272,6 @@ session_start();
 				}
 
 				sqlsrv_free_stmt( $stmt);
-				
 			?>
 		</div>
 	</div>
@@ -277,7 +290,7 @@ session_start();
 	<div class="row">
         <div class="col s12 center">
           <h4>How To Play</h4>
-          <p class="left-align light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a sapien id, viverra ultrices eros. Morbi sem neque, posuere et pretium eget, bibendum sollicitudin lacus. Aliquam eleifend sollicitudin diam, eu mattis nisl maximus sed. Nulla imperdiet semper molestie. Morbi massa odio, condimentum sed ipsum ac, gravida ultrices erat. Nullam eget dignissim mauris, non tristique erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+          <p class="left-align light">When we first meet the Boy Genius, he is in a sad town full of people who waste their food. Your job is to place towers around the town, so that no food goes into the garbage bin. Each tower takes in certain foods and gives you score and money. To put a tower on the map, simply click on the tower you want to select and then click on a spot on the map where you would like to place the tower. Keep track of your money, score, and lives in the bar at the top of the screen.  As you move on from wave to wave you will notice the town getting greener!</p>
         </div>
       </div>
 	
@@ -360,7 +373,6 @@ session_start();
     <div class="section no-pad-bot">
       <div class="container">
         <div class="row center">
-          <h5 class="header col s12 light">Please kill me</h5>
         </div>
       </div>
     </div>
@@ -394,7 +406,6 @@ session_start();
             <li><a class="white-text" href="#!">william@email.com</a></li>
           </ul>
         </div>
-
       </div>
     </div>
   </footer>
