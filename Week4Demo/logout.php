@@ -6,4 +6,5 @@
     $Message = "Logout Successful";
     header("location: index.php?Message={$Message}");
     die;
+//ukjgbkjghk
 ?>
