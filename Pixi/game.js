@@ -309,6 +309,7 @@ function StartGame(){
     
     var timer;
     var moneyContents;
+    var tester = false;
 
 	// Import textures
 	PIXI.loader.add("whiteBox", "../Pixi/images/WhiteBox.png")
@@ -682,27 +683,26 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
     if(typeof timer == 'number'){
             
     		if(timer >= 0){
+            password = 50;    
 			timer--; 
-               			    for (var x = 0; x <= 100; x++) {
-         for (var y = 0; y <= 30; y++) {            
-              moneyContents[x][y].rotation += 0.05 * delta;
-              moneyContents[x][y].y += 3.2;
-
-                }
-    } 
-		}
-				if(timer <= 0){
-
-			    for (var x = 0; x <= 100; x++) {
+                for (var x = 0; x <= 100; x++) {
+                    for (var y = 0; y <= 30; y++) {            
+                    moneyContents[x][y].rotation += 0.05 * delta;
+                    moneyContents[x][y].y += 3.2;
+                    }
+                } 
+                
+            }
+            if(timer <= 0){
+                for (var x = 0; x <= 100; x++) {
                 //moneyContents[x] =  new Array();
-        for (var y = 0; y <= 30; y++) {
-            Destroy(moneyContents[x][y]);          
-	          
-    }
-    } 
+                    for (var y = 0; y <= 30; y++) {
+                    Destroy(moneyContents[x][y]);          
+                    }
+                } 
             timer = "Done";
             //delete moneyContents;
-		}
+		  }
     }
 }
 
@@ -1168,6 +1168,8 @@ function Destroy(obj){
 }
 
 function checkKeyInput(key) {
+   
+        
         if (key.keyCode === 89 && password == 4)    {
             password = 0;
             startEasterEgg();
@@ -1184,6 +1186,7 @@ function checkKeyInput(key) {
         if (key.keyCode === 77)    {
 			password = 1;
         }
+        
 }
 
 function AdjustMoney(adjustBy){
