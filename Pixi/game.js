@@ -64,14 +64,20 @@ const waves = [
    [{time: 2, type: foodTypes.FRUIT, startRate: .85, endRate: .85, length: 15, from: 0}],
    [{time: 2, type: foodTypes.FRUIT, startRate: 1, endRate: 1, length: 35, from: 0}],
    [{time: 2, type: foodTypes.FRUIT, startRate: .8, endRate: .5, length: 10, from: 0}],
-   [{time: 2, type: foodTypes.FRUIT, startRate: 1, endRate: .75, length: 10, from: 0},
-	{time: 12, type: foodTypes.FRUIT, startRate: .425, endRate: .275, length: 30, from: 0}],
+   [{time: 2, type: foodTypes.FRUIT, startRate: 1, endRate: .75, length: 8, from: 0},
+	{time: 12, type: foodTypes.FRUIT, startRate: .525, endRate: .4, length: 15.5, from: 0}],
    [{time: 2, type: foodTypes.FRUIT, startRate: 1, endRate: .6, length: 10, from: 0},
     {time: 2.5, type: foodTypes.VEGETABLE, startRate: 1, endRate: .6, length: 10, from: 0},
     {time: 17.5, type: foodTypes.FRUIT, startRate: .7, endRate: .225, length: 15, from: 0},
     {time: 17.85, type: foodTypes.VEGETABLE, startRate: .7, endRate: .225, length: 15, from: 0},
     {time: 31.5, type: foodTypes.FRUIT, startRate: .4, endRate: .175, length: 20, from: 0},
-    {time: 31.5 + .65, type: foodTypes.VEGETABLE, startRate: .4, endRate: .175, length: 20, from: 0}]
+	{time: 31.5 + .65, type: foodTypes.VEGETABLE, startRate: .4, endRate: .175, length: 20, from: 0}],
+   [{time: 2, type: foodTypes.FRUIT, startRate: .3, endRate: .18, length: 45, from: 0},
+	{time: 2.15, type: foodTypes.VEGETABLE, startRate: .3, endRate: .18, length: 45, from: 0},
+	{time: 7, type: foodTypes.BREAD, startRate: 1, endRate: .667, length: 40, from: 1}],
+   [{time: 2, type: foodTypes.FRUIT, startRate: .3, endRate: .175, length: 35, from: 1},
+	{time: 2.15, type: foodTypes.VEGETABLE, startRate: .3, endRate: .175, length: 35, from: 1},
+	{time: 5.25, type: foodTypes.BREAD, startRate: .8, endRate: .375, length: 30, from: 1}]
 ];
 
 const donateUnlockAfter = 1;
@@ -361,10 +367,12 @@ function StartGame2(){
 	hpBar = GetObj(GetSprite("fullHP", 0, 0, hudBarScale, hudBarScale), 80 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	hpMask = GetObj(GetSprite("barMask", 0, 0, hudBarScale, hudBarScale), 81 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	hpBar.mask = hpMask;
+	hpText = GetObj(new PIXI.Text(lives / startLives * 100 + "%", hudStyle), hpBar.x + hpBar.width / 2, hpBar.y, app.stage, relPos.IGNOREMARGIN);
 
 	xpBar = GetObj(GetSprite("fullXP", 0, 0, hudBarScale, hudBarScale), 110 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpMask = GetObj(GetSprite("barMask", 0, 0, 0, hudBarScale), 111 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpBar.mask = xpMask;
+	xpText = GetObj(new PIXI.Text(xp / targetXP * 100 + "%", hudStyle), xpBar.x + xpBar.width / 2, xpBar.y, app.stage, relPos.IGNOREMARGIN);
     
     //Boy Genius face icon
     playerIcon = GetObj(GetSprite("faceNormal", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
@@ -549,7 +557,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 			if(inProgress[i].time + inProgress[i].length < elapsed){
 				inProgress.splice(i, 1);
 				
-				if(wavePos >= waves[wave].length){
+				if(wavePos >= waves[wave].length && !waitingForNextWave){
 					waitingForNextWave = true;
 
 					if(donateBLock != false && wave >= donateUnlockAfter){
@@ -583,13 +591,27 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					nextWaveB.on('pointerdown', function(){
 								waitingForNextWave = false;
 								Destroy(this);
+								playerIcon = GetObj(GetSprite("faceHappy3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
+
+								wave++;
+								wavePos = 0;
+								elapsed = 0;
+								waveText.text = "Wave: " + (wave + 1);
+
+								for(let i = food.length - 1; i >= 0; i--){
+									GetPopup("+ $1", food[i].x, food[i].y, 1, 1, 0x00FF00);
+									AdjustMoney(1);
+									Destroy(food[i]);
+								}
+
+								food = [];
 								})
 						 	 .on('pointerover', function(){this.scale.set(1.1, 1.1);})
 							 .on('pointerout', function(){this.scale.set(1 / 1.1, 1 / 1.1);});
 				}
 			}else{
 				if(inProgress[i].next < elapsed){
-					GetFood(inProgress[i].type, 16.5 * unit, (1.3 + Math.random() * .6) * unit); // TODO: Implement different "from"'s
+					GetFood(inProgress[i].type, inProgress[i].from);
 	
 					inProgress[i].next = elapsed + Lerp(inProgress[i].startRate, inProgress[i].endRate, (elapsed - inProgress[i].time) / inProgress[i].length);
 				}
@@ -606,14 +628,6 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}/*else{
 					console.log("Next wave in " + (Math.round((waves[wave][wavePos].time - elapsed) * 100) / 100));
 				}*/
-			}else if(inProgress.length == 0 && !waitingForNextWave){
-				//Player happy when new wave starts
-				playerIcon = GetObj(GetSprite("faceHappy3", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN);
-				
-				wave++;
-				wavePos = 0;
-				elapsed = 0;
-				waveText.text = "Wave: " + (wave + 1);
 			}
 		}else{
 			// TODO: Infinite waves
@@ -802,8 +816,8 @@ function PlaceTower(){
 				tower.finished = [0]; // MUST contain a 0 for every entry in .max[]
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 2; // Amount of concurrent users
-				tower.processTime = 25; // Frames required to process one food item
-				tower.value = 60; // Amount of score and money gained when all maxes have been met
+				tower.processTime = 40; // Frames required to process one food item
+				tower.value = 35; // Amount of score and money gained when all maxes have been met
 				tower.cost = 400;
 			}
 		}else if(wantToPlace == towerTypes.RECYCLE){
@@ -956,11 +970,14 @@ function AdjustScore(increaseBy){
 	}else{
 		xpMask.scale.x = Math.max(0, hudBarScale * (xp / targetXP));
 	}
+
+	xpText.text = Math.floor(xp / targetXP * 100) + "%";
 }
 
 function AdjustLives(increaseBy){
 	lives += increaseBy;
 	livesText.text = lives;
+	hpText.text = Math.ceil(lives / startLives * 100) + "%";
 
 	hpMask.scale.x = Math.max(0, hudBarScale * (lives / startLives));
 
@@ -1089,7 +1106,7 @@ function setScore() {
 	document.getElementById("scoreForm2").value = getScore();
 }
 
-function GetFood(subType, posX, posY){
+function GetFood(subType, from){
 	let obj;
 	let type;
 	//let obj = GetObj(GetSprite(foodNames[subType], .5, .5, foodScale, foodScale), posX, posY, foodContainer);
@@ -1186,8 +1203,13 @@ function GetFood(subType, posX, posY){
 	obj.scale.set(foodScale, foodScale);
 	obj.interactiveChildren = false;
 
-	obj.x = posX;
-	obj.y = posY + uiMargin;
+	if(from == 0){
+		obj.x = 16.5 * unit;
+		obj.y = (1.3 + Math.random() * .6) * unit + uiMargin;
+	}else if(from == 1){
+		obj.x = 1.5 * unit;
+		obj.y = (1.3 + Math.random() * .6) * unit + uiMargin;
+	}
 
 	foodContainer.addChild(obj);
 	food.push(obj);
