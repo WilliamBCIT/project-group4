@@ -55,10 +55,6 @@ const relPos = {
 	SIDEBAR:2
 };
 
-// ADJUST WAVE 5 TO BE A BIT SHORTER
-// ADJUST DONATE TOWERS TO GIVE LESS
-// MAKE WAVE 6 START GETTING THROUGH DONATE TOWERS
-
 const waves = [
    // FORMAT: time:TIME TO START IN SECONDS, type:foodTypes.ANY, startRate:FRAMES BETWEEN SPAWNING A NEW FOOD, endRate:AMOUNT OF FOOD SPAWNED IS LERPED BETWEEN startRate AND THIS, length:HOW LONG FOOD WILL BE SPAWNED
    [{time: 2, type: foodTypes.FRUIT, startRate: .85, endRate: .85, length: 15, from: 0}],
@@ -77,14 +73,51 @@ const waves = [
 	{time: 7, type: foodTypes.BREAD, startRate: 1, endRate: .667, length: 40, from: 1}],
    [{time: 2, type: foodTypes.FRUIT, startRate: .3, endRate: .175, length: 35, from: 1},
 	{time: 2.15, type: foodTypes.VEGETABLE, startRate: .3, endRate: .175, length: 35, from: 1},
-	{time: 5.25, type: foodTypes.BREAD, startRate: .8, endRate: .375, length: 30, from: 1}]
+	{time: 5.25, type: foodTypes.BREAD, startRate: .8, endRate: .375, length: 30, from: 1}],
+   [{time: 2, type: foodTypes.BREAD, startRate: 1, endRate: .3, length: 32.5, from: 1},
+	{time: 2.5, type: foodTypes.BREAD, startRate: .8, endRate: .1, length: 32.5, from: 1},
+	{time: 22, type: foodTypes.VEGETABLE, startRate: .4, endRate: .1, length: 12.5, from: 0}],
+   [{time: 2, type: foodTypes.BREAD, startRate: .6, endRate: .1, length: 35, from: 0},
+	{time: 2.3, type: foodTypes.VEGETABLE, startRate: .4, endRate: .1, length: 12.5, from: 0},
+	{time: 14.5, type: foodTypes.FRUIT, startRate: .075, endRate: .35, length: 20, from: 1},
+    {time: 14.5, type: foodTypes.MEAT, startRate: 1, endRate: .15, length: 5, from: 2},
+    {time: 19.5, type: foodTypes.MEAT, startRate: .15, endRate: .075, length: 15, from: 2}],
+   [{time: 2, type: foodTypes.MEAT, startRate: .15, endRate: .15, length: 40, from: 1},
+	{time: 2, type: foodTypes.MEAT, startRate: .15, endRate: .0666, length: 20, from: 2},
+	{time: 7, type: foodTypes.FRUIT, startRate: .2, endRate: .1, length: 30, from: 1},
+	{time: 7.1, type: foodTypes.VEGETABLE, startRate: .2, endRate: .1, length: 30, from: 1},
+	{time: 22, type: foodTypes.MEAT, startRate: .1, endRate: .075, length: 20, from: 1}],
+   [{time: 2, type: foodTypes.BREAD, startRate: .2, endRate: .0666, length: 50, from: 2},
+	{time: 2, type: foodTypes.VEGETABLE, startRate: .125, endRate: .0666, length: 50, from: 0},
+	{time: 2, type: foodTypes.FRUIT, startRate: .125, endRate: .075, length: 50, from: 1},
+	{time: 2, type: foodTypes.MEAT, startRate: .1, endRate: .045, length: 50, from: 0},
+	{time: 27, type: foodTypes.MEAT, startRate: .15, endRate: .075, length: 30, from: 2},
+	{time: 27, type: foodTypes.BREAD, startRate: .6, endRate: .1, length: 30, from: 0},
+	{time: 27, type: foodTypes.VEGETABLE, startRate: .4, endRate: .1, length: 30, from: 1},
+	{time: 27, type: foodTypes.FRUIT, startRate: .075, endRate: .35, length: 30, from: 0}],
+   [{time: 2, type: foodTypes.WATER, startRate: .2, endRate: .075, length: 10, from: 0},
+    {time: 12, type: foodTypes.WATER, startRate: .075, endRate: .075, length: 10, from: 0}],
+   [{time: 2, type: foodTypes.BREAD, startRate: .2, endRate: .0666, length: 35, from: 0},
+	{time: 2, type: foodTypes.VEGETABLE, startRate: .125, endRate: .0666, length: 35, from: 1},
+	{time: 2, type: foodTypes.FRUIT, startRate: .125, endRate: .075, length: 35, from: 0},
+	{time: 7, type: foodTypes.WATER, startRate: .1, endRate: .03, length: 30, from: 0},
+	{time: 12, type: foodTypes.WATER, startRate: .09, endRate: .02, length: 25, from: 2},
+	{time: 12, type: foodTypes.MEAT, startRate: .13, endRate: .075, length: 20, from: 1},
+	{time: 12, type: foodTypes.FRUIT, startRate: .155, endRate: 1.05, length: 20, from: 2}],
+   [{time: 2, type: foodTypes.BREAD, startRate: .2, endRate: .0666, length: 37.5, from: 1},
+	{time: 2, type: foodTypes.VEGETABLE, startRate: .125, endRate: .06, length: 37.5, from: 0},
+	{time: 2, type: foodTypes.FRUIT, startRate: .125, endRate: .0666, length: 35.5, from: 2},
+	{time: 7, type: foodTypes.WATER, startRate: .1, endRate: .0233, length: 32.5, from: 1},
+	{time: 12, type: foodTypes.WATER, startRate: .09, endRate: .01666, length: 27.5, from: 0},
+	{time: 12, type: foodTypes.MEAT, startRate: .13, endRate: .0666, length: 22.5, from: 2},
+	{time: 12, type: foodTypes.FRUIT, startRate: .155, endRate: .5, length: 22.5, from: 0}]
 ];
 
 const donateUnlockAfter = 1;
 const recyclerUnlockAfter = 3;
-const animalsUnlockAfter = 5;
-const purifierUnlockAfter = 7;
-const factoryUnlockAfter = 9;
+const animalsUnlockAfter = 7;
+const purifierUnlockAfter = 10;
+const factoryUnlockAfter = 13;
 
 var inProgress = [];
 
@@ -367,12 +400,12 @@ function StartGame2(){
 	hpBar = GetObj(GetSprite("fullHP", 0, 0, hudBarScale, hudBarScale), 80 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	hpMask = GetObj(GetSprite("barMask", 0, 0, hudBarScale, hudBarScale), 81 * hudBarScale, 13 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	hpBar.mask = hpMask;
-	hpText = GetObj(new PIXI.Text(lives / startLives * 100 + "%", hudStyle), hpBar.x + hpBar.width / 2, hpBar.y, app.stage, relPos.IGNOREMARGIN);
+	hpText = GetObj(new PIXI.Text(lives / startLives * 100 + "%", hudStyle), hpBar.x + hpBar.width / 2, hpBar.y + 1, app.stage, relPos.IGNOREMARGIN);
 
 	xpBar = GetObj(GetSprite("fullXP", 0, 0, hudBarScale, hudBarScale), 110 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpMask = GetObj(GetSprite("barMask", 0, 0, 0, hudBarScale), 111 * hudBarScale, 38 * hudBarScale + 20, hudContainer, relPos.IGNOREMARGIN);
 	xpBar.mask = xpMask;
-	xpText = GetObj(new PIXI.Text(xp / targetXP * 100 + "%", hudStyle), xpBar.x + xpBar.width / 2, xpBar.y, app.stage, relPos.IGNOREMARGIN);
+	xpText = GetObj(new PIXI.Text(xp / targetXP * 100 + "%", hudStyle), xpBar.x + xpBar.width / 2, xpBar.y + 1, app.stage, relPos.IGNOREMARGIN);
     
     //Boy Genius face icon
     playerIcon = GetObj(GetSprite("faceNormal", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
@@ -455,7 +488,7 @@ function StartGame2(){
 			.on('pointerover', function(){recycleB.scale.x *= 1.2; recycleB.scale.y *= 1.2;})
 			.on('pointerout', function(){recycleB.scale.x /= 1.2; recycleB.scale.y /= 1.2;});
 	
-	recycleText = GetObj(new PIXI.Text("Recycle: $650", hudStyle), recycleB.x, recycleB.y + unit, app.stage, relPos.IGNOREMARGIN);
+	recycleText = GetObj(new PIXI.Text("Recycle: $700", hudStyle), recycleB.x, recycleB.y + unit, app.stage, relPos.IGNOREMARGIN);
 	recycleText.anchor.set(.5, .5);
 
 	animalsB = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), sidebarUnit * 4.59, uiMargin / 2, app.stage, relPos.SIDEBAR);
@@ -467,7 +500,7 @@ function StartGame2(){
 			.on('pointerover', function(){animalsB.scale.x *= 1.2; animalsB.scale.y *= 1.2;})
 			.on('pointerout', function(){animalsB.scale.x /= 1.2; animalsB.scale.y /= 1.2;});
 	
-	animalsText = GetObj(new PIXI.Text("Feed: $770", hudStyle), animalsB.x, animalsB.y - unit, app.stage, relPos.IGNOREMARGIN);
+	animalsText = GetObj(new PIXI.Text("Feed: $1000", hudStyle), animalsB.x, animalsB.y - unit, app.stage, relPos.IGNOREMARGIN);
 	animalsText.anchor.set(.5, .5);
 
 	purifierB = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), sidebarUnit * 5.77, uiMargin / 2, app.stage, relPos.SIDEBAR);
@@ -479,7 +512,7 @@ function StartGame2(){
 			 .on('pointerover', function(){purifierB.scale.x *= 1.2; purifierB.scale.y *= 1.2;})
 			 .on('pointerout', function(){purifierB.scale.x /= 1.2; purifierB.scale.y /= 1.2;});
 	
-	purifierText = GetObj(new PIXI.Text("Purify: $900", hudStyle), purifierB.x, purifierB.y + unit, app.stage, relPos.IGNOREMARGIN);
+	purifierText = GetObj(new PIXI.Text("Purify: $1250", hudStyle), purifierB.x, purifierB.y + unit, app.stage, relPos.IGNOREMARGIN);
 	purifierText.anchor.set(.5, .5);
 
 	factoryB = GetObj(GetSprite("factory", .5, .5, .9, .9), sidebarUnit * 6.95, uiMargin / 2, app.stage, relPos.SIDEBAR);
@@ -491,7 +524,7 @@ function StartGame2(){
 			.on('pointerover', function(){factoryB.scale.x *= 1.2; factoryB.scale.y *= 1.2;})
 			.on('pointerout', function(){factoryB.scale.x /= 1.2; factoryB.scale.y /= 1.2;});
 	
-	factoryText = GetObj(new PIXI.Text("Process: $1200", hudStyle), factoryB.x, factoryB.y - unit, app.stage, relPos.IGNOREMARGIN);
+	factoryText = GetObj(new PIXI.Text("Process: $1500", hudStyle), factoryB.x, factoryB.y - unit, app.stage, relPos.IGNOREMARGIN);
 	factoryText.anchor.set(.5, .5);
 
 	wantToPlace = "";
@@ -571,7 +604,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					}
 
 					if(animalsBLock != false && wave >= animalsUnlockAfter){
-						Destroy(recycleBLock);
+						Destroy(animalsBLock);
 						recycleBLock = false;
 					}
 
@@ -782,7 +815,7 @@ function PlaceTower(){
 				tower.cost = 250;
 			}
 		}else if(wantToPlace == towerTypes.ANIMALS){ // Consume meat & bread at a high rate
-			if(Buy(770)){
+			if(Buy(1000)){
 				tower = GetObj(GetSprite("animals", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.MEAT, foodTypes.BREAD];
 				tower.ignore = [];
@@ -792,10 +825,10 @@ function PlaceTower(){
 				tower.atOnce = 16; // Amount of concurrent users
 				tower.processTime = 40; // Frames required to process one food item
 				tower.value = 100; // Amount of score and money gained when all maxes have been met
-				tower.cost = 770;
+				tower.cost = 1000;
 			}
 		}else if(wantToPlace == towerTypes.FACTORY){ // A mass-processing machine that accepts anything but meat, only processing a few at a time. Isn't very profitable
-			if(Buy(1200)){
+			if(Buy(1500)){
 				tower = GetObj(GetSprite("factory", .55, .55, .9, .9), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BONE, foodTypes.OIL];
 				tower.ignore = [];
@@ -804,8 +837,8 @@ function PlaceTower(){
 				tower.curr = [[]]; // MUST contain an empty array for every entry in .max[]
 				tower.atOnce = 8; // Amount of concurrent users
 				tower.processTime = 15; // Frames required to process one food item
-				tower.value = 250; // Amount of score and money gained when all maxes have been met
-				tower.cost = 1200;
+				tower.value = 300; // Amount of score and money gained when all maxes have been met
+				tower.cost = 1500;
 			}
 		}else if(wantToPlace == towerTypes.DONATION){ // More expensive & picky than composting, but is faster & worth more
 			if(Buy(400)){
@@ -821,7 +854,7 @@ function PlaceTower(){
 				tower.cost = 400;
 			}
 		}else if(wantToPlace == towerTypes.RECYCLE){
-			if(Buy(650)){
+			if(Buy(700)){
 				tower = GetObj(GetSprite("recycle", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.FRUIT, foodTypes.VEGETABLE, foodTypes.BREAD, foodTypes.WATER];
 				tower.ignore = [];
@@ -831,10 +864,10 @@ function PlaceTower(){
 				tower.atOnce = 4; // Amount of concurrent users
 				tower.processTime = 145; // Frames required to process one food item
 				tower.value = 175; // Amount of score and money gained when all maxes have been met
-				tower.cost = 650;
+				tower.cost = 700;
 			}
 		}else if(wantToPlace == towerTypes.PURIFIER){
-			if(Buy(900)){
+			if(Buy(1250)){
 				tower = GetObj(GetSprite("purify", .5, .5, 1.25, 1.25), x, y, app.stage, relPos.IGNOREMARGIN);
 				tower.allow = [foodTypes.WATER];
 				tower.ignore = [];
@@ -844,7 +877,7 @@ function PlaceTower(){
 				tower.atOnce = 40; // Amount of concurrent users
 				tower.processTime = 200; // Frames required to process one food item
 				tower.value = 225; // Amount of score and money gained when all maxes have been met
-				tower.cost = 900;
+				tower.cost = 1250;
 			}
 		}
 
@@ -1209,6 +1242,15 @@ function GetFood(subType, from){
 	}else if(from == 1){
 		obj.x = 1.5 * unit;
 		obj.y = (1.3 + Math.random() * .6) * unit + uiMargin;
+	}else if(from == 2){
+		obj.x = 16.5 * unit;
+		obj.y = (7.3 + Math.random() * .6) * unit + uiMargin;
+	}else if(from == 3){
+		obj.x = 16.5 * unit;
+		obj.y = (12.3 + Math.random() * .6) * unit + uiMargin;
+	}else if(from == 4){
+		obj.x = 1.5 * unit;
+		obj.y = (12.3 + Math.random() * .6) * unit + uiMargin;
 	}
 
 	foodContainer.addChild(obj);
