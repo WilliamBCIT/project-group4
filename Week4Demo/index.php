@@ -17,6 +17,8 @@ session_start();
   <script type="text/javascript"  src="./Pixi/pixi.min.js"/></script>
   <script type="text/javascript" src="./Pixi/game.js"></script>
   <script type="text/javascript" src="./Pixi/scaleToWindow.js"></script>
+  <!-- <script src='ingameLeaderboard.php' type='text/javascript'></script> -->
+  
 
 
   </head>
@@ -97,7 +99,9 @@ session_start();
                     while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
                         echo "Hi <button class=\"btn btn-primary btn-sm\">".$row['userFirstName']."</button></form><br />Record your current score by clicking the button below!<br />";
                     }
-                    sqlsrv_free_stmt( $stmt);}?>
+                    sqlsrv_free_stmt( $stmt);}
+					*/
+					?>
                 
                     <?php if(!isset($_SESSION['userNo'])) echo "<!--";?>
                     <form action="recordOnly.php" method="post">
@@ -134,8 +138,8 @@ session_start();
                     echo "-->";
                    }
 				   
-				   
-				   */?>
+				
+				   ?>
 			<div></div>
 
 			<br/> 
@@ -176,8 +180,8 @@ session_start();
                 <p>
 				
                 <?php   
-                      /*
-
+                     
+/*
 					  $serverName = "disk1.database.windows.net";
                             $connectionOptions = array(
                                 "Database" => "disk1",
@@ -214,17 +218,18 @@ session_start();
 </div>
 <br/>
 <div id="leaderboard2container">
-	<div id="leaderboard2" class="green col s12 hide-on-large-only">				
+	<div id="leaderboard2" class="green col s12 hide-on-large-only">
+	<br/>
+	
 			<form action="loggedInRecordScore.php" method="post">
 				<div class="form-group">
-                    Login to Record Your Score <br />and Share it on Facebook!
-                    <br />
-                    <br />
-            <?php
+				
+				 <?php
                 if(isset($_GET['Message'])){
                     echo $_GET['Message'];
                 }
-			?>
+				?>	
+				
 					<label for="name" class = "whiteText">Email: </label>
 					<input type="email" class="form-control" name="userEmail" placeholder="Enter Your Email">
                     <label for="pwd" class = "whiteText">Password: </label>
@@ -233,11 +238,10 @@ session_start();
 				</div>
 				<button type="submit" class="btn btn-default" onclick="setScore5();">Login</button>
 			</form>
-			<br/>
-			<form action="signup.php" method="post">
+            <form action="signup.php" method="post">
                 <input type="hidden" class="form-control" name="score" id = "scoreForm4">
                     <button type="submit" class="btn btn-default" onclick="setScore4();">Register</button>
-            </form> 
+            </form>
 			<br />
 			<div class="addthis_inline_share_toolbox"></div>
 			<br />
@@ -245,10 +249,11 @@ session_start();
 			<h3>Your Score: </h3><h2 id="scoreUpdate"></h2>
 
 			<ul class="list-unstyled components">
-				<li class="active"><h3>High Scores</h3></li>
+				<li class="active"><h4>High Scores</h4></li>
 			</ul>
 			<?php
-				$serverName = "disk1.database.windows.net";
+			/*
+			$serverName = "disk1.database.windows.net";
 				$connectionOptions = array(
 					"Database" => "disk1",
 					"Uid" => "apollo78124",
@@ -270,9 +275,17 @@ session_start();
 					  echo $j.". ".$row['userFirstName']." ".$row['userLastName']." ".$row['score']." ".date_format($row['dateRecorded'], 'y/m/d')."<br />";
 					$j++;
 				}
-
 				sqlsrv_free_stmt( $stmt);
+				*/
 			?>
+                
+	<br/>
+	<br/>
+	</div>
+
+		
+			
+			
 		</div>
 	</div>
 </div>
@@ -306,42 +319,49 @@ session_start();
 		  <div class="center"><img src="img/towerCompost.png" alt="Compost Bin"></div>
 		  <h5 class="center">Compost Tower</h5>
 
-            <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a</p>
-          </div>
+          <p class="light"><i>Price: </i>$250<br />
+			<i>Speed: </i>Slow<br />
+			This simple tower, a modest wooden box that help produces fertile soil, will accept any non-liquid item that comes along.
+		  </p>
+		  </div>
         </div>
 
         <div class="col s12 m4">
           <div class="icon-block">
-		  <div class="center"><img src="img/garbageBin.png" alt="Compost Bin"></div>
+		  <div class="center"><img src="img/garbageBin.png" alt="Garbage Bin"></div>
 		  <h5 class="center">Garbage Bin</h5>
 
-            <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a</p>
+		  <p class="light"><i>Price: </i>Far Too Great<br />
+			<i>Speed: </i>Devastatingly Quick<br />
+			Any time food waste is not saved using one of the other towers, this garbage bin at the end of the conveyor system will begin to fill. Garbage will reduce the health of the town. Too much garbage will mean Game Over!
+		  </p>         
+
+		  </div>
           </div>
-        </div>
 
         <div class="col s12 m4">
           <div class="icon-block">
 		  <div class="center"><img src="img/towerDonate.png" alt="Compost Bin"></div>
 		  <h5 class="center">Donation Tower</h5>
 
-            <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a</p>
+            <p class="light"><i>Price: </i>$400<br />
+			<i>Speed: </i>Fast<br />
+			A tower that helps collect food items for those in need. While it does not accept as many items as other towers, it helps prevent food waste quickly.
+			</p>
           </div>
         </div>
-		<div class="col s12 m4">
-          <div class="icon-block">
-		  <div class="center"><img src="img/towerFarm.png" alt="Compost Bin"></div>
-		  <h5 class="center">Farm</h5>
-
-            <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a</p>
-          </div>
-        </div>
+		</div>
+		<div class="row">
 
         <div class="col s12 m4">
           <div class="icon-block">
 		  <div class="center"><img src="img/towerWater.png" alt="Compost Bin"></div>
 		  <h5 class="center">Water Tower</h5>
 
-            <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a</p>
+            <p class="light"><i>Price: </i>$900<br />
+			<i>Speed: </i>Fast<br />
+			One of the Boy Genius' greatest inventions! It will purify water at record volume and speed, and help keep the world healthy.
+			</p>
           </div>
         </div>
 
@@ -350,17 +370,40 @@ session_start();
 		  <div class="center"><img src="img/towerFuelALT.png" alt="Compost Bin"></div>
 		  <h5 class="center">Fuel Tower</h5>
 
-            <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a</p>
-          </div>
+            <p class="light"><i>Price: </i>$1200<br />
+			<i>Speed: </i>Average<br />
+			An unfortunate yet necessary tower, this factory is able to process everything except meats. Despite being the least environmentally-friendly tower, it still provides the only solution to safely process oil.</p>
+		  </div>
         </div>
 		<div class="col s12 m4">
           <div class="icon-block">
 		  <div class="center"><img src="img/towerRecycle.png" alt="Compost Bin"></div>
 		  <h5 class="center">Recycle Tower</h5>
 
-            <p class="light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque id nunc nec volutpat. Etiam pellentesque tristique arcu, non consequat magna fermentum ac. Cras ut ultricies eros. Maecenas eros justo, ullamcorper a</p>
+            <p class="light"><i>Price: </i>$650<br />
+			<i>Speed: </i>Average<br />
+			A useful tower that helps recycle food and water so it won't go to waste.
+			</p>
+          
+		  </div>
+        </div>
+		</div>
+		<div class="row">
+
+				<div class="col s12 m4">
+          <div class="icon-block">
+		  <div class="center"><img src="img/towerFarm.png" alt="Compost Bin"></div>
+		  <h5 class="center">Farm</h5>
+
+            <p class="light"><i>Price: </i>$770<br />
+			<i>Speed: </i>Fast<br />
+			This tower is full of hungry livestock! It will quickly take in all meat products that pass by.
+			</p>
+
+
           </div>
         </div>
+		</div>
       </div>
 <!-- second row -->
 	  

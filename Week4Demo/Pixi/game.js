@@ -150,92 +150,131 @@ function Init2(){
 	if(app instanceof PIXI.CanvasRenderer) {console.log("CANVAS");} else {console.log("WEBGL");}
 }
 
+var stringS;
+var stringN;
+var stringD;
+var creditContainer;
+var leaderboardJ = 0;
+var ltimer = 3;
+var wtimer = 0;
+
 function ShowLBoards(){
-	// TODO
-    Destroy(mmLogo);
-	Destroy(mmPlay);
-	Destroy(mmLBoards);
-    var lBoardTitle = new PIXI.Text('Leaderboard!', {
-			fontWeight: 'bold',
-			fontSize: 60,
-			fontFamily: 'Arial',
-			fill: '#CD0000',
-			align: 'center',
-			stroke: '#FFFFFF',
-			strokeThickness: 6
-		});
+   
+   Destroy(mmLogo);
+    Destroy(mmPlay);
+    Destroy(mmLBoards);
+   
+   creditContainer = new PIXI.Container();
+   creditContainer.y = app.screen.height;
+   app.stage.addChild(creditContainer);
+   
+   var blackBox = new PIXI.Graphics();
+   blackBox.beginFill(000000);
+   blackBox.lineStyle(5, 000000);
+   blackBox.drawRect(0, 0, app.screen.width, app.screen.height / 4);
+   app.stage.addChild(blackBox);
+   
+   var blackBox2 = new PIXI.Graphics();
+   blackBox2.beginFill(000000);
+   blackBox2.lineStyle(5, 000000);
+   blackBox2.drawRect(0, app.screen.height - 100, app.screen.width, app.screen.height /4);
+   app.stage.addChild(blackBox2);
+   
+   var lBoardTitle = new PIXI.Text("Leaderboard!", {
+            fontWeight: 'bold',
+            fontSize: 60,
+            fontFamily: 'Arial',
+            fill: '#CD0000',
+            align: 'center',
+            stroke: '#FFFFFF',
+            strokeThickness: 6
+        });
 
-		
-   		lBoardTitle.anchor.set(0.5);
-		lBoardTitle.x = app.screen.width / 2;
-		lBoardTitle.y = app.screen.height / 7;
         
-        app.stage.addChild(lBoardTitle);
+          lBoardTitle.anchor.set(0.5);
+        lBoardTitle.x = app.screen.width / 2;
+        lBoardTitle.y = app.screen.height / 7;
+       
+       app.stage.addChild(lBoardTitle);
+   
+       stringN = new PIXI.Text(stringName, {
+            fontWeight: 'bold',
+            fontSize: 25,
+            fontFamily: 'Arial',
+            fill: '#6c7a86 ',
+            align: 'left',
+            stroke: '#FFFFFF',
+            strokeThickness: 6
+        });
+
         
-        connect();
+          stringN.anchor.set(0.5);
+        stringN.x = app.screen.width / 7 + 70;
+        stringN.y =0;
+       creditContainer.addChild(stringN);
+   
+       stringD = new PIXI.Text(stringDate, {
+            fontWeight: 'bold',
+            fontSize: 25,
+            fontFamily: 'Arial',
+            fill: '#6c7a86 ',
+            align: 'left',
+            stroke: '#FFFFFF',
+            strokeThickness: 6
+        });
+
+        
+          stringD.anchor.set(0.5);
+        stringD.x = app.screen.width / 7 + 480;
+        stringD.y = 0;
+       creditContainer.addChild(stringD);
+   
+       stringS = new PIXI.Text(stringScore, {
+            fontWeight: 'bold',
+            fontSize: 25,
+            fontFamily: 'Arial',
+            fill: '#6c7a86 ',
+            align: 'left',
+            stroke: '#FFFFFF',
+            strokeThickness: 6
+        });
+
+        
+          stringS.anchor.set(0.5);
+        stringS.x = app.screen.width / 7 + 300;
+        stringS.y = 0;
+       creditContainer.addChild(stringS);
+       app.ticker.add(delta => leaderboardAnimation(delta));
+   
 }
 
-function connect() {
-    //Connect to MS SQL server
-    var Connection = require('tedious').Connection;
-    var Request = require('tedious').Request;
-
-// Create connection to database
-    var config = 
-   {
-     userName: 'apollo78124', 
-     password: 'bcitGroup4$', 
-     server: 'disk1.database.windows.net', 
-     options: 
-        {
-           database: 'disk1'
-           , encrypt: true
-        }
-           }
-        var connection = new Connection(config);
-
-        // Attempt to connect and execute queries if connection goes through
-        connection.on('connect', function(err) 
-           {
-             if (err) 
-               {
-                  console.log(err)
-               }
-            else
-               {
-                   queryDatabase()
-               }
-           }
-         );
-
-}
-
-function queryDatabase() { 
-    
-    console.log('Reading rows from the Table...');
-
-       // Read all rows from table
-     request = new Request(
-          "SELECT TOP 10 s.score, s.userNo, u.userFirstName, u.userLastName,s.dateRecorded FROM ScoreRecord s JOIN userInfo u ON s.userNo = u.userNo ORDER BY s.score DESC;",
-             function(err, rowCount, rows) 
-                {
-                    console.log(rowCount + ' row(s) returned');
-                    process.exit();
-                }
-            );
-
-     request.on('row', function(columns) {
-        columns.forEach(function(column) {
-            console.log("%s\t%s", column.metadata.colName, column.value);
-         });
-             });
-     connection.execSql(request);
+function leaderboardAnimation(delta) {
+   if (ltimer == 1) {
+         creditContainer.y -= 8 * delta;
+       if (creditContainer.y < -300)
+           ltimer = 2;
    }
-
-function printRow() {
-    //Print one row in the MS SQL Table 
+   
+   if (ltimer == 2) {
+        creditContainer.y += 9 * delta;
+       if (creditContainer.y > app.screen.height + 300)
+           ltimer = 3;
+   }
+   
+   if (ltimer == 3) {
+         creditContainer.y -= 6 * delta;
+       if (creditContainer.y < app.screen.height / 1.73)
+           ltimer = 4;
+   }
+   
+   if (ltimer == 4) {
+       wtimer += 5 * delta;
+       if (wtimer > 600) {
+           wtimer = 0;
+           ltimer = 1;
+       }
+   }
 }
-
 function OpenPauseMenu(){
 	//pm
 }
