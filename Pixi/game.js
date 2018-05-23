@@ -149,13 +149,13 @@ function Init2(){
 	// Prints render type (Khide's desktop uses WebGL & masking does not work)
 	if(app instanceof PIXI.CanvasRenderer) {console.log("CANVAS");} else {console.log("WEBGL");}
 }
-
 function ShowLBoards(){
-	// Show and animate the leaderboard. 
+    
     Destroy(mmLogo);
 	Destroy(mmPlay);
 	Destroy(mmLBoards);
-    var lBoardTitle = new PIXI.Text('Leaderboard!', {
+    
+    var lBoardTitle = new PIXI.Text("Leaderboard!", {
 			fontWeight: 'bold',
 			fontSize: 60,
 			fontFamily: 'Arial',
@@ -171,11 +171,28 @@ function ShowLBoards(){
 		lBoardTitle.y = app.screen.height / 7;
         
         app.stage.addChild(lBoardTitle);
+    
+    var lBoardTitle = new PIXI.Text(stringA, {
+			fontWeight: 'bold',
+			fontSize: 20,
+			fontFamily: 'Arial',
+			fill: '#CD0000',
+			align: 'center',
+			stroke: '#FFFFFF',
+			strokeThickness: 6
+		});
+
+		
+   		lBoardTitle.anchor.set(0.5);
+		lBoardTitle.x = app.screen.width / 2;
+		lBoardTitle.y = app.screen.height / 2;
         
-       PIXI.loader.add("whiteBox", "../Pixi/images/WhiteBox.png")
-			   .load(connect);
+        app.stage.addChild(lBoardTitle);
+        
+    
 }
 
+/**
 function connect() {
     //Connect to MS SQL server
     var Connection = require('tedious').Connection;
@@ -238,7 +255,7 @@ function queryDatabase() {
 function printRow() {
     //Print one row in the MS SQL Table 
 }
-
+*/
 function OpenPauseMenu(){
 	//pm
 }
