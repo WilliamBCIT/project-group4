@@ -693,7 +693,7 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}*/
 			}
 		}else{
-			for(let i = 0; i < wave / 600; i++){
+			for(let i = 0; i < (wave / 600) % 10; i++){
 				let r = Math.random(0, 4.9999999999999);
 				GetFood(foodTypes.ANY, r > .4 ? 4 : r > .3 ? 3 : r > .2 ? 2 : r > .1 ? 1 : 0);
 			}
