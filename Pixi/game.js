@@ -110,14 +110,23 @@ const waves = [
 	{time: 7, type: foodTypes.WATER, startRate: .1, endRate: .0233, length: 32.5, from: 1},
 	{time: 12, type: foodTypes.WATER, startRate: .09, endRate: .01666, length: 27.5, from: 0},
 	{time: 12, type: foodTypes.MEAT, startRate: .13, endRate: .0666, length: 22.5, from: 2},
-	{time: 12, type: foodTypes.FRUIT, startRate: .155, endRate: .5, length: 22.5, from: 0}]
+	{time: 12, type: foodTypes.FRUIT, startRate: .155, endRate: .5, length: 22.5, from: 0}],
+   [{time: 2, type: foodTypes.BREAD, startRate: .2, endRate: .07, length: 50, from: 0},
+	{time: 2, type: foodTypes.VEGETABLE, startRate: .125, endRate: .07, length: 50, from: 1},
+	{time: 2, type: foodTypes.FRUIT, startRate: .125, endRate: .08, length: 50, from: 3},
+	{time: 2, type: foodTypes.MEAT, startRate: .1, endRate: .05, length: 50, from: 2},
+	{time: 15, type: foodTypes.OIL, startRate: .1, endRate: .028, length: 37, from: 0},
+	{time: 27, type: foodTypes.WATER, startRate: .15, endRate: .08, length: 30, from: 1},
+	{time: 27, type: foodTypes.BREAD, startRate: .6, endRate: .15, length: 30, from: 4},
+	{time: 27, type: foodTypes.VEGETABLE, startRate: .4, endRate: .15, length: 30, from: 4},
+	{time: 27, type: foodTypes.FRUIT, startRate: .075, endRate: .4, length: 30, from: 3}]
 ];
 
 const donateUnlockAfter = 1;
 const recyclerUnlockAfter = 3;
 const animalsUnlockAfter = 7;
-const purifierUnlockAfter = 10;
-const factoryUnlockAfter = 13;
+const purifierUnlockAfter = 9;
+const factoryUnlockAfter = 11;
 
 var inProgress = [];
 
@@ -431,9 +440,9 @@ function StartGame2(){
     //Boy Genius face icon
     playerIcon = GetObj(GetSprite("faceNormal", 0, 0, hudBarScale, hudBarScale), 6 * hudBarScale, 6 * hudBarScale + 20, app.stage, relPos.IGNOREMARGIN); 
 
-	// Assuming one level
+	// Assuming one level 14, 12
 	track = [{x:9, y:4}, {x:8, y:4}, {x:7, y:4}, {x:6, y:4}, {x:5, y:4}, {x:5, y:5}, {x:4, y:5}, {x:3, y:5}, {x:3, y:6}, {x:3, y:7}, {x:4, y:7}, {x:10, y:4}, {x:11, y:4}, {x:12, y:4}, {x:13, y:4}, {x:14, y:4}, {x:14, y:3}, {x:14, y:2}, {x:15, y:2}, {x:16, y:2}, {x:16, y:8}, {x:15, y:8}, {x:14, y:8}, {x:13, y:8}, {x:13, y:9}, {x:5, y:7}, {x:6, y:7}, {x:7, y:7}, {x:8, y:6}, {x:8, y:7}, {x:9, y:6}, {x:10, y:6}, {x:10, y:7}, {x:10, y:8}, {x:10, y:9}, {x:10, y:10}, {x:11, y:10}, {x:12, y:10}, {x:13, y:10}, {x:13, y:11}, {x:13, y:12}, {x:13, y:13}, {x:12, y:13}, {x:11, y:13}, {x:10, y:13}, {x:9, y:13}, {x:8, y:13}, {x:8, y:12}, {x:7, y:12}, {x:6, y:12}, {x:6, y:11}, {x:6, y:10}, {x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:4, y:10}, {x:4, y:11}, {x:4, y:12}, {x:3, y:13}, {x:2, y:13}, {x:4, y:13}, {x:4, y:14}, {x:4, y:15}, {x:4, y:16}, {x:5, y:16}, {x:6, y:16}, {x:6, y:15}, {x:7, y:15}, {x:8, y:15}, {x:9, y:15}, {x:10, y:15}, {x:10, y:16}, {x:10, y:17}, {x:10, y:18}, {x:9, y:18}, {x:8, y:18}, {x:7, y:18}, {x:6, y:18}, {x:5, y:18}, {x:4, y:18}, {x:3, y:18}, {x:12, y:14}, {x:12, y:15}, {x:12, y:16}, {x:213, y:16}, {x:14, y:16}, {x:15, y:16}, {x:15, y:15}, {x:15, y:14}, {x:15, y:13}, {x:616, y:13}, {x:17, y:13}, {x:17, y:8}, {x:17, y:2}, {x:2, y:2}, {x:3, y:2}, {x:4, y:2}, {x:5, y:2}, {x:6, y:2}, {x:7, y:2}, {x:8, y:2}, {x:8, y:3}, {x:13, y:16}, {x:16, y:13}/*, {x:2, y:18}*/];
-	let trackV = [{x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:-1.5}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:-1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:-1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, /*{x:-1.5, y:0}*/];
+	let trackV = [{x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:-1.5}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:-1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:-1.5}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:0, y:-1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:-1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:1.5, y:0}, {x:0, y:1.5}, {x:0, y:1.5}, {x:-1.5, y:0}, {x:-1.5, y:0}, /*{x:-1.5, y:0}*/];
 	
 	let trackAnim = [];
 
@@ -684,7 +693,13 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 				}*/
 			}
 		}else{
-			// TODO: Infinite waves
+			for(let i = 0; i < wave / 600; i++){
+				let r = Math.random(0, 4.9999999999999);
+				GetFood(foodTypes.ANY, r > .4 ? 4 : r > .3 ? 3 : r > .2 ? 2 : r > .1 ? 1 : 0);
+			}
+
+			wave++;
+			waveText = GetObj(new PIXI.Text("Wave: " + wave, hudStyle), 225, 5, app.stage, relPos.IGNOREMARGIN);
 		}
 		
 		// TODO: Properly centre food along tracks
