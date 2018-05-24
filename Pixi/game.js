@@ -573,7 +573,7 @@ const foodTransferSpeed = 2.5;
 const popupSpeed = -1;
 const popupDuration = .4;
 
-const minBetweenIntake = 15;
+const minBetweenIntake = 10;
 
 function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes across multiple frames (ie: movement / rotation) should be multiplied by delta to scale properly w/ low FPS
 	elapsed += secondsPerFrame * delta;
@@ -667,18 +667,16 @@ function Update(delta){ // Note: Runs at/up to 60fps. Any real-world changes acr
 					inProgress[inProgress.length - 1].next = 0;
 
 					wavePos++;
-				}/*else{
-					console.log("Next wave in " + (Math.round((waves[wave][wavePos].time - elapsed) * 100) / 100));
-				}*/
+				}
 			}
 		}else{
-			for(let i = 0; i < (wave / 600) % 10; i++){
-				let r = Math.random(0, 4.9999999999999);
-				GetFood(foodTypes.ANY, r > .4 ? 4 : r > .3 ? 3 : r > .2 ? 2 : r > .1 ? 1 : 0);
+			for(let i = 0; i < (wave * .0666); i++){
+				let r = Math.floor(Math.random() * 4.333);
+				GetFood(foodTypes.ANY, r);
 			}
 
-			wave++;
-			waveText = GetObj(new PIXI.Text("Wave: " + wave, hudStyle), 225, 5, app.stage, relPos.IGNOREMARGIN);
+			wave += secondsPerFrame * 2;
+			waveText.text = "Wave: " + Math.floor(wave);
 		}
 		
 		// TODO: Properly centre food along tracks
